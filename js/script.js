@@ -36,8 +36,10 @@ const SHEET_URLS = {
 // Clave: nombre del corredor en minúsculas. / Key: runner name, lowercased.
 const RUNNER_FLAGS = {
   jokeruy: 'UY',
-  // sawken: 'AR',
-  // luis_sera: 'UY',
+  sawken: 'AR',
+  pochoide: 'AR',
+  yuushi: 'JP',
+  shimarisu: 'JP',
   // ...completar. También se puede llenar la columna "Flag" de la Sheet.
 };
 
@@ -49,13 +51,17 @@ const PAST_EDITIONS = [
     champion: 'JokerUY',
     runnerUp: 'Sawken',
     third: 'Pochoide',
+    prize: '$1,568',
+    logo: 'assets/champions/2026.png',
     vod: 'https://www.youtube.com/@DitmanCup',
   },
   {
     year: 2022,
-    champion: '',
-    runnerUp: '',
-    third: '',
+    champion: 'Yuushi',
+    runnerUp: 'shimarisu',
+    third: 'Sawken',
+    prize: '$1,000',
+    logo: '',   // TODO: banner "RE4 NG Pro Tournament" (2022)
     vod: '',
   },
 ];
@@ -281,6 +287,7 @@ const I18N = {
     'champions.third': '3er puesto',
     'champions.tbd': 'Por confirmar',
     'champions.vod': 'Ver final',
+    'champions.prize': 'Prize pool',
     'champions.trophyTitle': 'El trofeo',
     'champions.trophyPending': 'El trofeo de la Ditman Cup 2027 todavía se está diseñando.',
 
@@ -389,6 +396,7 @@ const I18N = {
     'champions.third': '3rd place',
     'champions.tbd': 'To be confirmed',
     'champions.vod': 'Watch the final',
+    'champions.prize': 'Prize pool',
     'champions.trophyTitle': 'The trophy',
     'champions.trophyPending': 'The Ditman Cup 2027 trophy is still being designed.',
 
@@ -948,12 +956,16 @@ function renderChampions() {
 
   const editions = PAST_EDITIONS.map(e => `
     <article class="edition">
-      <h3 class="edition-year">${esc(t('champions.edition', { year: e.year }))}</h3>
+      <div class="edition-head">
+        <h3 class="edition-year">${esc(t('champions.edition', { year: e.year }))}</h3>
+        ${e.logo ? `<img class="edition-logo" src="${esc(e.logo)}" alt="Ditman Cup ${esc(e.year)}" loading="lazy">` : ''}
+      </div>
       <div class="podium">
         ${spot('champions.champion', e.champion, 1)}
         ${spot('champions.runnerUp', e.runnerUp, 2)}
         ${spot('champions.third', e.third, 3)}
       </div>
+      ${e.prize ? `<div class="edition-prize"><span class="prize-label">${esc(t('champions.prize'))}</span><span class="prize-amount">${esc(e.prize)}</span></div>` : ''}
       ${e.vod ? `<a class="edition-vod" href="${esc(e.vod)}" target="_blank" rel="noopener">${esc(t('champions.vod'))} ↗</a>` : ''}
     </article>`).join('');
 

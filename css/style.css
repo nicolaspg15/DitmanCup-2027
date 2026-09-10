@@ -619,18 +619,28 @@ footer {
 }
 .edition::before { top: 4px; left: 4px; border-right: 0; border-bottom: 0; }
 .edition::after { bottom: 4px; right: 4px; border-left: 0; border-top: 0; }
+.edition-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--frame);
+  padding-bottom: .6rem;
+  margin-bottom: 1.1rem;
+}
 .edition-year {
   font-family: var(--font-safe);
   font-size: 1.1rem;
   letter-spacing: .05em;
   text-transform: uppercase;
   color: var(--text-muted);
-  border-bottom: 1px solid var(--frame);
-  padding-bottom: .5rem;
-  margin-bottom: 1.1rem;
+  border: 0;
+  padding: 0;
+  margin: 0;
 }
+.edition-logo { height: 68px; width: auto; max-width: 48%; object-fit: contain; flex: none; }
 
-.podium { display: flex; flex-direction: column; gap: .9rem; }
+.podium { display: flex; flex-direction: column; gap: .85rem; }
 .podium-spot { display: flex; align-items: baseline; gap: .9rem; flex-wrap: wrap; }
 .podium-role {
   flex: none;
@@ -640,26 +650,55 @@ footer {
   letter-spacing: .1em;
   color: var(--text-muted);
 }
-.podium-name { font-weight: 800; line-height: 1.1; word-break: break-word; }
-.podium-name .fi { vertical-align: baseline; margin-right: .3em; }
-.podium-name .tbd { font-weight: 400; font-style: italic; font-size: 1rem; color: var(--text-muted); }
+.podium-name {
+  font-family: var(--font-title);   /* fuente del juego para los nombres */
+  line-height: 1.1;
+  word-break: break-word;
+}
+.podium-name .fi { vertical-align: baseline; margin-right: .35em; }
+.podium-name .tbd {
+  font-family: var(--font-safe);
+  font-style: italic; font-size: 1rem; color: var(--text-muted);
+}
 
-/* Jerarquía: 1º dorado y grande, 2º plateado brillante mediano, 3º bronce chico */
+/* Jerarquía suave: 1º dorado, 2º plateado brillante, 3º bronce */
 .rank-1 .podium-name {
-  font-size: clamp(2rem, 5.5vw, 2.9rem);
+  font-size: clamp(1.9rem, 4vw, 2.4rem);
   color: #F4C752;
-  text-shadow: 0 0 24px rgba(244, 199, 82, .5);
+  text-shadow: 0 0 22px rgba(244, 199, 82, .5);
 }
-.rank-1 .podium-name .fi { font-size: .62em; }
+.rank-1 .podium-name .fi { font-size: .6em; }
 .rank-2 .podium-name {
-  font-size: clamp(1.4rem, 3.6vw, 1.8rem);
+  font-size: clamp(1.6rem, 3.2vw, 2rem);
   color: #EDF1F6;
-  text-shadow: 0 0 14px rgba(220, 228, 240, .45);
+  text-shadow: 0 0 13px rgba(220, 228, 240, .4);
 }
-.rank-2 .podium-name .fi { font-size: .78em; }
+.rank-2 .podium-name .fi { font-size: .68em; }
 .rank-3 .podium-name {
-  font-size: clamp(1.05rem, 2.6vw, 1.3rem);
+  font-size: clamp(1.35rem, 2.7vw, 1.65rem);
   color: #CB8B4C;
+}
+.rank-3 .podium-name .fi { font-size: .8em; }
+
+.edition-prize {
+  display: flex;
+  align-items: baseline;
+  gap: .6rem;
+  margin-top: 1.2rem;
+  padding-top: .9rem;
+  border-top: 1px solid var(--frame);
+}
+.prize-label {
+  font-family: var(--font-safe);
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--text-muted);
+}
+.prize-amount {
+  font-family: var(--font-title);
+  font-size: 1.4rem;
+  color: #F4C752;
 }
 
 .edition-vod {
