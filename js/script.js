@@ -20,11 +20,14 @@ const TOURNAMENT_CONFIG = {
 
 // ======= FUENTES DE DATOS (Google Sheets) / DATA SOURCES =======
 // Pegar acá el link de "Publicar en la web -> CSV" de cada hoja.
+// Sheet PRINCIPAL del torneo (2027). Por ahora está casi vacía: hasta que se
+// carguen corredores, la pestaña Clasificatorias muestra el mensaje de vacío.
+const SHEET_ID = '1oBfViFUu-jujuuVkXmNCU4Ew9Lt9gCEptcTYFwPtZHw';
+const sheetCsv = gid => `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}`;
+
 const SHEET_URLS = {
-  groups: '',    // columnas: Grupo, Corredor  (gid de la hoja de grupos — pendiente)
-  standings: '', // vacío a propósito: la clasificación del año pasado no va.
-  // Ejemplo cuando esté la hoja nueva (hoja "Qualifiers"):
-  // standings: 'https://docs.google.com/spreadsheets/d/<ID>/export?format=csv&gid=<GID>',
+  groups: '',                      // gid de la hoja de grupos — pendiente
+  standings: sheetCsv('1240403995'), // hoja "Qualifiers" de la sheet principal
 };
 
 // ======= BANDERAS / FLAGS =======
@@ -58,17 +61,119 @@ const PAST_EDITIONS = [
 ];
 
 // ======= MEJORES CLIPS / BEST CLIPS =======
-// Clips destacados de otros torneos. url: link de YouTube o Twitch (clip o video).
+// Clips destacados por sección. Extraídos del canal de Twitch (twitch.tv/ditmancup).
+// Cada item: s = slug del clip, t = título, a = autor del clip, v = views, d = fecha.
+// Para sumar uno a mano: agregá { s: '<slug>', ... } a la sección que quieras.
 const CLIPS = [
-  // { title: 'Clutch en la final', author: 'JokerUY', url: 'https://www.youtube.com/watch?v=XXXXXXXXXXX' },
-  // { title: 'Reset perfecto', author: 'Sawken', url: 'https://clips.twitch.tv/XXXXXXXX' },
+  { section: 'Ditman Cup 2026', items: [
+    { s: 'NeighborlyAdorableOctopusOSsloth-naioivubgNMq57TY', t: 'Tenes que cerrar el estadio, los genios hacen eso', a: 'Gallardd', v: 120, d: '2026-01-20' },
+    { s: 'OutstandingTenaciousSoymilkTTours-wRFOfwbbdffulO6q', t: 'SAWKEN TODODROGADO', a: 'MateoUsh27', v: 107, d: '2026-01-25' },
+    { s: 'FlirtySucculentMosquitoOMGScoots-EFR8hfxGtCFAy7hL', t: 'CHACO KICK', a: 'JokerUY', v: 98, d: '2026-01-13' },
+    { s: 'DistinctPlumpLegDeIlluminati-DJgd6W_mll5N1CZc', t: 'MISSING MOST CREEPYPASTA GALLERY', a: 'JokerUY', v: 92, d: '2026-02-21' },
+    { s: 'BlueAdorableToadChefFrank-la6UlXjFJNLEYywW', t: 'EL FOLLOW MATEO EL FOLLOOOOOOOW', a: 'sawkenn', v: 85, d: '2026-02-07' },
+    { s: 'FurryPerfectFerretEleGiggle-SPnRwG9pHQB9lzkH', t: 'That is so UNLUCKY', a: 'MikeWavRR', v: 70, d: '2026-02-12' },
+    { s: 'CloudyStormyApePMSTwin-9eeZAF9w9R-M54cL', t: 'youcri activa los cheats de invencibilidad', a: 'sawkenn', v: 64, d: '2026-02-08' },
+    { s: 'BusyAliveTigerLitty-wJwAOmsjsjrpAlLD', t: 'el wachin ta de paso nomas', a: 'sawkenn', v: 63, d: '2026-01-28' },
+    { s: 'TentativeAcceptableIcecreamArsonNoSexy-aoOYQ1bm-isR9ATd', t: 'creepypasta novis2 para pocho', a: 'sawkenn', v: 63, d: '2026-02-02' },
+    { s: 'KathishRelentlessBoarPastaThat-OIg3PEFsWsxFU9gT', t: 'INSTA MUFA JOKER', a: 'JokerUY', v: 61, d: '2026-02-07' },
+    { s: 'GrotesqueObeseEagleAliens-TA3OH4wFkEnuG5tx', t: 'OUT OF BOUND FLASH ARCA', a: 'JokerUY', v: 59, d: '2026-02-09' },
+    { s: 'CrypticHilariousConsoleKappaPride-Z8vcsSWRyxGaoYhV', t: 'pocho no lo hago mas', a: 'gapi0909', v: 58, d: '2026-01-25' },
+    { s: 'ThankfulIncredulousSproutThisIsSparta-Fp-Heo8xDXKA55NG', t: 'la jokermufa', a: 'sawkenn', v: 54, d: '2026-01-31' },
+    { s: 'ShyCrunchyBottleCeilingCat-RKwaxjtJFr5jM45w', t: 'que andas mostrando arca', a: 'sawkenn', v: 52, d: '2026-02-16' },
+    { s: 'ScaryAthleticQuailNotLikeThis-yD2oLEMv8PSTtqP-', t: 'o7 granada', a: 'JokerUY', v: 49, d: '2026-02-12' },
+    { s: 'ThoughtfulAmorphousRamenCmonBruh-09HRgzGtbaQcCRBQ', t: 'MATEO CHUPAME LA P', a: '4rcadan', v: 48, d: '2026-01-18' },
+    { s: 'CredulousDeafFerretKevinTurtle-2nvPAOkzJY4tjWiD', t: 'pocho memed in canyon twice', a: 'playking615', v: 47, d: '2026-02-12' },
+    { s: 'VivaciousSavageSalmonThisIsSparta-ywwpq8QVTzWS6Qx2', t: 'missing recontra mega duro mirando la puerta', a: 'pochiel_', v: 39, d: '2026-02-18' },
+    { s: 'ResilientYawningBoarGingerPower-bIFpAa3LTviEOzUx', t: 'infa out of novis3 Sane', a: 'sawkenn', v: 39, d: '2026-01-31' },
+    { s: 'PowerfulDirtyPangolinEagleEye-sd68cy399prIlOhB', t: 'novi creepypasta lo persigue', a: 'sawkenn', v: 38, d: '2026-01-31' },
+    { s: 'SpoopyLuckyReindeerAsianGlow-W7Rohlzf5zyJSkly', t: 'NOOOOOOOOOOOOOOO', a: 'JokerUY', v: 36, d: '2026-02-07' },
+    { s: 'PlacidStrongMoonCurseLit-rTEUwI29wn6Ax-r6', t: 'SAWKEN PORFAVOR!!!!', a: 'sawkenn', v: 36, d: '2026-02-21' },
+    { s: 'WittyExuberantChoughSquadGoals-LiddZ1Qv2Xtsap0Y', t: 'insane mirror', a: 'sawkenn', v: 36, d: '2026-02-21' },
+    { s: 'CrispyRefinedLegWTRuck-C1ScalxfOrla4u3p', t: 'disparos re merca', a: 'sawkenn', v: 34, d: '2026-02-14' },
+    { s: 'DepressedElatedOctopusDatSheffy-gMCDVgvE1NBV06D_', t: 'combea2 war extremo', a: 'sawkenn', v: 32, d: '2026-02-20' },
+    { s: 'DifferentToughIguanaOpieOP-k2dB0JeR1N1hlNrs', t: 'tirale el rocket al novi ya fue', a: 'sawkenn', v: 32, d: '2026-01-31' },
+    { s: 'EnthusiasticDignifiedRamenHassanChop-Bve_YvNm3tOlwfu6', t: 'joker creepypasta clutch whall part 2', a: 'JokerUY', v: 30, d: '2026-02-19' },
+    { s: 'EasyFunnyBoarCclamChamp-EJfiDsAnUuyteOOv', t: '1 bala', a: 'JokerUY', v: 30, d: '2026-02-12' },
+    { s: 'PopularLachrymoseLocustPeoplesChamp-B51ef87AmfYPXkW6', t: 'pocho merca', a: 'JokerUY', v: 30, d: '2026-02-15' },
+    { s: 'TemperedEmpathicKangarooTebowing-sx_-OInI2-UxCDeL', t: 'Novis 2 Sane sure', a: 'JokerUY', v: 30, d: '2026-02-11' },
+    { s: 'VivaciousSlipperyPoxMoreCowbell-loP5MqjD_erQXu5i', t: 'rare rng', a: 'slifercs', v: 29, d: '2026-02-19' },
+    { s: 'SplendidVainWatermelonThisIsSparta--Wh32YzZtqJPDcSV', t: 'He never got a bad merchant', a: 'sawkenn', v: 28, d: '2026-02-11' },
+    { s: 'DeadSpikyFriesRalpherZ-tkxlKQEkOG3GHflX', t: 'debería estar bien', a: 'MateoUsh27', v: 27, d: '2026-02-08' },
+    { s: 'PeppyBadAardvarkGingerPower-EhpdYRLvBd0I-4Ju', t: 'cabin cup hechomierda', a: 'sawkenn', v: 25, d: '2026-02-12' },
+    { s: 'HandsomeAverageAirGuitarThunBeast-qAocU8y_0nBValTF', t: 'novis2 creepypasta youcri (arca died before also VODIJ)', a: 'JokerUY', v: 25, d: '2026-02-09' },
+    { s: 'MuddyCrowdedCrabsBuddhaBar-m35zP1Dhb42ej0_h', t: 'novis1 mega ultra combo', a: 'sawkenn', v: 24, d: '2026-02-21' },
+    { s: 'IntelligentSpoopyPancakeDendiFace-7yslr-G2RleRes9t', t: 'UNA ROCAAAAAAAAA AGHHHHHHHH', a: 'JokerUY', v: 23, d: '2026-02-09' },
+    { s: 'BlitheKathishRadishTwitchRaid-1tQQ9WOaH72Lgduf', t: 'si esta ada se muere ada, si esta sherry se meure, (MUERE)', a: 'JokerUY', v: 21, d: '2026-02-12' },
+    { s: 'MoistLaconicHummingbirdKeepo-BmrfOoBTGCyQPZnH', t: 'EL CURRENT PACE DE OTAKU CAMBIO!!', a: 'JokerUY', v: 21, d: '2026-02-15' },
+    { s: 'RenownedSuaveShallotCurseLit-juUvgsVaaFMKDOsQ', t: 'LORE DE POCHO PARALISIS DE SUEÑO', a: 'JokerUY', v: 21, d: '2026-02-15' },
+    { s: 'GorgeousPlacidApeSaltBae-kdFt6g-qskqVpTu2', t: 'pocho ojos amarillo fluor', a: 'sawkenn', v: 20, d: '2026-02-15' },
+    { s: 'AlertRudeReubenNotATK-CQJ2lCHpi_O6VDmE', t: 'pocho avion', a: 'MateoUsh27', v: 20, d: '2026-01-25' },
+    { s: 'TenuousTriangularGullPupper-QWDa_Ul8ViYxg0vB', t: 'POCHO WARHALL 2', a: 'JokerUY', v: 20, d: '2026-02-12' },
+    { s: 'MildLitigiousGrassKappaWealth-DTO8E4-uF-hbKJ5D', t: 'POCHO WARHALL 1', a: 'JokerUY', v: 19, d: '2026-02-12' },
+    { s: 'TrustworthyResourcefulNarwhalWow-pAGb5rAkSMD7jN_K', t: 'aint locked in the target xdd', a: 'roger_eduardo67', v: 19, d: '2026-01-15' },
+    { s: 'BovineDarkSaladRedCoat-amoJaF-sbxXAhFYw', t: 'matrix', a: 'sawkenn', v: 19, d: '2026-02-24' },
+    { s: 'AntsyHealthyAardvarkMrDestructoid-XRO8QMWM0R49U9Ai', t: 'controles invertido', a: 'gapi0909', v: 19, d: '2026-01-28' },
+    { s: 'CrazyMildHamBloodTrail-2AIBDr2aRq0Vzhu3', t: 'SAWKEN ANGEL DE LA GUARDA', a: 'JokerUY', v: 19, d: '2026-02-12' },
+    { s: 'PeppyUninterestedBorkHoneyBadger-Dgo5nELYJ4vilPIM', t: 'joker creepypasta clutch whall part 1', a: 'JokerUY', v: 18, d: '2026-02-19' },
+    { s: 'LivelyKawaiiAyeayeFUNgineer-6jHWBj-ihJW-TFvq', t: 'creepypasta dog', a: 'sawkenn', v: 18, d: '2026-02-21' },
+    { s: 'ColdInnocentTroutTBTacoLeft-FganDOLboJXqmZBS', t: 'IMPOSSIBLE TO MUFA MISSING', a: 'JokerUY', v: 18, d: '2026-02-16' },
+    { s: 'MoldyFastCheddarFUNgineer-lmRNR8lbJYdXiB8k', t: 'hechomierda frit missing novis2', a: 'JokerUY', v: 17, d: '2026-02-09' },
+    { s: 'SuaveCorrectBurritoDuDudu-qf0IMbFM_tpZGvVe', t: 'CREEPYPASTA JAPONES LA SUCIA ESA', a: 'JokerUY', v: 17, d: '2026-02-09' },
+    { s: 'AbstrusePoorTurnipNotATK-0KzUd_hoxHKyGGAN', t: 'missing recontra mega duro mirando la caja', a: 'Missing', v: 17, d: '2026-02-19' },
+    { s: 'BetterCrunchyToothHeyGirl-4tkr5UuVcHxY_8-f', t: 'INSTA MUFA', a: 'JokerUY', v: 16, d: '2026-02-08' },
+    { s: 'LitigiousPricklySalmonKappaClaus-yG99lMK1UAVZ5Cll', t: 'lo recontra rusheaba wtf', a: 'sawkenn', v: 16, d: '2026-02-21' },
+    { s: 'BloodyGlutenFreeMosquitoSoBayed-f3ZmnlkrLZhy0giS', t: 'joker mufa x3000', a: 'JokerUY', v: 15, d: '2026-01-31' },
+    { s: 'TiredShinyFoxSoBayed-nxJfkTKgd96KLv5b', t: 'CREEPYPASTA CABINS', a: 'JokerUY', v: 14, d: '2026-02-09' },
+    { s: 'SparklingRelentlessCucumberDoggo-nb2utcMzgCIPBo1X', t: 'mateo mufa', a: 'JokerUY', v: 13, d: '2026-02-07' },
+  ] },
+  { section: '2022 Tournament', items: [
+    { s: 'TenuousFancyYakinikuLitFam-en79hrjrsVnDO973', t: 'u3 warp?', a: 'eidenfir', v: 362, d: '2022-03-20' },
+    { s: 'CogentEnjoyableReubenMVGame-lt1c4ETva9t3cJqp', t: 'Mom IRL RNG', a: 'eidenfir', v: 215, d: '2022-03-05' },
+    { s: 'GrossSpotlessJellyfishDxAbomb-YprCYwmP7EPAwfCJ', t: 'biggest combo in history', a: 'sawkenn', v: 199, d: '2022-02-23' },
+    { s: 'VastPunchySardineBudBlast-YI4sNgwyrbgqNPF_', t: 'Garrador new knife strat?', a: 'JoeKoh27', v: 158, d: '2022-02-06' },
+    { s: 'AmericanModernStingrayMrDestructoid-GWohRGQ8hkLO2SGd', t: 'Thanks novi Okayge', a: 'Spartanfinix117', v: 141, d: '2022-02-17' },
+    { s: 'GloriousKawaiiSheepDerp-wQpDdUHUCyiu7gfp', t: 'novi chilling on the ceiling', a: 'sawkenn', v: 119, d: '2022-02-20' },
+    { s: 'ColdbloodedTransparentBadgerPeanutButterJellyTime-RybWBSRV9pp14iYf', t: 'dogey bodyblock', a: 'DrumsetWereWolf', v: 111, d: '2022-03-10' },
+    { s: 'ColorfulTentativeVanillaBigBrother-G8IS59v03huTOt2e', t: 'WHAT ARE YOU DOING???!!', a: 'sawkenn', v: 102, d: '2022-04-24' },
+    { s: 'NastyBrightLegSquadGoals-Z0Yb0hymdVqTYyBb', t: 'HELLO??', a: 'sawkenn', v: 96, d: '2022-02-12' },
+    { s: 'StrangeFlaccidPizzaNomNom-ai04Gx2dEzgJjZgi', t: 'Oh no he is dead', a: 'Kevin700P', v: 94, d: '2022-02-27' },
+    { s: 'TardyArtsyNoodleCorgiDerp-j7woBDewzicUClOg', t: 'calculated', a: 'enhikee', v: 91, d: '2022-06-08' },
+    { s: 'GloriousRealOysterAMPEnergyCherry-8Wm1oUOlD_Y6uzeE', t: 'ashley??????', a: 'sawkenn', v: 89, d: '2022-03-27' },
+    { s: 'AlertProudDragonKappa-F3ykbPtcMEKJ2-ZI', t: 'SYNCED', a: 'sawkenn', v: 85, d: '2022-02-18' },
+    { s: 'BlushingSlickWasabiStinkyCheese-_Uxh_rpiHoD8Q0Yx', t: 'little flex', a: 'sawkenn', v: 82, d: '2022-02-05' },
+    { s: 'TrappedResourcefulClipsmomFutureMan-gDRiI-_7EMneYDpn', t: 'RE4 NG Pro Steam 60fps !tournament !prizepool | Qualifying !bracket, round 1, Kromer vs Hikee, Tuesday 8th, 10pm UTC+1', a: 'sawkenn', v: 70, d: '2022-02-08' },
+    { s: 'FreezingTangibleSandstormAMPEnergy-4z1UsWBIdDJ4WCFm', t: 'WHAT THE!!!', a: 'sawkenn', v: 67, d: '2022-04-24' },
+    { s: 'NastyHardWrenchKippa-3R8g__fVInBON2vC', t: 'HOW?!', a: 'eidenfir', v: 63, d: '2022-02-12' },
+    { s: 'EmpathicDarlingTermitePastaThat-FiUDeTPknLRfrnO5', t: 'Invert Aim new strat?', a: 'JoeKoh27', v: 62, d: '2022-02-05' },
+    { s: 'SincereSuccessfulDeerShazBotstix-ZwN7ci_wIHzvdGGf', t: 'THAT BAD?!!!', a: 'eidenfir', v: 52, d: '2022-03-10' },
+    { s: 'SquareBoredSrirachaVoHiYo-Vqco2PF4UFgunLnH', t: 'Cursed by Sniper\'s Commentary', a: 'ImSniperKiller', v: 46, d: '2022-02-06' },
+    { s: 'CreativeDifficultAlbatrossKappa-03IffEVsxfk3Mgdb', t: 'Luis prediction', a: 'DrumsetWereWolf', v: 46, d: '2022-02-24' },
+    { s: 'SneakyMildChowderWholeWheat-mTLmvpk4MbJqSYWn', t: 'YEAAAAAA', a: 'eidenfir', v: 45, d: '2022-02-19' },
+    { s: 'FrigidEnergeticMeatloafKeyboardCat-kZ0oa2bcOEBC3U3a', t: 'miracle in the wrecking ball', a: 'Tania__ainaT', v: 44, d: '2022-03-12' },
+    { s: 'IgnorantSlipperyPieCoolStoryBob-4M2DauyXfbRQ459V', t: 'cursed loading', a: 'sawkenn', v: 43, d: '2022-03-20' },
+    { s: 'ShortSpikyBoarAsianGlow-a81NryKaLximPnte', t: 'Nooo luis te pasaste KEKW', a: 'l_tobirama', v: 42, d: '2022-02-07' },
+    { s: 'TolerantIronicSoymilkDogFace-9jwqm4C_22gPO6bc', t: 'RE4 NG Pro Steam 60fps !tournament !prizepool | Qualifying !bracket, round 2, OtakuXD vs Hikee, Sunday 27th, 10 pm UTC+1', a: 'RedWiwen', v: 37, d: '2022-02-27' },
+    { s: 'CuriousTastyNewtRitzMitz-bFQNixUcP1bMu8Zr', t: '25.52', a: 'sawkenn', v: 34, d: '2022-07-02' },
+    { s: 'MuddyGenerousLettuceOSfrog-2uhT_Q6-AKSwMSp1', t: 'Near perfect sync', a: 'casualspeedrun', v: 32, d: '2022-02-18' },
+    { s: 'StormyCooperativeWatercressPeanutButterJellyTime-SUm5o6W7-wQNkqs_', t: 'jetski glitch', a: 'enhikee', v: 27, d: '2023-12-18' },
+    { s: 'ObservantPoisedRuffBudStar-9Yqp5BZqnK4X4ZeP', t: 'u3 safe', a: 'shunviewer', v: 26, d: '2022-04-30' },
+    { s: 'ModernDeliciousTurtleNerfRedBlaster-28Jwo97QZ0mmnZal', t: 'MajorWeirdChamp', a: 'DrumsetWereWolf', v: 25, d: '2022-02-13' },
+    { s: 'VastVastTortoiseM4xHeh-8I4bxqCLx_N-hbWO', t: 'Lost Ark > RE4', a: 'ImSniperKiller', v: 19, d: '2022-02-19' },
+    { s: 'DifferentDarlingWaspTBCheesePull-KmrlpeD5pLX_L1ou', t: 'tankei nada', a: 'SiaoMuleki', v: 17, d: '2022-02-12' },
+    { s: 'BillowingSincereMagpieFloof-7iUQ26mrQ_OE68ke', t: 'inventory i-frames', a: 'ImSniperKiller', v: 17, d: '2022-02-18' },
+    { s: 'KindCredulousGullBCWarrior-XUU9KSU4oxyZDYfW', t: '36k', a: 'eidenfir', v: 17, d: '2022-03-13' },
+    { s: 'FrigidAgileBibimbapSmoocherZ-tDYgoSR3GMJAIeYW', t: 'tavo don comedy KEKO', a: 'l_tobirama', v: 17, d: '2022-03-03' },
+    { s: 'AliveGlutenFreeAppleShadyLulu-Q-XSDIemYTzA9Otu', t: 'RE4 NG Pro Steam 60fps !tournament | Qualifying !brackets, round 1, Chrioden vs ImSniperkiller, Saturday 5th, 10pm UTC+1', a: 'RockCandyy', v: 14, d: '2022-02-05' },
+    { s: 'LovelyScrumptiousSeahorseCmonBruh-JYNhKb7RzttDiSIK', t: '.', a: 'sawkenn', v: 14, d: '2023-11-28' },
+    { s: 'DeafPlacidDiamondSmoocherZ-hMgv_A7y3AD28ZHQ', t: 'Sadge', a: 'enhikee', v: 14, d: '2022-04-02' },
+  ] },
 ];
 
 // ======= RUNNERS DE RE4 EN VIVO / RE4 RUNNERS LIVE =======
 // Canales de Twitch a vigilar. Se marca "EN VIVO" consultando decapi.me (sin API key).
+// Completar/limpiar esta lista con los handles reales de los runners.
 const RE4_LIVE_CHANNELS = [
-  'DitmanCup',
-  // 'jokeruy', 'sawken', '4rcadan', 'nevs', ...  (handles de Twitch, en minúscula)
+  'DitmanCup', 'sawkenn', 'jokeruy', '4rcadan', 'nevs_', 'slifercs', 'casualspeedrun',
 ];
 
 // ======= TEXTOS BILINGÜES / BILINGUAL STRINGS =======
@@ -653,7 +758,12 @@ async function loadStandings() {
 }
 
 function renderStandings(rows, container) {
-  if (!rows || !rows.length) {
+  // Descartar filas que solo tienen el nº de ranking (sheet vacía todavía)
+  const meaningful = r => Object.entries(r).some(([k, v]) =>
+    String(v).trim() !== '' && !/^(rank|#|pos|posici[oó]n)$/i.test(k.trim()));
+  rows = (rows || []).filter(meaningful);
+
+  if (!rows.length) {
     container.innerHTML = '<p class="loading-msg">' + esc(t('clas.noData')) + '</p>';
     return;
   }
@@ -866,20 +976,54 @@ function toEmbed(url) {
   return '';
 }
 
+function clipUrl(c) {
+  return c.url || (c.s ? 'https://clips.twitch.tv/' + c.s : '');
+}
+function clipEmbed(c) {
+  if (c.s) return `https://clips.twitch.tv/embed?clip=${encodeURIComponent(c.s)}&parent=${location.hostname}&autoplay=true`;
+  return toEmbed(c.url || '');
+}
+
 function renderClips() {
   const host = document.getElementById('clips-grid');
   if (!host) return;
-  if (!CLIPS.length) {
-    host.innerHTML = `<p class="loading-msg">${esc(t('clips.empty'))}</p>`;
-    return;
-  }
-  host.innerHTML = CLIPS.map(c => {
-    const embed = toEmbed(c.url);
-    const inner = embed
-      ? `<div class="clip-frame"><iframe src="${esc(embed)}" allowfullscreen loading="lazy" title="${esc(c.title || 'clip')}"></iframe></div>`
-      : `<a class="clip-frame clip-link" href="${esc(c.url)}" target="_blank" rel="noopener">▶ ${esc(t('champions.vod'))}</a>`;
-    return `<figure class="clip">${inner}<figcaption>${esc(c.title || '')}${c.author ? ` · <span class="clip-author">${esc(c.author)}</span>` : ''}</figcaption></figure>`;
-  }).join('');
+
+  // Soporta tanto [{section, items:[]}] como un array plano de clips
+  const sections = Array.isArray(CLIPS) && CLIPS.length && CLIPS[0].items
+    ? CLIPS
+    : [{ section: '', items: CLIPS || [] }];
+
+  const total = sections.reduce((n, s) => n + (s.items ? s.items.length : 0), 0);
+  if (!total) { host.innerHTML = `<p class="loading-msg">${esc(t('clips.empty'))}</p>`; return; }
+
+  host.innerHTML = sections.filter(s => s.items && s.items.length).map(s => `
+    ${s.section ? `<h3 class="clips-section-title">${esc(s.section)} <span class="clips-count">${s.items.length}</span></h3>` : ''}
+    <div class="clips-row">
+      ${s.items.map((c, i) => {
+        const title = c.t || c.title || '';
+        const author = c.a || c.author || '';
+        const meta = [author && ('by ' + author), c.d, c.v != null && (c.v + ' views')].filter(Boolean).join(' · ');
+        return `<figure class="clip">
+          <button class="clip-frame clip-play" type="button" data-clip='${esc(JSON.stringify({ s: c.s || '', url: c.url || '' }))}' aria-label="${esc(title || 'clip')}">
+            <span class="clip-play-icon" aria-hidden="true">▶</span>
+          </button>
+          <figcaption><span class="clip-title">${esc(title)}</span>${meta ? `<span class="clip-meta">${esc(meta)}</span>` : ''}</figcaption>
+        </figure>`;
+      }).join('')}
+    </div>`).join('');
+
+  host.querySelectorAll('.clip-play').forEach(btn => {
+    btn.addEventListener('click', () => {
+      let c; try { c = JSON.parse(btn.dataset.clip); } catch (e) { return; }
+      const src = clipEmbed(c);
+      if (!src) { window.open(clipUrl(c), '_blank', 'noopener'); return; }
+      const frame = document.createElement('iframe');
+      frame.src = src;
+      frame.allowFullscreen = true;
+      frame.title = btn.getAttribute('aria-label') || 'clip';
+      btn.replaceWith(frame);
+    });
+  });
 }
 
 // ======= EN VIVO / LIVE (RE4 runners) =======

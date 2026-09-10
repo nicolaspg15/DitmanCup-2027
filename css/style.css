@@ -651,26 +651,51 @@ footer {
 .edition-vod:hover { color: var(--accent-bright); }
 
 /* --- Clips --- */
-.clips-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); margin-top: 1.5rem; }
+.clips-section-title {
+  font-family: var(--font-title);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--accent-bright);
+  border-bottom: 1px solid var(--frame);
+  padding-bottom: .4rem;
+  margin: 2rem 0 1.2rem;
+}
+.clips-section-title:first-child { margin-top: .5rem; }
+.clips-count {
+  font-size: .7em;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 0 .4em;
+  vertical-align: .15em;
+}
+.clips-row { display: grid; gap: 1.3rem; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
 .clip { margin: 0; }
-.clip-frame {
+.clip-frame, .clip > iframe {
   display: block;
-  position: relative;
+  width: 100%;
   aspect-ratio: 16 / 9;
   background: #000;
   border: 1px solid var(--frame);
   border-radius: 2px;
-  overflow: hidden;
 }
-.clip-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-.clip-link {
+.clip > iframe { border: 0; }
+.clip-play {
+  position: relative;
+  cursor: pointer;
+  color: var(--text);
+  transition: border-color .15s, background .15s;
+}
+.clip-play:hover { border-color: var(--accent-bright); background: #140f0e; }
+.clip-play-icon {
+  position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
-  color: var(--text); text-decoration: none; font-family: var(--font-title);
-  letter-spacing: .05em;
+  font-size: 2rem; color: var(--accent-bright);
 }
-.clip-link:hover { background: #111; color: var(--accent-bright); }
-.clip figcaption { margin-top: .5rem; color: var(--text-dim); font-size: .95rem; }
-.clip-author { color: var(--accent-bright); }
+.clip-play:hover .clip-play-icon { color: #fff; }
+.clip figcaption { margin-top: .5rem; display: flex; flex-direction: column; gap: .15rem; }
+.clip-title { color: var(--text); font-size: .98rem; }
+.clip-meta { color: var(--text-muted); font-size: .82rem; }
 
 /* --- En vivo --- */
 .live-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); margin-top: 1.5rem; }
