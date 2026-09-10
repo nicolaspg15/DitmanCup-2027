@@ -22,8 +22,9 @@ const TOURNAMENT_CONFIG = {
 // Pegar acá el link de "Publicar en la web -> CSV" de cada hoja.
 const SHEET_URLS = {
   groups: '',    // columnas: Grupo, Corredor  (gid de la hoja de grupos — pendiente)
-  // Ranking de clasificatorias (hoja "Qualifiers"): Rank, Qualifiers PB, Overall PB, Flag, Runner, Date, Link, Notes
-  standings: 'https://docs.google.com/spreadsheets/d/1Q4dkuOBvclcAzfIG_8oD6oQeFjp3ION0lxsDkE-K9No/export?format=csv&gid=1240403995',
+  standings: '', // vacío a propósito: la clasificación del año pasado no va.
+  // Ejemplo cuando esté la hoja nueva (hoja "Qualifiers"):
+  // standings: 'https://docs.google.com/spreadsheets/d/<ID>/export?format=csv&gid=<GID>',
 };
 
 // ======= TEXTOS BILINGÜES / BILINGUAL STRINGS =======
@@ -95,10 +96,12 @@ const I18N = {
     'org.tier.organizers': 'Organizadores',
     'org.tier.mods': 'Moderadores',
     'org.tier.helpers': 'Helpers y casters',
+    'org.tier.design': 'Diseño',
     'org.role.admin': 'Admin',
     'org.role.mod': 'Moderador',
-    'org.role.helperDesign': 'Helper y diseño',
+    'org.role.helper': 'Helper',
     'org.role.helperCaster': 'Helper / Caster',
+    'org.role.design': 'Diseño',
 
     'link.discord': 'Discord',
     'link.rules': 'Reglas',
@@ -176,10 +179,12 @@ const I18N = {
     'org.tier.organizers': 'Organizers',
     'org.tier.mods': 'Moderators',
     'org.tier.helpers': 'Helpers & casters',
+    'org.tier.design': 'Design',
     'org.role.admin': 'Admin',
     'org.role.mod': 'Moderator',
-    'org.role.helperDesign': 'Helper & design',
+    'org.role.helper': 'Helper',
     'org.role.helperCaster': 'Helper / Caster',
+    'org.role.design': 'Design',
 
     'link.discord': 'Discord',
     'link.rules': 'Rules',
