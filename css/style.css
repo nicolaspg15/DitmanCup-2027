@@ -10,12 +10,6 @@
   font-display: swap;
 }
 @font-face {
-  font-family: 'Trajan Pro';
-  src: url('../assets/fonts/TrajanPro-Bold.otf') format('opentype');
-  font-weight: 700;
-  font-display: swap;
-}
-@font-face {
   font-family: 'Virgula Vulgaris';
   src: url('../assets/fonts/VirgulaVulgaris-Bold.ttf') format('truetype');
   font-weight: 700;
@@ -28,16 +22,18 @@
   --surface-alt: #1D242D;
   --text: #EDEEF0;
   --text-muted: #8A93A3;
+  --text-dim: #B4BCC9;
   --accent: #F2A93B;
   --accent-2: #2DD4BF;
   --danger: #C6402F;
   --border: #262E38;
 
-  /* La principal es la del juego. Trajan para números/subtítulos. Virgula para acentos grunge. */
-  --font-display: 'Biohazard Game Font', 'Trajan Pro', serif;
-  --font-title: 'Trajan Pro', 'Times New Roman', serif;
-  --font-grunge: 'Virgula Vulgaris', 'Trajan Pro', cursive;
-  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  /* Solo fuentes de fan/gratis. La principal es la del juego (Biohazard);
+     Virgula Vulgaris para acentos grunge (subtítulos, labels, notas). */
+  --font-display: 'Biohazard Game Font', 'Times New Roman', serif;
+  --font-title: 'Biohazard Game Font', 'Times New Roman', serif;
+  --font-grunge: 'Virgula Vulgaris', 'Biohazard Game Font', cursive;
+  --font-body: 'Biohazard Game Font', 'Segoe UI', system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -46,7 +42,9 @@ body {
   margin: 0;
   color: var(--text);
   font-family: var(--font-body);
-  line-height: 1.5;
+  font-size: 17px;
+  line-height: 1.6;
+  letter-spacing: .01em;
   background-color: var(--bg);
   background-image:
     linear-gradient(rgba(11, 14, 17, 0.80), rgba(11, 14, 17, 0.94)),
@@ -55,6 +53,13 @@ body {
   background-position: center top;
   background-size: cover;
   background-attachment: fixed;
+}
+
+/* Fondo propio de la pestaña Inicio (imagen completa, overlay más suave) */
+body[data-tab="inicio"] {
+  background-image:
+    linear-gradient(rgba(11, 14, 17, 0.42), rgba(11, 14, 17, 0.80)),
+    url('../assets/fondoInicio.jpg');
 }
 
 h1, h2, h3 {
@@ -90,13 +95,6 @@ a { color: var(--accent-2); }
 }
 
 .brand { display: flex; align-items: center; gap: .6rem; min-width: 0; }
-.brand-logo {
-  height: 34px; width: 34px;
-  object-fit: cover;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: var(--surface-alt);
-}
 .brand-name {
   font-family: var(--font-display);
   font-size: 1.05rem;
@@ -144,13 +142,12 @@ a { color: var(--accent-2); }
 .tab-btn {
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: var(--text-dim);
   font-family: var(--font-title);
-  font-weight: 700;
-  font-size: .82rem;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  padding: .5rem .8rem;
+  font-weight: 400;
+  font-size: 1rem;
+  letter-spacing: .07em;
+  padding: .5rem .75rem;
   border-radius: 6px;
   cursor: pointer;
   transition: color .15s, background .15s;
@@ -177,20 +174,10 @@ main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
 /* --- Inicio / Hero --- */
 .hero {
   text-align: center;
-  padding: 2.5rem 0 2rem;
+  padding: 3.5rem 0 2.5rem;
   border-bottom: 1px solid var(--border);
   margin-bottom: 2rem;
 }
-.hero-logo-slot {
-  width: 150px; height: 150px;
-  margin: 0 auto 1.4rem;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  overflow: hidden;
-  background: var(--surface);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, .5);
-}
-.hero-logo { width: 100%; height: 100%; object-fit: cover; }
 .hero-title {
   font-size: clamp(2.4rem, 7vw, 4rem);
   color: var(--text);
@@ -236,12 +223,11 @@ main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
   font-variant-numeric: tabular-nums;
 }
 .cd-lbl {
-  font-family: var(--font-body);
-  font-size: .68rem;
-  text-transform: uppercase;
-  letter-spacing: .12em;
-  color: var(--text-muted);
-  margin-top: .2rem;
+  font-family: var(--font-grunge);
+  font-size: .95rem;
+  letter-spacing: .06em;
+  color: var(--text-dim);
+  margin-top: .35rem;
 }
 .cd-sep {
   font-family: var(--font-title);
@@ -252,9 +238,10 @@ main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
 }
 .countdown-date {
   margin: 1rem 0 0;
-  font-size: .82rem;
-  color: var(--text-muted);
-  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-dim);
+  font-family: var(--font-grunge);
+  letter-spacing: .03em;
 }
 .countdown.is-open .countdown-clock,
 .countdown.is-open .countdown-date { display: none; }
@@ -268,7 +255,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
   font-size: 2.1rem;
   color: var(--accent);
 }
-.fact-label { color: var(--text-muted); font-size: .8rem; }
+.fact-label { color: var(--text-dim); font-size: .95rem; font-family: var(--font-grunge); letter-spacing: .04em; }
 .intro-text {
   max-width: 640px;
   margin: 0 auto;

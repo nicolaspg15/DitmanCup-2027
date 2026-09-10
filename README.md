@@ -7,13 +7,14 @@ Bilingüe español / inglés (botón **ES / EN** en la barra superior).
 - `index.html` — toda la página (Inicio, Sorteo, Grupos, Brackets, Clasificatorias, Donaciones, Organizadores)
 - `css/style.css` — estilos + `@font-face` de las fuentes locales
 - `js/script.js` — configuración del torneo, textos ES/EN, pestañas, contador y carga de datos
-- `assets/` — imágenes (`fondo1.jpeg` de fondo, `dc-logo.png` de logo)
-- `assets/fonts/` — fuentes: `REBiohazard.otf` (la del juego, principal), `TrajanPro-Bold.otf`, `VirgulaVulgaris-Bold.ttf`
+- `assets/` — imágenes: `fondoInicio.jpg` (fondo de la pestaña Inicio), `fondo1.jpeg` (fondo del resto)
+- `assets/fonts/` — fuentes (fan/gratis): `REBiohazard.otf` (la del juego, principal) y `VirgulaVulgaris-Bold.ttf` (acentos)
 
 ## Configuración del torneo
 Todo en la constante `TOURNAMENT_CONFIG` al principio de `js/script.js`:
 - `totalRunners`, `numGroups`, `groupSize`, `qualifiersPerGroup` — los cuadros y grupos se arman a partir de acá, no hay números hardcodeados.
-- `qualysOpen` — fecha/hora de apertura de las clasificatorias (formato ISO, hora local). Alimenta el contador de la portada. **Hoy está en `2026-11-20` para testear — cambiar por la fecha real.**
+- `qualysOpen` — apertura de las clasificatorias, formato ISO con offset. Hoy: `2026-11-20T00:00:00-03:00` (20 nov 2026, 00:00 Argentina). Alimenta el contador de la portada.
+- `qualysTimeZone` — zona horaria para mostrar la fecha siempre igual sin importar dónde esté el visitante.
 
 ## Idiomas
 Cada texto traducible lleva `data-i18n="clave"` en el HTML y su valor está en el objeto `I18N` (`es` / `en`) de `js/script.js`. Para tocar un texto se edita ahí, en los dos idiomas. El idioma elegido queda guardado en el navegador (`localStorage`).
@@ -43,7 +44,7 @@ y abrir <http://localhost:4599>. (Hace falta un server por las fuentes y el `fet
 Cualquier colaborador puede editar desde la web de GitHub o clonar y trabajar con git. GitHub Pages se actualiza solo en menos de 2 minutos.
 
 ## Pendiente
-- [ ] Logo definitivo con fondo transparente (hoy `assets/dc-logo.png` trae fondo)
+- [ ] Logo del torneo (se sacó el del 2026)
 - [ ] Confirmar número final de corredores / grupos / clasificados
 - [ ] Fecha real de apertura de qualys (`qualysOpen`)
 - [ ] VOD del sorteo (sección Sorteo)
@@ -51,10 +52,8 @@ Cualquier colaborador puede editar desde la web de GitHub o clonar y trabajar co
 - [ ] Nombres reales de organizadores / casters
 - [ ] Link real de donaciones
 - [ ] Conectar las dos Sheets (grupos y clasificación)
-- [ ] Robustecer `fetchCSV()` + modo mock data
-- [ ] Revisar licencias de las fuentes para uso web (ver notas abajo)
 
 ## Notas sobre las fuentes
-`REBiohazard.otf` y `VirgulaVulgaris-Bold.ttf` son fuentes de fan / gratuitas para uso no comercial;
-`TrajanPro-Bold.otf` es comercial (Adobe). Para un torneo comunitario sin fines de lucro suele estar
-bien, pero conviene confirmar los términos de cada una antes de algo más formal.
+`REBiohazard.otf` (Biohazard Game Font) y `VirgulaVulgaris-Bold.ttf` son fuentes de fan / gratuitas
+para uso no comercial. Para un torneo comunitario sin fines de lucro suele estar bien; conviene igual
+confirmar los términos antes de algo más formal.

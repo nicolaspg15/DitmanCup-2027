@@ -7,10 +7,10 @@ const TOURNAMENT_CONFIG = {
   groupSize: 4,
   qualifiersPerGroup: 2,   // clasificados por grupo a la llave / advance per group
 
-  // Apertura de las clasificatorias ("qualys"). Fecha/hora LOCAL, formato ISO.
-  // Qualifier window opens. LOCAL date/time, ISO format.
-  // TODO: fecha real por confirmar — hoy está puesta para testear el contador.
-  qualysOpen: '2026-11-20T00:00:00',
+  // Apertura de las clasificatorias ("qualys"). Formato ISO con offset.
+  // Qualifier window opens. ISO format with UTC offset.
+  qualysOpen: '2026-11-20T00:00:00-03:00',      // 20 nov 2026, 00:00 hora Argentina (UTC-3)
+  qualysTimeZone: 'America/Argentina/Buenos_Aires', // solo para mostrar la fecha siempre igual
 };
 
 // ======= FUENTES DE DATOS (Google Sheets) / DATA SOURCES =======
@@ -226,6 +226,7 @@ function initTabs() {
 
     const panel = document.getElementById(btn.dataset.tab);
     panel.classList.add('active');
+    document.body.dataset.tab = btn.dataset.tab;
     tabs.classList.remove('open');
     toggle.setAttribute('aria-expanded', 'false');
     if (focusPanel) panel.focus();
@@ -257,6 +258,9 @@ function initTabs() {
   tabs.setAttribute('role', 'tablist');
   document.querySelectorAll('.tab-panel').forEach(p => p.setAttribute('role', 'tabpanel'));
 
+  const active = document.querySelector('.tab-btn.active');
+  document.body.dataset.tab = active ? active.dataset.tab : 'inicio';
+
   toggle.addEventListener('click', () => {
     const open = tabs.classList.toggle('open');
     toggle.setAttribute('aria-expanded', String(open));
@@ -286,7 +290,11 @@ function renderCountdown() {
 
   const dateLine = document.getElementById('countdown-date');
   const locale = currentLang === 'en' ? 'en-US' : 'es-ES';
-  const pretty = _countdownTarget.toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' });
+  const fmtOpts = { day: 'numeric', month: 'long', year: 'numeric' };
+  if (TOURNAMENT_CONFIG.qualysTimeZone) fmtOpts.timeZone = TOURNAMENT_CONFIG.qualysTimeZone;
+  let pretty;
+  try { pretty = _countdownTarget.toLocaleDateString(locale, fmtOpts); }
+  catch (e) { pretty = _countdownTarget.toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' }); }
   if (dateLine) dateLine.textContent = t('countdown.datePrefix') + ' ' + pretty;
 
   let diff = _countdownTarget.getTime() - Date.now();
