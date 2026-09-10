@@ -1,14 +1,21 @@
 # Ditman Cup 2027 — Sitio del torneo
 
 Sitio estático (GitHub Pages), una sola página con navegación por pestañas.
-Bilingüe español / inglés (botón **ES / EN** en la barra superior).
+Bilingüe **inglés (principal) / español** — botón **EN / ES** en la barra superior.
+Estética basada en Resident Evil 4 (2005): paleta negro / gris / rojo / blanco hueso,
+nav estilo menú del juego, tarjetas de grupo tipo marco de diálogo del Merchant.
 
 ## Estructura
 - `index.html` — toda la página (Inicio, Sorteo, Grupos, Brackets, Clasificatorias, Donaciones, Organizadores)
-- `css/style.css` — estilos + `@font-face` de las fuentes locales
-- `js/script.js` — configuración del torneo, textos ES/EN, pestañas, contador y carga de datos
-- `assets/` — imágenes: `fondoInicio.jpg` (fondo de la pestaña Inicio), `fondo1.jpeg` (fondo del resto)
+- `css/style.css` — estilos + `@font-face` + paleta RE4 en `:root`
+- `js/script.js` — configuración del torneo, textos EN/ES, pestañas, contador, carga de datos y bracket
+- `assets/` — `fondoInicio.jpg` (fondo de Inicio), `fondo1.jpeg` (fondo del resto)
+- `assets/org/` — fotos de perfil de los organizadores
 - `assets/fonts/` — fuentes (fan/gratis): `REBiohazard.otf` (la del juego, principal) y `VirgulaVulgaris-Bold.ttf` (acentos)
+
+## Links del torneo
+YouTube, Twitch y Discord están en el hero y el footer. El botón **Reglas** apunta al Google Doc.
+Editar las URLs directo en `index.html` (`.hero-links` y `.social-links`).
 
 ## Configuración del torneo
 Todo en la constante `TOURNAMENT_CONFIG` al principio de `js/script.js`:
@@ -17,7 +24,7 @@ Todo en la constante `TOURNAMENT_CONFIG` al principio de `js/script.js`:
 - `qualysTimeZone` — zona horaria para mostrar la fecha siempre igual sin importar dónde esté el visitante.
 
 ## Idiomas
-Cada texto traducible lleva `data-i18n="clave"` en el HTML y su valor está en el objeto `I18N` (`es` / `en`) de `js/script.js`. Para tocar un texto se edita ahí, en los dos idiomas. El idioma elegido queda guardado en el navegador (`localStorage`).
+Inglés es el idioma por defecto. Cada texto traducible lleva `data-i18n="clave"` en el HTML y su valor está en el objeto `I18N` (`en` / `es`) de `js/script.js` — se edita ahí, en los dos idiomas. La elección del visitante queda en `localStorage`.
 
 ## Cómo agregar colaboradores
 En el repo: **Settings → Collaborators → Add people**, buscar por usuario o email de GitHub, y aceptan la invitación por mail.
@@ -31,6 +38,10 @@ En el repo: **Settings → Collaborators → Add people**, buscar por usuario o 
 **Formato esperado — hoja de grupos:** dos columnas, `Grupo` y `Corredor` (una fila por corredor, ej: `A, NombreDelRunner`).
 
 **Formato esperado — hoja de clasificación:** cualquier set de columnas (se muestran todas tal cual estén en la Sheet). Si además trae `Grupo` y `Corredor`, los primeros `qualifiersPerGroup` de cada grupo alimentan el bracket.
+
+**Ya conectado:** `SHEET_URLS.standings` apunta a la hoja *Qualifiers* del libro del torneo
+(`.../export?format=csv&gid=1240403995`). Ese endpoint sirve CSV con CORS abierto mientras la
+Sheet esté compartida "cualquiera con el link". Falta el `gid` de la hoja de **grupos**.
 
 El parser (`parseCSV` / `fetchCSV`) soporta comas dentro de comillas, comillas escapadas (`""`), CRLF, BOM y filas vacías.
 
@@ -58,10 +69,9 @@ Cualquier colaborador puede editar desde la web de GitHub o clonar y trabajar co
 - [ ] Confirmar número final de corredores / grupos / clasificados
 - [ ] Fecha real de apertura de qualys (`qualysOpen`)
 - [ ] VOD del sorteo (sección Sorteo)
-- [ ] Armar el bracket visual una vez definida la fase de grupos
-- [ ] Nombres reales de organizadores / casters
+- [ ] `gid` de la hoja de grupos para `SHEET_URLS.groups`
 - [ ] Link real de donaciones
-- [ ] Conectar las dos Sheets (grupos y clasificación)
+- [ ] Casters / nombres de nuevos organizadores si se suman
 
 ## Notas sobre las fuentes
 `REBiohazard.otf` (Biohazard Game Font) y `VirgulaVulgaris-Bold.ttf` son fuentes de fan / gratuitas

@@ -21,8 +21,9 @@ const TOURNAMENT_CONFIG = {
 // ======= FUENTES DE DATOS (Google Sheets) / DATA SOURCES =======
 // Pegar acá el link de "Publicar en la web -> CSV" de cada hoja.
 const SHEET_URLS = {
-  groups: '',    // columnas: Grupo, Corredor
-  standings: '', // clasificación / placements
+  groups: '',    // columnas: Grupo, Corredor  (gid de la hoja de grupos — pendiente)
+  // Ranking de clasificatorias (hoja "Qualifiers"): Rank, Qualifiers PB, Overall PB, Flag, Runner, Date, Link, Notes
+  standings: 'https://docs.google.com/spreadsheets/d/1Q4dkuOBvclcAzfIG_8oD6oQeFjp3ION0lxsDkE-K9No/export?format=csv&gid=1240403995',
 };
 
 // ======= TEXTOS BILINGÜES / BILINGUAL STRINGS =======
@@ -37,7 +38,7 @@ const I18N = {
     'nav.organizadores': 'Organizadores',
     'nav.menu': 'Abrir menú',
 
-    'hero.subtitle': 'Torneo comunitario de speedrunning, formato copa del mundo.',
+    'hero.subtitle': 'Torneo comunitario de speedrunning de Resident Evil 4 — formato copa del mundo.',
 
     'countdown.label': 'Faltan para que abran las qualys',
     'countdown.days': 'días',
@@ -91,10 +92,13 @@ const I18N = {
     'don.btn': 'Donar',
 
     'org.title': 'Organizadores',
-    'org.tbd': 'Por definir',
-    'org.role.org': 'Organización',
-    'org.role.cast': 'Casting',
-    'org.role.web': 'Diseño / Web',
+    'org.role.admin': 'Admin',
+    'org.role.helper': 'Helper y diseño',
+
+    'link.discord': 'Discord',
+    'link.rules': 'Reglas',
+    'link.youtube': 'YouTube',
+    'link.twitch': 'Twitch',
 
     'footer.text': 'Ditman Cup 2027 · Hecho por la comunidad',
 
@@ -110,7 +114,7 @@ const I18N = {
     'nav.organizadores': 'Organizers',
     'nav.menu': 'Open menu',
 
-    'hero.subtitle': 'Community speedrunning tournament, World Cup format.',
+    'hero.subtitle': 'Community Resident Evil 4 speedrunning tournament — World Cup format.',
 
     'countdown.label': 'Until the qualifiers open',
     'countdown.days': 'days',
@@ -164,10 +168,13 @@ const I18N = {
     'don.btn': 'Donate',
 
     'org.title': 'Organizers',
-    'org.tbd': 'TBD',
-    'org.role.org': 'Organization',
-    'org.role.cast': 'Casting',
-    'org.role.web': 'Design / Web',
+    'org.role.admin': 'Admin',
+    'org.role.helper': 'Helper & design',
+
+    'link.discord': 'Discord',
+    'link.rules': 'Rules',
+    'link.youtube': 'YouTube',
+    'link.twitch': 'Twitch',
 
     'footer.text': 'Ditman Cup 2027 · Made by the community',
 
@@ -176,7 +183,8 @@ const I18N = {
 };
 
 // Estado en memoria para poder re-renderizar al cambiar de idioma
-let currentLang = 'es';
+// Idioma principal: inglés. / Primary language: English.
+let currentLang = 'en';
 let lastGroupsRows = null;
 let lastStandingsRows = null;
 
@@ -215,8 +223,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // ======= IDIOMA / LANGUAGE =======
 function initLang() {
   const saved = safeGet('dc-lang');
-  const guess = (navigator.language || 'es').toLowerCase().startsWith('en') ? 'en' : 'es';
-  applyLang(saved === 'en' || saved === 'es' ? saved : guess);
+  // Inglés por defecto; solo recordamos si el visitante eligió español.
+  applyLang(saved === 'es' || saved === 'en' ? saved : 'en');
 
   document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.addEventListener('click', () => applyLang(btn.dataset.lang));
