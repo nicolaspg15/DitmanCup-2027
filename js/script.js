@@ -91,9 +91,14 @@ const I18N = {
     'don.body': 'La Ditman Cup se sostiene gracias a la comunidad. Si querés colaborar con los premios y los gastos del torneo, podés hacerlo acá:',
     'don.btn': 'Donar',
 
-    'org.title': 'Organizadores',
+    'org.title': 'Organización y staff',
+    'org.tier.organizers': 'Organizadores',
+    'org.tier.mods': 'Moderadores',
+    'org.tier.helpers': 'Helpers y casters',
     'org.role.admin': 'Admin',
-    'org.role.helper': 'Helper y diseño',
+    'org.role.mod': 'Moderador',
+    'org.role.helperDesign': 'Helper y diseño',
+    'org.role.helperCaster': 'Helper / Caster',
 
     'link.discord': 'Discord',
     'link.rules': 'Reglas',
@@ -167,9 +172,14 @@ const I18N = {
     'don.body': 'The Ditman Cup runs on community support. If you want to chip in for the prize pool and tournament costs, you can do it here:',
     'don.btn': 'Donate',
 
-    'org.title': 'Organizers',
+    'org.title': 'Organizers & staff',
+    'org.tier.organizers': 'Organizers',
+    'org.tier.mods': 'Moderators',
+    'org.tier.helpers': 'Helpers & casters',
     'org.role.admin': 'Admin',
-    'org.role.helper': 'Helper & design',
+    'org.role.mod': 'Moderator',
+    'org.role.helperDesign': 'Helper & design',
+    'org.role.helperCaster': 'Helper / Caster',
 
     'link.discord': 'Discord',
     'link.rules': 'Rules',

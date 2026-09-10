@@ -11,6 +11,12 @@
   font-display: swap;
 }
 @font-face {
+  font-family: 'RE4 Remake';
+  src: url('../assets/fonts/RE4Remake.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
   font-family: 'Virgula Vulgaris';
   src: url('../assets/fonts/VirgulaVulgaris-Bold.ttf') format('truetype');
   font-weight: 700;
@@ -30,10 +36,12 @@
   --border: #3B342A;        /* bronce apagado */
   --frame: #7A6A49;         /* borde tipo menú del Merchant */
 
-  --font-display: 'Biohazard Game Font', 'Times New Roman', serif;
-  --font-title: 'Biohazard Game Font', 'Times New Roman', serif;
-  --font-grunge: 'Virgula Vulgaris', 'Biohazard Game Font', cursive;
-  --font-body: 'Biohazard Game Font', 'Segoe UI', system-ui, sans-serif;
+  /* Biohazard: títulos grandes con textura. RE4 Remake: todo lo demás (legible).
+     Virgula: acentos sueltos. Las 3 son de fan / gratis. */
+  --font-display: 'Biohazard Game Font', 'RE4 Remake', 'Times New Roman', serif;
+  --font-title: 'RE4 Remake', 'Segoe UI', system-ui, sans-serif;
+  --font-grunge: 'Virgula Vulgaris', 'RE4 Remake', cursive;
+  --font-body: 'RE4 Remake', 'Segoe UI', system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -47,7 +55,7 @@ body {
   letter-spacing: .01em;
   background-color: var(--bg);
   background-image:
-    linear-gradient(rgba(10, 9, 8, 0.88), rgba(10, 9, 8, 0.97)),
+    linear-gradient(rgba(10, 9, 8, 0.93), rgba(10, 9, 8, 0.985)),
     url('../assets/fondo1.jpeg');
   background-repeat: no-repeat;
   background-position: center top;
@@ -63,19 +71,19 @@ body[data-tab="inicio"] {
 }
 
 h1, h2, h3 {
-  font-family: var(--font-display);
   font-weight: 400;
   letter-spacing: .04em;
   margin: 0 0 .6rem;
   line-height: 1.15;
 }
+h1, h2 { font-family: var(--font-display); }
 h2 {
   font-size: clamp(1.4rem, 3.5vw, 2rem);
   color: var(--text);
   border-left: 3px solid var(--accent);
   padding-left: .6rem;
 }
-h3 { letter-spacing: .03em; }
+h3 { font-family: var(--font-title); letter-spacing: .03em; }
 
 a { color: var(--accent-bright); }
 
@@ -219,8 +227,9 @@ main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
   margin-bottom: 2.2rem;
 }
 .hero-links a {
-  font-family: var(--font-display);
-  letter-spacing: .06em;
+  font-family: var(--font-title);
+  letter-spacing: .08em;
+  text-transform: uppercase;
   font-size: .9rem;
   text-decoration: none;
   color: var(--text);
@@ -394,9 +403,10 @@ main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
 }
 .round-title {
   text-align: center;
-  font-family: var(--font-display);
-  font-size: .85rem;
-  letter-spacing: .06em;
+  font-family: var(--font-title);
+  font-size: .82rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
   color: var(--accent-bright);
   padding: 0 .7rem .8rem;
   white-space: nowrap;
@@ -483,7 +493,18 @@ main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
 .donate-btn:hover { background: var(--accent-bright); border-color: var(--accent-bright); }
 
 /* --- Organizadores (retrato tipo Merchant) --- */
-.team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1.4rem; }
+.org-tier {
+  font-family: var(--font-title);
+  font-size: 1rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent-bright);
+  margin: 2rem 0 1rem;
+  padding-bottom: .35rem;
+  border-bottom: 1px solid var(--frame);
+}
+.org-tier:first-of-type { margin-top: .5rem; }
+.team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1.4rem; margin-bottom: 1.5rem; }
 .team-card { text-align: center; }
 .team-avatar {
   width: 104px; height: 104px;
@@ -496,10 +517,11 @@ main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
   filter: saturate(.92) contrast(1.05);
 }
 .team-name {
-  font-family: var(--font-display);
-  letter-spacing: .04em;
+  font-family: var(--font-title);
+  letter-spacing: .03em;
   color: var(--text);
-  font-size: 1.05rem;
+  font-size: 1rem;
+  word-break: break-word;
 }
 .team-role { color: var(--accent-bright); font-size: .9rem; font-family: var(--font-grunge); }
 
@@ -521,8 +543,9 @@ footer {
 .social-links a {
   color: var(--text-dim);
   text-decoration: none;
-  font-family: var(--font-display);
-  letter-spacing: .06em;
+  font-family: var(--font-title);
+  letter-spacing: .08em;
+  text-transform: uppercase;
   font-size: .88rem;
   padding: .4rem .9rem;
   border: 1px solid var(--border);

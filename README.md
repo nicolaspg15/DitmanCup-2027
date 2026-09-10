@@ -11,7 +11,10 @@ nav estilo menú del juego, tarjetas de grupo tipo marco de diálogo del Merchan
 - `js/script.js` — configuración del torneo, textos EN/ES, pestañas, contador, carga de datos y bracket
 - `assets/` — `fondoInicio.jpg` (fondo de Inicio), `fondo1.jpeg` (fondo del resto)
 - `assets/org/` — fotos de perfil de los organizadores
-- `assets/fonts/` — fuentes (fan/gratis): `REBiohazard.otf` (la del juego, principal) y `VirgulaVulgaris-Bold.ttf` (acentos)
+- `assets/fonts/` — fuentes (todas de fan/gratis):
+  - `RE4Remake.ttf` — texto general, nav, números, tablas (legible)
+  - `REBiohazard.otf` — títulos grandes con textura (hero, `<h2>`, marca)
+  - `VirgulaVulgaris-Bold.ttf` — acentos sueltos (subtítulo, footer, notas)
 
 ## Links del torneo
 YouTube, Twitch y Discord están en el hero y el footer. El botón **Reglas** apunta al Google Doc.
@@ -74,6 +77,6 @@ Cualquier colaborador puede editar desde la web de GitHub o clonar y trabajar co
 - [ ] Casters / nombres de nuevos organizadores si se suman
 
 ## Notas sobre las fuentes
-`REBiohazard.otf` (Biohazard Game Font) y `VirgulaVulgaris-Bold.ttf` son fuentes de fan / gratuitas
+Las tres (`RE4Remake.ttf`, `REBiohazard.otf`, `VirgulaVulgaris-Bold.ttf`) son de fan / gratuitas
 para uso no comercial. Para un torneo comunitario sin fines de lucro suele estar bien; conviene igual
 confirmar los términos antes de algo más formal.
