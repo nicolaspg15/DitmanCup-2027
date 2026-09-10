@@ -9,5 +9,8 @@ desktop.ini
 *.swp
 *~
 
+# Claude Code (config local por persona)
+.claude/settings.local.json
+
 # Varios
 *.log

@@ -1,15 +1,25 @@
 # Ditman Cup 2027 — Sitio del torneo
 
 Sitio estático (GitHub Pages), una sola página con navegación por pestañas.
+Bilingüe español / inglés (botón **ES / EN** en la barra superior).
 
 ## Estructura
 - `index.html` — toda la página (Inicio, Sorteo, Grupos, Brackets, Clasificatorias, Donaciones, Organizadores)
-- `css/style.css` — estilos
-- `js/script.js` — lógica de pestañas + carga de datos desde Google Sheets
-- `assets/` — logo e imágenes (agregar acá el logo del torneo cuando esté listo)
+- `css/style.css` — estilos + `@font-face` de las fuentes locales
+- `js/script.js` — configuración del torneo, textos ES/EN, pestañas, contador y carga de datos
+- `assets/` — imágenes (`fondo1.jpeg` de fondo, `dc-logo.png` de logo)
+- `assets/fonts/` — fuentes: `REBiohazard.otf` (la del juego, principal), `TrajanPro-Bold.otf`, `VirgulaVulgaris-Bold.ttf`
+
+## Configuración del torneo
+Todo en la constante `TOURNAMENT_CONFIG` al principio de `js/script.js`:
+- `totalRunners`, `numGroups`, `groupSize`, `qualifiersPerGroup` — los cuadros y grupos se arman a partir de acá, no hay números hardcodeados.
+- `qualysOpen` — fecha/hora de apertura de las clasificatorias (formato ISO, hora local). Alimenta el contador de la portada. **Hoy está en `2026-11-20` para testear — cambiar por la fecha real.**
+
+## Idiomas
+Cada texto traducible lleva `data-i18n="clave"` en el HTML y su valor está en el objeto `I18N` (`es` / `en`) de `js/script.js`. Para tocar un texto se edita ahí, en los dos idiomas. El idioma elegido queda guardado en el navegador (`localStorage`).
 
 ## Cómo agregar colaboradores
-En el repo: **Settings → Collaborators → Add people**, buscar por usuario o email de GitHub, y aceptan la invitación por mail. Van a poder subir cambios directo al repo, igual que el dueño.
+En el repo: **Settings → Collaborators → Add people**, buscar por usuario o email de GitHub, y aceptan la invitación por mail.
 
 ## Cómo conectar una Google Sheet
 1. En la Sheet: **Archivo → Compartir → Publicar en la web**
@@ -21,16 +31,30 @@ En el repo: **Settings → Collaborators → Add people**, buscar por usuario o 
 
 **Formato esperado — hoja de clasificación:** cualquier set de columnas (se muestran todas tal cual estén en la Sheet).
 
-Si en algún momento los nombres tienen comas o el CSV se complica, se puede reemplazar el parser casero de `fetchCSV()` por la librería PapaParse (vía CDN), que es más robusta.
+El parser `fetchCSV()` es casero y todavía simple (no soporta comas dentro de comillas). Se robustece en un paso siguiente.
+
+## Correr en local
+```bash
+python -m http.server 4599
+```
+y abrir <http://localhost:4599>. (Hace falta un server por las fuentes y el `fetch`; abrir el `index.html` directo no alcanza.)
 
 ## Publicar cambios
-Cualquier colaborador puede subir/editar archivos desde la web de GitHub (**Add file → Upload files**, o editar directo con el lápiz), o clonar el repo y trabajar con git localmente. GitHub Pages se actualiza solo, en menos de 2 minutos.
+Cualquier colaborador puede editar desde la web de GitHub o clonar y trabajar con git. GitHub Pages se actualiza solo en menos de 2 minutos.
 
 ## Pendiente
-- [ ] Logo del torneo (reemplazar `.hero-logo-slot` y `.brand-logo`)
+- [ ] Logo definitivo con fondo transparente (hoy `assets/dc-logo.png` trae fondo)
 - [ ] Confirmar número final de corredores / grupos / clasificados
+- [ ] Fecha real de apertura de qualys (`qualysOpen`)
 - [ ] VOD del sorteo (sección Sorteo)
 - [ ] Armar el bracket visual una vez definida la fase de grupos
 - [ ] Nombres reales de organizadores / casters
 - [ ] Link real de donaciones
 - [ ] Conectar las dos Sheets (grupos y clasificación)
+- [ ] Robustecer `fetchCSV()` + modo mock data
+- [ ] Revisar licencias de las fuentes para uso web (ver notas abajo)
+
+## Notas sobre las fuentes
+`REBiohazard.otf` y `VirgulaVulgaris-Bold.ttf` son fuentes de fan / gratuitas para uso no comercial;
+`TrajanPro-Bold.otf` es comercial (Adobe). Para un torneo comunitario sin fines de lucro suele estar
+bien, pero conviene confirmar los términos de cada una antes de algo más formal.

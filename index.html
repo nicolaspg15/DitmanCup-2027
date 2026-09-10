@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ditman Cup 2027</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<meta name="description" content="Ditman Cup 2027 — torneo comunitario de speedrunning de Resident Evil 4, formato copa del mundo. / Community RE4 speedrunning tournament, World Cup format.">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -13,98 +12,121 @@
 <header class="topbar">
   <div class="topbar-inner">
     <div class="brand">
-      <div class="brand-logo" id="nav-logo"></div>
+      <img class="brand-logo" id="nav-logo" src="assets/dc-logo.png" alt="Ditman Cup">
       <span class="brand-name">DITMAN CUP <span class="brand-year">2027</span></span>
     </div>
-    <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú">☰</button>
-    <nav class="tabs" id="tabs">
-      <button class="tab-btn active" data-tab="inicio">Inicio</button>
-      <button class="tab-btn" data-tab="sorteo">Sorteo</button>
-      <button class="tab-btn" data-tab="grupos">Grupos</button>
-      <button class="tab-btn" data-tab="brackets">Brackets</button>
-      <button class="tab-btn" data-tab="clasificatorias">Clasificatorias</button>
-      <button class="tab-btn" data-tab="donaciones">Donaciones</button>
-      <button class="tab-btn" data-tab="organizadores">Organizadores</button>
+
+    <div class="topbar-actions">
+      <div class="lang-switch" role="group" aria-label="Idioma / Language">
+        <button class="lang-btn" data-lang="es" type="button">ES</button>
+        <button class="lang-btn" data-lang="en" type="button">EN</button>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="tabs" data-i18n-attr="aria-label:nav.menu"><span aria-hidden="true">☰</span></button>
+    </div>
+
+    <nav class="tabs" id="tabs" aria-label="Secciones">
+      <button class="tab-btn active" data-tab="inicio" data-i18n="nav.inicio">Inicio</button>
+      <button class="tab-btn" data-tab="sorteo" data-i18n="nav.sorteo">Sorteo</button>
+      <button class="tab-btn" data-tab="grupos" data-i18n="nav.grupos">Grupos</button>
+      <button class="tab-btn" data-tab="brackets" data-i18n="nav.brackets">Brackets</button>
+      <button class="tab-btn" data-tab="clasificatorias" data-i18n="nav.clasificatorias">Clasificatorias</button>
+      <button class="tab-btn" data-tab="donaciones" data-i18n="nav.donaciones">Donaciones</button>
+      <button class="tab-btn" data-tab="organizadores" data-i18n="nav.organizadores">Organizadores</button>
     </nav>
   </div>
 </header>
 
 <main>
 
-  <section id="inicio" class="tab-panel active">
+  <section id="inicio" class="tab-panel active" tabindex="-1">
     <div class="hero">
-      <div class="hero-logo-slot" id="hero-logo">
-        <span class="hero-logo-placeholder">LOGO ACÁ</span>
+      <div class="hero-logo-slot">
+        <img class="hero-logo" src="assets/dc-logo.png" alt="Ditman Cup 2027">
       </div>
       <h1 class="hero-title">Ditman Cup 2027</h1>
-      <p class="hero-subtitle">Torneo comunitario de speedrunning, formato copa del mundo.</p>
+      <p class="hero-subtitle" data-i18n="hero.subtitle">Torneo comunitario de speedrunning, formato copa del mundo.</p>
+
+      <div class="countdown" id="countdown" aria-live="polite">
+        <p class="countdown-label" data-i18n="countdown.label">Faltan para que abran las qualys</p>
+        <div class="countdown-clock" id="countdown-clock">
+          <div class="cd-unit"><span class="cd-num" id="cd-days">--</span><span class="cd-lbl" data-i18n="countdown.days">días</span></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit"><span class="cd-num" id="cd-hours">--</span><span class="cd-lbl" data-i18n="countdown.hours">horas</span></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit"><span class="cd-num" id="cd-mins">--</span><span class="cd-lbl" data-i18n="countdown.mins">min</span></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit"><span class="cd-num" id="cd-secs">--</span><span class="cd-lbl" data-i18n="countdown.secs">seg</span></div>
+        </div>
+        <p class="countdown-date" id="countdown-date"></p>
+      </div>
+
       <div class="hero-facts">
-        <div class="fact"><span class="fact-number" id="fact-runners">24</span><span class="fact-label">corredores</span></div>
-        <div class="fact"><span class="fact-number" id="fact-groups">6</span><span class="fact-label">grupos</span></div>
-        <div class="fact"><span class="fact-number" id="fact-qualify">3</span><span class="fact-label">clasifican x grupo</span></div>
+        <div class="fact"><span class="fact-number" id="fact-runners">32</span><span class="fact-label" data-i18n="facts.runners">corredores</span></div>
+        <div class="fact"><span class="fact-number" id="fact-groups">8</span><span class="fact-label" data-i18n="facts.groups">grupos</span></div>
+        <div class="fact"><span class="fact-number" id="fact-qualify">2</span><span class="fact-label" data-i18n="facts.qualify">clasifican x grupo</span></div>
       </div>
     </div>
     <div class="intro-text">
-      <p>Bienvenidos a la Ditman Cup 2027. Acá vas a encontrar el sorteo, los grupos, el cuadro de eliminación y todo lo necesario para seguir el torneo de punta a punta.</p>
+      <p data-i18n="intro.p">Bienvenidos a la Ditman Cup 2027. Acá vas a encontrar el sorteo, los grupos, el cuadro de eliminación y todo lo necesario para seguir el torneo de punta a punta.</p>
     </div>
   </section>
 
-  <section id="sorteo" class="tab-panel">
-    <h2>Sorteo</h2>
+  <section id="sorteo" class="tab-panel" tabindex="-1">
+    <h2 data-i18n="sorteo.title">Sorteo</h2>
     <div class="vod-wrapper">
-      <div class="vod-placeholder">VOD del sorteo — próximamente</div>
+      <div class="vod-placeholder" data-i18n="sorteo.vod">VOD del sorteo — próximamente</div>
       <!-- Cuando esté el video, reemplazar el div de arriba por:
       <iframe src="https://www.youtube.com/embed/VIDEO_ID" allowfullscreen></iframe> -->
     </div>
-    <p class="section-note">Los resultados del sorteo se reflejan automáticamente en la pestaña <strong>Grupos</strong>.</p>
+    <p class="section-note" data-i18n="sorteo.note">Los resultados del sorteo se reflejan automáticamente en la pestaña Grupos.</p>
   </section>
 
-  <section id="grupos" class="tab-panel">
-    <h2>Fase de grupos</h2>
+  <section id="grupos" class="tab-panel" tabindex="-1">
+    <h2 data-i18n="grupos.title">Fase de grupos</h2>
     <div id="groups-grid" class="groups-grid">
-      <p class="loading-msg">Cargando grupos…</p>
+      <p class="loading-msg" data-i18n="grupos.loading">Cargando grupos…</p>
     </div>
   </section>
 
-  <section id="brackets" class="tab-panel">
-    <h2>Brackets</h2>
+  <section id="brackets" class="tab-panel" tabindex="-1">
+    <h2 data-i18n="brackets.title">Brackets</h2>
     <div id="bracket-container" class="bracket-placeholder">
-      <p>El cuadro de eliminación se arma una vez definida y cerrada la fase de grupos.</p>
+      <p data-i18n="brackets.placeholder">El cuadro de eliminación se arma una vez cerrada la fase de grupos.</p>
     </div>
   </section>
 
-  <section id="clasificatorias" class="tab-panel">
-    <h2>Clasificatorias y placements</h2>
+  <section id="clasificatorias" class="tab-panel" tabindex="-1">
+    <h2 data-i18n="clas.title">Clasificatorias y placements</h2>
     <div id="standings-table" class="standings-wrapper">
-      <p class="loading-msg">Todavía no hay clasificación cargada.</p>
+      <p class="loading-msg" data-i18n="clas.empty">Todavía no hay clasificación cargada.</p>
     </div>
   </section>
 
-  <section id="donaciones" class="tab-panel">
-    <h2>Donaciones</h2>
+  <section id="donaciones" class="tab-panel" tabindex="-1">
+    <h2 data-i18n="don.title">Donaciones</h2>
     <div class="donations-box">
-      <p>La Ditman Cup se sostiene gracias a la comunidad. Si querés colaborar con los premios y los gastos del torneo, podés hacerlo acá:</p>
-      <a href="#" class="donate-btn" id="donate-link">Donar</a>
+      <p data-i18n="don.body">La Ditman Cup se sostiene gracias a la comunidad. Si querés colaborar con los premios y los gastos del torneo, podés hacerlo acá:</p>
+      <a href="#" class="donate-btn" id="donate-link" data-i18n="don.btn">Donar</a>
     </div>
   </section>
 
-  <section id="organizadores" class="tab-panel">
-    <h2>Organizadores</h2>
+  <section id="organizadores" class="tab-panel" tabindex="-1">
+    <h2 data-i18n="org.title">Organizadores</h2>
     <div class="team-grid" id="team-grid">
       <div class="team-card">
         <div class="team-avatar"></div>
-        <div class="team-name">Por definir</div>
-        <div class="team-role">Organización</div>
+        <div class="team-name" data-i18n="org.tbd">Por definir</div>
+        <div class="team-role" data-i18n="org.role.org">Organización</div>
       </div>
       <div class="team-card">
         <div class="team-avatar"></div>
-        <div class="team-name">Por definir</div>
-        <div class="team-role">Casting</div>
+        <div class="team-name" data-i18n="org.tbd">Por definir</div>
+        <div class="team-role" data-i18n="org.role.cast">Casting</div>
       </div>
       <div class="team-card">
         <div class="team-avatar"></div>
-        <div class="team-name">Por definir</div>
-        <div class="team-role">Diseño / Web</div>
+        <div class="team-name" data-i18n="org.tbd">Por definir</div>
+        <div class="team-role" data-i18n="org.role.web">Diseño / Web</div>
       </div>
     </div>
   </section>
@@ -112,7 +134,7 @@
 </main>
 
 <footer>
-  <p>Ditman Cup 2027 · Hecho por la comunidad</p>
+  <p data-i18n="footer.text">Ditman Cup 2027 · Hecho por la comunidad</p>
 </footer>
 
 <script src="js/script.js"></script>
