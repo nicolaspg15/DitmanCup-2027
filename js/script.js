@@ -170,10 +170,24 @@ const CLIPS = [
 ];
 
 // ======= RUNNERS DE RE4 EN VIVO / RE4 RUNNERS LIVE =======
-// Canales de Twitch a vigilar. Se marca "EN VIVO" consultando decapi.me (sin API key).
-// Completar/limpiar esta lista con los handles reales de los runners.
+// Canales de Twitch a vigilar. El estado "EN VIVO" se consulta a la API pública
+// de Twitch (GraphQL, sin API key) en una sola request.
 const RE4_LIVE_CHANNELS = [
-  'DitmanCup', 'sawkenn', 'jokeruy', '4rcadan', 'nevs_', 'slifercs', 'casualspeedrun',
+  'DitmanCup', 'sawkenn', 'jokeruy', '4rcadan', 'Nevs', 'missing', 'pochiel_', 'mattgael',
+  'pixieesaki', 'vechman', 'RazieCR', 'fritrrs', 'MateoUsh27', 'youcri1031', 'majorrichy',
+  'infamouslol8', 'shularune', 'slifercs', 'doradori_dolph', 'xjoker115', 'eidenfir',
+  'abdou_mz', 'novi_fan', 'MineZowski', 'MikeWavRR', 'FrancoBv17', 'chanwii',
+  'gabrielsinmarr', 'redshines', 'MrMuba',
+  // sin resolver (Twitch dice "no existe"): joydurnjup, matiussEC
+];
+
+// Runners que streamean en YouTube. No hay forma sin API key de saber si están
+// en vivo, así que el card lleva a youtube.com/.../live (YouTube redirige al
+// stream si están transmitiendo).
+const YOUTUBE_LIVE_CHANNELS = [
+  { name: 'seppp', id: 'UCeClRyYfzoODHyA7FJKcjvA' },
+  { name: 'Bang Gori', id: 'UCMnXQX5GWrrcfSVZrOIaJUA' },
+  { name: 'Muh01', url: 'https://www.youtube.com/results?search_query=Muh01+resident+evil+4' }, // handle sin confirmar
 ];
 
 // ======= TEXTOS BILINGÜES / BILINGUAL STRINGS =======
@@ -1027,35 +1041,79 @@ function renderClips() {
 }
 
 // ======= EN VIVO / LIVE (RE4 runners) =======
+const TWITCH_GQL_CLIENT_ID = 'kimne78kx3ncx6brgo4mv6wki5h1ko'; // client-id público de solo lectura
+
+async function twitchLiveStatus(logins) {
+  if (!logins.length) return {};
+  const q = `query{users(logins:[${logins.map(l => JSON.stringify(l.toLowerCase())).join(',')}]){login displayName stream{id game{name} viewersCount title}}}`;
+  const res = await fetch('https://gql.twitch.tv/gql', {
+    method: 'POST',
+    headers: { 'Client-ID': TWITCH_GQL_CLIENT_ID, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query: q }),
+  });
+  const j = await res.json();
+  const map = {};
+  (j.data && j.data.users || []).forEach(u => { if (u) map[u.login] = u; });
+  return map;
+}
+
 async function renderLive() {
   const host = document.getElementById('live-grid');
   if (!host) return;
-  const channels = RE4_LIVE_CHANNELS.filter(Boolean);
-  if (!channels.length) { host.innerHTML = `<p class="loading-msg">${esc(t('live.none'))}</p>`; return; }
+
+  const tw = (RE4_LIVE_CHANNELS || []).filter(Boolean);
+  const yt = (YOUTUBE_LIVE_CHANNELS || []).filter(Boolean);
+  if (!tw.length && !yt.length) { host.innerHTML = `<p class="loading-msg">${esc(t('live.none'))}</p>`; return; }
 
   host.innerHTML = `<p class="loading-msg">${esc(t('live.checking'))}</p>`;
   const parent = location.hostname;
 
-  const results = await Promise.all(channels.map(async ch => {
-    try {
-      const r = await fetch('https://decapi.me/twitch/uptime/' + encodeURIComponent(ch), { cache: 'no-store' });
-      const txt = (await r.text()).trim().toLowerCase();
-      const live = r.ok && !/offline|not found|error|unable/.test(txt);
-      return { ch, live };
-    } catch (e) { return { ch, live: false }; }
-  }));
+  let status = {};
+  try { status = await twitchLiveStatus(tw); } catch (e) { console.error('Twitch live check falló:', e); }
 
-  results.sort((a, b) => (b.live - a.live) || a.ch.localeCompare(b.ch));
-  const anyLive = results.some(x => x.live);
+  const rows = tw.map(ch => {
+    const u = status[ch.toLowerCase()];
+    return { ch, name: (u && u.displayName) || ch, live: !!(u && u.stream), stream: u && u.stream };
+  }).sort((a, b) => (b.live - a.live) || a.name.localeCompare(b.name));
 
-  host.innerHTML = (anyLive ? '' : `<p class="loading-msg">${esc(t('live.none'))}</p>`) + results.map(({ ch, live }) => live
-    ? `<div class="live-card is-live">
-         <div class="live-frame"><iframe src="https://player.twitch.tv/?channel=${encodeURIComponent(ch)}&parent=${parent}&muted=true" allowfullscreen title="${esc(ch)}"></iframe></div>
-         <div class="live-meta"><span class="live-badge">● ${esc(t('live.on'))}</span> <a href="https://twitch.tv/${encodeURIComponent(ch)}" target="_blank" rel="noopener">${esc(ch)}</a></div>
-       </div>`
-    : `<a class="live-card is-off" href="https://twitch.tv/${encodeURIComponent(ch)}" target="_blank" rel="noopener">
-         <span class="live-name">${esc(ch)}</span><span class="live-status">${esc(t('live.off'))}</span>
-       </a>`).join('');
+  const liveRows = rows.filter(r => r.live);
+  const offRows = rows.filter(r => !r.live);
+
+  const twIcon = '<svg class="ic" aria-hidden="true"><use href="#ic-twitch"/></svg>';
+  const ytIcon = '<svg class="ic" aria-hidden="true"><use href="#ic-youtube"/></svg>';
+
+  let html = '';
+
+  if (liveRows.length) {
+    html += `<div class="live-live">` + liveRows.map(r => `
+      <div class="live-card is-live">
+        <div class="live-frame"><iframe src="https://player.twitch.tv/?channel=${encodeURIComponent(r.ch)}&parent=${parent}&muted=true" allowfullscreen title="${esc(r.name)}"></iframe></div>
+        <div class="live-meta">
+          <span class="live-badge">● ${esc(t('live.on'))}</span>
+          <a href="https://twitch.tv/${encodeURIComponent(r.ch)}" target="_blank" rel="noopener">${twIcon}${esc(r.name)}</a>
+          ${r.stream && r.stream.game ? `<span class="live-game">${esc(r.stream.game.name)}</span>` : ''}
+        </div>
+      </div>`).join('') + `</div>`;
+  } else {
+    html += `<p class="loading-msg">${esc(t('live.none'))}</p>`;
+  }
+
+  const offCards = offRows.map(r =>
+    `<a class="live-card is-off" href="https://twitch.tv/${encodeURIComponent(r.ch)}" target="_blank" rel="noopener">
+       <span class="live-name">${twIcon}${esc(r.name)}</span><span class="live-status">${esc(t('live.off'))}</span>
+     </a>`);
+
+  const ytCards = yt.map(c => {
+    const href = c.url || (c.id ? `https://www.youtube.com/channel/${c.id}/live` : `https://www.youtube.com/results?search_query=${encodeURIComponent(c.name)}`);
+    return `<a class="live-card is-off is-yt" href="${esc(href)}" target="_blank" rel="noopener">
+       <span class="live-name">${ytIcon}${esc(c.name)}</span><span class="live-status">YouTube</span>
+     </a>`;
+  });
+
+  const all = offCards.concat(ytCards);
+  if (all.length) html += `<div class="live-roster">${all.join('')}</div>`;
+
+  host.innerHTML = html;
 }
 
 // ======= DATOS FALSOS / MOCK DATA =======
