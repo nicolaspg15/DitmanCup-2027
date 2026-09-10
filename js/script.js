@@ -11,6 +11,11 @@ const TOURNAMENT_CONFIG = {
   // Qualifier window opens. ISO format with UTC offset.
   qualysOpen: '2026-11-20T00:00:00-03:00',      // 20 nov 2026, 00:00 hora Argentina (UTC-3)
   qualysTimeZone: 'America/Argentina/Buenos_Aires', // solo para mostrar la fecha siempre igual
+
+  // Modo prueba: usa datos falsos en Grupos / Clasificatorias / Brackets.
+  // También se activa agregando ?mock=1 a la URL (sin tocar el código).
+  // Test mode: fake data. Also enabled with ?mock=1 in the URL.
+  mock: false,
 };
 
 // ======= FUENTES DE DATOS (Google Sheets) / DATA SOURCES =======
@@ -60,11 +65,26 @@ const I18N = {
 
     'brackets.title': 'Brackets',
     'brackets.placeholder': 'El cuadro de eliminación se arma una vez cerrada la fase de grupos.',
+    'brackets.previewNote': 'Vista previa del cuadro — {n} clasificados. Los cruces reales se definen al cerrar la fase de grupos.',
+    'bracket.champion': 'Campeón/a',
+    'bracket.tbd': '—',
+    'bracket.bye': 'BYE',
+    'bracket.round.final': 'Final',
+    'bracket.round.semi': 'Semifinal',
+    'bracket.round.quarter': 'Cuartos',
+    'bracket.round.r16': 'Octavos',
+    'bracket.round.r32': '16avos',
+    'bracket.round.generic': 'Ronda de {n}',
 
     'clas.title': 'Clasificatorias y placements',
     'clas.empty': 'Todavía no hay clasificación cargada.',
     'clas.sheetError': 'No se pudo cargar la Sheet de clasificación.',
     'clas.noData': 'Sin datos todavía.',
+    'clas.col.pos': 'Pos',
+    'clas.col.runner': 'Corredor',
+    'clas.col.group': 'Grupo',
+    'clas.col.time': 'Mejor tiempo',
+    'clas.col.pts': 'Pts',
 
     'don.title': 'Donaciones',
     'don.body': 'La Ditman Cup se sostiene gracias a la comunidad. Si querés colaborar con los premios y los gastos del torneo, podés hacerlo acá:',
@@ -77,6 +97,8 @@ const I18N = {
     'org.role.web': 'Diseño / Web',
 
     'footer.text': 'Ditman Cup 2027 · Hecho por la comunidad',
+
+    'testmode': 'MODO PRUEBA · datos falsos',
   },
   en: {
     'nav.inicio': 'Home',
@@ -116,11 +138,26 @@ const I18N = {
 
     'brackets.title': 'Bracket',
     'brackets.placeholder': 'The knockout bracket goes live once the group stage is finalized.',
+    'brackets.previewNote': 'Bracket preview — {n} qualifiers. Real matchups are set once the group stage is finalized.',
+    'bracket.champion': 'Champion',
+    'bracket.tbd': '—',
+    'bracket.bye': 'BYE',
+    'bracket.round.final': 'Final',
+    'bracket.round.semi': 'Semifinals',
+    'bracket.round.quarter': 'Quarterfinals',
+    'bracket.round.r16': 'Round of 16',
+    'bracket.round.r32': 'Round of 32',
+    'bracket.round.generic': 'Round of {n}',
 
     'clas.title': 'Standings & placements',
     'clas.empty': 'No standings loaded yet.',
     'clas.sheetError': 'Could not load the standings Sheet.',
     'clas.noData': 'No data yet.',
+    'clas.col.pos': 'Pos',
+    'clas.col.runner': 'Runner',
+    'clas.col.group': 'Group',
+    'clas.col.time': 'Best time',
+    'clas.col.pts': 'Pts',
 
     'don.title': 'Donations',
     'don.body': 'The Ditman Cup runs on community support. If you want to chip in for the prize pool and tournament costs, you can do it here:',
@@ -133,6 +170,8 @@ const I18N = {
     'org.role.web': 'Design / Web',
 
     'footer.text': 'Ditman Cup 2027 · Made by the community',
+
+    'testmode': 'TEST MODE · fake data',
   },
 };
 
@@ -141,9 +180,11 @@ let currentLang = 'es';
 let lastGroupsRows = null;
 let lastStandingsRows = null;
 
-function t(key) {
+function t(key, vars) {
   const dict = I18N[currentLang] || I18N.es;
-  return dict[key] != null ? dict[key] : (I18N.es[key] != null ? I18N.es[key] : key);
+  let s = dict[key] != null ? dict[key] : (I18N.es[key] != null ? I18N.es[key] : key);
+  if (vars) Object.keys(vars).forEach(k => { s = s.replace('{' + k + '}', vars[k]); });
+  return s;
 }
 
 // Escape básico para texto que viene de la Sheet (evita romper el HTML)
@@ -153,13 +194,22 @@ function esc(s) {
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
+// ¿Modo prueba? / Test mode?
+function isMock() {
+  return TOURNAMENT_CONFIG.mock === true ||
+    /[?&]mock=1(&|$)/.test(location.search) ||
+    location.hash === '#mock';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initLang();
   initTabs();
   initFacts();
   initCountdown();
+  if (isMock()) showTestBanner();
   loadGroups();
   loadStandings();
+  renderBracket();
 });
 
 // ======= IDIOMA / LANGUAGE =======
@@ -177,7 +227,6 @@ function applyLang(lang) {
   currentLang = I18N[lang] ? lang : 'es';
   document.documentElement.lang = currentLang;
 
-  // Nodos de texto
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const val = t(el.dataset.i18n);
     if (val != null) el.textContent = val;
@@ -200,9 +249,24 @@ function applyLang(lang) {
 
   // Re-render de lo dinámico
   renderCountdown();
+  const tb = document.getElementById('test-banner');
+  if (tb) tb.textContent = t('testmode');
+  if (isMock()) {                       // en modo prueba, los datos falsos dependen del idioma
+    lastGroupsRows = mockGroupsRows();
+    lastStandingsRows = mockStandingsRows();
+  }
   if (lastGroupsRows) renderGroups(lastGroupsRows, document.getElementById('groups-grid'));
   else document.getElementById('groups-grid').innerHTML = placeholderGroups();
   if (lastStandingsRows) renderStandings(lastStandingsRows, document.getElementById('standings-table'));
+  renderBracket();
+}
+
+function showTestBanner() {
+  if (document.getElementById('test-banner')) return;
+  const b = document.createElement('div');
+  b.id = 'test-banner';
+  b.textContent = t('testmode');
+  document.body.prepend(b);
 }
 
 // ======= NAVEGACIÓN POR PESTAÑAS / TABS =======
@@ -320,6 +384,12 @@ function renderCountdown() {
 // ======= GRUPOS / GROUPS =======
 async function loadGroups() {
   const container = document.getElementById('groups-grid');
+
+  if (isMock()) {
+    lastGroupsRows = mockGroupsRows();
+    renderGroups(lastGroupsRows, container);
+    return;
+  }
   if (!SHEET_URLS.groups) {
     container.innerHTML = placeholderGroups();
     return;
@@ -328,17 +398,19 @@ async function loadGroups() {
     const rows = await fetchCSV(SHEET_URLS.groups);
     lastGroupsRows = rows;
     renderGroups(rows, container);
+    renderBracket();
   } catch (err) {
     console.error('Error cargando grupos:', err);
     container.innerHTML = '<p class="loading-msg">' + esc(t('grupos.sheetError')) + '</p>' + placeholderGroups();
   }
 }
 
+function letterFor(i) { return String.fromCharCode(65 + i); }
+
 function placeholderGroups() {
   let html = '';
   for (let g = 0; g < TOURNAMENT_CONFIG.numGroups; g++) {
-    const letter = String.fromCharCode(65 + g);
-    html += `<div class="group-card"><h3>${esc(t('group.word'))} ${letter}</h3><ol>`;
+    html += `<div class="group-card"><h3>${esc(t('group.word'))} ${letterFor(g)}</h3><ol>`;
     for (let i = 0; i < TOURNAMENT_CONFIG.groupSize; i++) {
       html += `<li>${esc(t('group.tbd'))}</li>`;
     }
@@ -349,15 +421,7 @@ function placeholderGroups() {
 
 // Espera columnas en la Sheet: Grupo, Corredor (una fila por corredor)
 function renderGroups(rows, container) {
-  const groups = {};
-  rows.forEach(r => {
-    const g = r['Grupo'] || r['Group'];
-    const name = r['Corredor'] || r['Runner'] || r['Nombre'];
-    if (!g || !name) return;
-    if (!groups[g]) groups[g] = [];
-    groups[g].push(name);
-  });
-
+  const groups = groupRows(rows);
   const keys = Object.keys(groups).sort();
   if (!keys.length) {
     container.innerHTML = placeholderGroups();
@@ -372,14 +436,34 @@ function renderGroups(rows, container) {
   `).join('');
 }
 
+// { "A": ["nombre", ...], ... } a partir de filas {Grupo, Corredor}
+function groupRows(rows) {
+  const groups = {};
+  (rows || []).forEach(r => {
+    const g = r['Grupo'] || r['Group'];
+    const name = r['Corredor'] || r['Runner'] || r['Nombre'];
+    if (!g || !name) return;
+    if (!groups[g]) groups[g] = [];
+    groups[g].push(name);
+  });
+  return groups;
+}
+
 // ======= CLASIFICACIÓN / STANDINGS =======
 async function loadStandings() {
   const container = document.getElementById('standings-table');
+
+  if (isMock()) {
+    lastStandingsRows = mockStandingsRows();
+    renderStandings(lastStandingsRows, container);
+    return;
+  }
   if (!SHEET_URLS.standings) return; // se queda con el mensaje por defecto del HTML
   try {
     const rows = await fetchCSV(SHEET_URLS.standings);
     lastStandingsRows = rows;
     renderStandings(rows, container);
+    renderBracket();
   } catch (err) {
     console.error('Error cargando clasificación:', err);
     container.innerHTML = '<p class="loading-msg">' + esc(t('clas.sheetError')) + '</p>';
@@ -402,22 +486,229 @@ function renderStandings(rows, container) {
   `;
 }
 
-// ======= UTILIDADES / UTILITIES =======
-// Parser simple de CSV. Nota: no soporta comas dentro de campos entre comillas.
-// (Se robustece en un paso siguiente del review.)
-async function fetchCSV(url) {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error('No se pudo obtener la Sheet');
-  const text = await res.text();
-  const lines = text.trim().split('\n').map(l => l.split(','));
-  const headers = lines[0].map(h => h.trim());
-  return lines.slice(1).map(line => {
-    const obj = {};
-    headers.forEach((h, i) => obj[h] = (line[i] || '').trim());
-    return obj;
+// ======= BRACKET / CUADRO DE ELIMINACIÓN =======
+// Se arma a partir de TOURNAMENT_CONFIG: numGroups * qualifiersPerGroup entrantes.
+// Con datos (Sheet o mock) muestra nombres; sin datos, casilleros "1A / 2B".
+function renderBracket() {
+  const host = document.getElementById('bracket-container');
+  if (!host) return;
+
+  const G = TOURNAMENT_CONFIG.numGroups;
+  const Q = TOURNAMENT_CONFIG.qualifiersPerGroup;
+  const nEntrants = G * Q;
+  if (nEntrants < 2) { host.innerHTML = `<p>${esc(t('brackets.placeholder'))}</p>`; return; }
+
+  const size = 1 << Math.ceil(Math.log2(nEntrants));   // próxima potencia de 2
+  const order = seedOrder(size);                        // orden de siembra 1..size
+
+  // Etiqueta de cada semilla: 1..nEntrants -> "posº Grupo"; resto -> BYE
+  const qualified = qualifiedFromData();                // {"A":["n1","n2"], ...} o null
+  function seedLabel(seed) {
+    if (seed > nEntrants) return { txt: t('bracket.bye'), bye: true };
+    const pos = Math.floor((seed - 1) / G) + 1;         // 1 = ganador de grupo
+    const letter = letterFor((seed - 1) % G);
+    if (qualified && qualified[letter] && qualified[letter][pos - 1]) {
+      return { txt: qualified[letter][pos - 1], bye: false };
+    }
+    return { txt: pos + (currentLang === 'en' ? '' : 'º') + ' ' + letter, bye: false, tag: pos + letter };
+  }
+
+  // Ronda 1: pares (order[0] vs order[1]), (order[2] vs order[3]), ...
+  let matches = [];
+  for (let i = 0; i < size; i += 2) {
+    matches.push([seedLabel(order[i]), seedLabel(order[i + 1])]);
+  }
+
+  const rounds = [];
+  let teams = size;
+  let current = matches;
+  while (true) {
+    rounds.push({ name: roundName(teams), matches: current });
+    if (current.length <= 1) break;
+    teams = teams / 2;
+    current = new Array(current.length / 2).fill(0).map(() => ([null, null]));
+  }
+
+  const html = [
+    `<p class="section-note bracket-note">${esc(t('brackets.previewNote', { n: nEntrants }))}</p>`,
+    `<div class="bracket-scroll"><div class="bracket" role="group" aria-label="${esc(t('brackets.title'))}">`,
+  ];
+
+  rounds.forEach((round, ri) => {
+    html.push(`<div class="round" data-round="${ri}"><div class="round-title">${esc(round.name)}</div><div class="round-inner">`);
+    round.matches.forEach(m => {
+      const a = m[0], b = m[1];
+      html.push(`<div class="match">
+        <span class="slot${a && a.bye ? ' is-bye' : ''}">${a ? esc(a.txt) : esc(t('bracket.tbd'))}</span>
+        <span class="slot${b && b.bye ? ' is-bye' : ''}">${b ? esc(b.txt) : esc(t('bracket.tbd'))}</span>
+      </div>`);
+    });
+    html.push(`</div></div>`);
+  });
+
+  // Columna del campeón
+  html.push(`<div class="round round-champion"><div class="round-title">${esc(t('bracket.champion'))}</div><div class="round-inner">
+    <div class="match match-champion"><span class="slot">${esc(t('bracket.tbd'))}</span></div>
+  </div></div>`);
+
+  html.push(`</div></div>`);
+  host.innerHTML = html.join('');
+}
+
+// Orden de siembra estándar para un cuadro de `n` (potencia de 2).
+function seedOrder(n) {
+  let seeds = [1, 2];
+  while (seeds.length < n) {
+    const sum = seeds.length * 2 + 1;
+    const next = [];
+    seeds.forEach(s => { next.push(s); next.push(sum - s); });
+    seeds = next;
+  }
+  return seeds;
+}
+
+// Nombre de ronda según cuántos entran a esa ronda
+function roundName(teams) {
+  if (teams === 2) return t('bracket.round.final');
+  if (teams === 4) return t('bracket.round.semi');
+  if (teams === 8) return t('bracket.round.quarter');
+  if (teams === 16) return t('bracket.round.r16');
+  if (teams === 32) return t('bracket.round.r32');
+  return t('bracket.round.generic', { n: teams });
+}
+
+// Top Q de cada grupo, si hay datos cargados. Devuelve {"A":[...], ...} o null.
+function qualifiedFromData() {
+  const rows = lastStandingsRows;
+  const Q = TOURNAMENT_CONFIG.qualifiersPerGroup;
+
+  // 1) Si la clasificación trae Grupo + Corredor + (Pos), usar eso
+  if (rows && rows.length) {
+    const gCol = pickKey(rows[0], ['Grupo', 'Group']);
+    const rCol = pickKey(rows[0], ['Corredor', 'Runner', 'Nombre']);
+    if (gCol && rCol) {
+      const by = {};
+      rows.forEach(r => {
+        const g = (r[gCol] || '').trim();
+        const name = (r[rCol] || '').trim();
+        if (!g || !name) return;
+        (by[g] = by[g] || []).push(name);
+      });
+      const out = {};
+      Object.keys(by).forEach(g => { out[g] = by[g].slice(0, Q); });
+      if (Object.keys(out).length) return out;
+    }
+  }
+
+  // 2) Si no, usar el orden de la hoja de grupos (primeros Q de cada grupo)
+  const g = groupRows(lastGroupsRows);
+  if (Object.keys(g).length) {
+    const out = {};
+    Object.keys(g).forEach(k => { out[k] = g[k].slice(0, Q); });
+    return out;
+  }
+  return null;
+}
+
+function pickKey(obj, names) {
+  for (const n of names) if (n in obj) return n;
+  return null;
+}
+
+// ======= DATOS FALSOS / MOCK DATA =======
+const MOCK_NAMES = [
+  'ditman', 'kael', 'v1rus', 'Noh', 'requiem', 'SlyFox', 'mercase', 'Trece',
+  'Ada_W', 'Krauser', 'luisdlv', 'saddler99', 'ashley', 'wesk3r', 'HUNK', 'Salazar',
+  'chris_r', 'jillsandwich', 'nemesis', 'carlos', 'sherry', 'claire', 'birkin', 'annette',
+  'leon_k', 'ganado', 'plaga', 'verdugo', 'delLago', 'elGigante', 'novistador', 'regenerador',
+];
+
+function mockGroupsRows() {
+  const G = TOURNAMENT_CONFIG.numGroups;
+  const S = TOURNAMENT_CONFIG.groupSize;
+  const rows = [];
+  let k = 0;
+  for (let g = 0; g < G; g++) {
+    for (let i = 0; i < S; i++) {
+      rows.push({ Grupo: letterFor(g), Corredor: MOCK_NAMES[k % MOCK_NAMES.length] });
+      k++;
+    }
+  }
+  return rows;
+}
+
+function mockStandingsRows() {
+  const rows = mockGroupsRows();
+  const groups = groupRows(rows);
+  const out = [];
+  Object.keys(groups).sort().forEach(g => {
+    groups[g].forEach((name, i) => {
+      out.push({
+        [t('clas.col.pos')]: String(i + 1),
+        [t('clas.col.runner')]: name,
+        [t('clas.col.group')]: g,
+        [t('clas.col.time')]: mockTime(),
+        [t('clas.col.pts')]: String(9 - i * 2),
+      });
+    });
+  });
+  return out;
+}
+
+function mockTime() {
+  const m = 5 + Math.floor(Math.random() * 3);
+  const s = Math.floor(Math.random() * 60);
+  const ms = Math.floor(Math.random() * 1000);
+  return `${m}:${String(s).padStart(2, '0')}.${String(ms).padStart(3, '0')}`;
+}
+
+// ======= CSV: fetch + parseo robusto / robust parsing =======
+// Soporta: comas dentro de comillas, comillas escapadas (""), CRLF, BOM,
+// líneas vacías y salto final. / Handles quoted commas, "" escapes, CRLF, BOM, blank lines.
+function parseCSV(text) {
+  if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);   // BOM
+  const rows = [];
+  let row = [], field = '', inQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { field += '"'; i++; }
+        else inQuotes = false;
+      } else field += c;
+    } else if (c === '"') {
+      inQuotes = true;
+    } else if (c === ',') {
+      row.push(field); field = '';
+    } else if (c === '\n') {
+      row.push(field); rows.push(row); row = []; field = '';
+    } else if (c !== '\r') {
+      field += c;
+    }
+  }
+  if (field !== '' || row.length) { row.push(field); rows.push(row); }
+  return rows;
+}
+
+function csvToObjects(text) {
+  const rows = parseCSV(text).filter(r => r.some(c => c.trim() !== ''));  // sin filas vacías
+  if (!rows.length) return [];
+  const headers = rows[0].map(h => h.trim());
+  return rows.slice(1).map(r => {
+    const o = {};
+    headers.forEach((h, i) => { o[h] = (r[i] != null ? r[i] : '').trim(); });
+    return o;
   });
 }
 
+async function fetchCSV(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Sheet HTTP ' + res.status);
+  return csvToObjects(await res.text());
+}
+
+// ======= UTILIDADES / UTILITIES =======
 function setText(id, value) {
   const el = document.getElementById(id);
   if (el) el.textContent = value;

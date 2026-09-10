@@ -30,9 +30,19 @@ En el repo: **Settings → Collaborators → Add people**, buscar por usuario o 
 
 **Formato esperado — hoja de grupos:** dos columnas, `Grupo` y `Corredor` (una fila por corredor, ej: `A, NombreDelRunner`).
 
-**Formato esperado — hoja de clasificación:** cualquier set de columnas (se muestran todas tal cual estén en la Sheet).
+**Formato esperado — hoja de clasificación:** cualquier set de columnas (se muestran todas tal cual estén en la Sheet). Si además trae `Grupo` y `Corredor`, los primeros `qualifiersPerGroup` de cada grupo alimentan el bracket.
 
-El parser `fetchCSV()` es casero y todavía simple (no soporta comas dentro de comillas). Se robustece en un paso siguiente.
+El parser (`parseCSV` / `fetchCSV`) soporta comas dentro de comillas, comillas escapadas (`""`), CRLF, BOM y filas vacías.
+
+## Modo prueba (datos falsos)
+Para ver Grupos / Clasificatorias / Brackets sin la Sheet conectada:
+- agregá `?mock=1` a la URL (ej. `.../index.html?mock=1`), o
+- poné `mock: true` en `TOURNAMENT_CONFIG`.
+
+Aparece un cartel "MODO PRUEBA" y se cargan 32 corredores de mentira. **No dejar `mock: true` commiteado.**
+
+## Bracket
+Se arma solo desde `TOURNAMENT_CONFIG`: `numGroups × qualifiersPerGroup` entrantes → cuadro de eliminación con la siembra estándar (1º A vs 2º del cruzado, etc.). Si el número no es potencia de 2, reparte BYEs a los primeros. Sin datos muestra casilleros `1 A` / `2 B`; con datos (Sheet o mock) muestra nombres.
 
 ## Correr en local
 ```bash
