@@ -940,31 +940,27 @@ function renderChampions() {
   const host = document.getElementById('champions-content');
   if (!host) return;
 
-  const podium = (labelKey, name, cls) => `
-    <div class="podium-spot ${cls}">
-      <div class="podium-medal" aria-hidden="true">${cls === 'gold' ? '🥇' : cls === 'silver' ? '🥈' : '🥉'}</div>
-      <div class="podium-role">${esc(t(labelKey))}</div>
-      <div class="podium-name">${name ? nameWithFlag(name) : '<span class="tbd">' + esc(t('champions.tbd')) + '</span>'}</div>
+  const spot = (labelKey, name, rank) => `
+    <div class="podium-spot rank-${rank}">
+      <span class="podium-role">${esc(t(labelKey))}</span>
+      <span class="podium-name">${name ? nameWithFlag(name) : '<span class="tbd">' + esc(t('champions.tbd')) + '</span>'}</span>
     </div>`;
 
   const editions = PAST_EDITIONS.map(e => `
     <article class="edition">
       <h3 class="edition-year">${esc(t('champions.edition', { year: e.year }))}</h3>
       <div class="podium">
-        ${podium('champions.champion', e.champion, 'gold')}
-        ${podium('champions.runnerUp', e.runnerUp, 'silver')}
-        ${podium('champions.third', e.third, 'bronze')}
+        ${spot('champions.champion', e.champion, 1)}
+        ${spot('champions.runnerUp', e.runnerUp, 2)}
+        ${spot('champions.third', e.third, 3)}
       </div>
       ${e.vod ? `<a class="edition-vod" href="${esc(e.vod)}" target="_blank" rel="noopener">${esc(t('champions.vod'))} ↗</a>` : ''}
     </article>`).join('');
 
   host.innerHTML = `
     <div class="trophy-card">
-      <div class="trophy-emoji" aria-hidden="true">🏆</div>
-      <div>
-        <h3>${esc(t('champions.trophyTitle'))}</h3>
-        <p>${esc(t('champions.trophyPending'))}</p>
-      </div>
+      <h3>${esc(t('champions.trophyTitle'))}</h3>
+      <p>${esc(t('champions.trophyPending'))}</p>
     </div>
     <div class="editions">${editions}</div>
   `;
