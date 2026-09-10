@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ditman Cup 2027</title>
 <meta name="description" content="Ditman Cup 2027 — community Resident Evil 4 speedrunning tournament, World Cup format. / Torneo comunitario de speedrunning de RE4.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/css/flag-icons.min.css">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-tab="inicio">
@@ -36,6 +37,9 @@
       <button class="tab-btn" data-tab="grupos" data-i18n="nav.grupos">Groups</button>
       <button class="tab-btn" data-tab="brackets" data-i18n="nav.brackets">Bracket</button>
       <button class="tab-btn" data-tab="clasificatorias" data-i18n="nav.clasificatorias">Standings</button>
+      <button class="tab-btn" data-tab="champions" data-i18n="nav.champions">Champions</button>
+      <button class="tab-btn" data-tab="clips" data-i18n="nav.clips">Clips</button>
+      <button class="tab-btn" data-tab="live" data-i18n="nav.live">Live</button>
       <button class="tab-btn" data-tab="donaciones" data-i18n="nav.donaciones">Donations</button>
       <button class="tab-btn" data-tab="organizadores" data-i18n="nav.organizadores">Organizers</button>
     </nav>
@@ -118,6 +122,23 @@
     <div id="standings-table" class="standings-wrapper">
       <p class="loading-msg" data-i18n="clas.empty">No standings loaded yet.</p>
     </div>
+  </section>
+
+  <section id="champions" class="tab-panel" tabindex="-1">
+    <h2 data-i18n="champions.title">Champions</h2>
+    <div id="champions-content"></div>
+  </section>
+
+  <section id="clips" class="tab-panel" tabindex="-1">
+    <h2 data-i18n="clips.title">Best clips</h2>
+    <p class="section-note" data-i18n="clips.intro">Highlights from past editions and other tournaments.</p>
+    <div id="clips-grid" class="clips-grid"></div>
+  </section>
+
+  <section id="live" class="tab-panel" tabindex="-1">
+    <h2 data-i18n="live.title">RE4 runners live</h2>
+    <p class="section-note" data-i18n="live.intro">Community channels running Resident Evil 4 right now.</p>
+    <div id="live-grid" class="live-grid"></div>
   </section>
 
   <section id="donaciones" class="tab-panel" tabindex="-1">

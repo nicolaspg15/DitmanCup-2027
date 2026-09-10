@@ -27,6 +27,50 @@ const SHEET_URLS = {
   // standings: 'https://docs.google.com/spreadsheets/d/<ID>/export?format=csv&gid=<GID>',
 };
 
+// ======= BANDERAS / FLAGS =======
+// País de cada corredor. Se usa cuando la Sheet no trae la columna "Flag".
+// Valor: código ISO de 2 letras ("AR", "UY", "US", "JP"...) o directamente un emoji.
+// Clave: nombre del corredor en minúsculas. / Key: runner name, lowercased.
+const RUNNER_FLAGS = {
+  jokeruy: 'UY',
+  // sawken: 'AR',
+  // luis_sera: 'UY',
+  // ...completar. También se puede llenar la columna "Flag" de la Sheet.
+};
+
+// ======= EDICIONES ANTERIORES / PAST EDITIONS =======
+// Podio de cada Ditman Cup pasada. Dejar '' lo que falte.
+const PAST_EDITIONS = [
+  {
+    year: 2026,
+    champion: 'JokerUY',
+    runnerUp: 'Sawken',
+    third: 'Pochoide',
+    vod: 'https://www.youtube.com/@DitmanCup',
+  },
+  {
+    year: 2022,
+    champion: '',
+    runnerUp: '',
+    third: '',
+    vod: '',
+  },
+];
+
+// ======= MEJORES CLIPS / BEST CLIPS =======
+// Clips destacados de otros torneos. url: link de YouTube o Twitch (clip o video).
+const CLIPS = [
+  // { title: 'Clutch en la final', author: 'JokerUY', url: 'https://www.youtube.com/watch?v=XXXXXXXXXXX' },
+  // { title: 'Reset perfecto', author: 'Sawken', url: 'https://clips.twitch.tv/XXXXXXXX' },
+];
+
+// ======= RUNNERS DE RE4 EN VIVO / RE4 RUNNERS LIVE =======
+// Canales de Twitch a vigilar. Se marca "EN VIVO" consultando decapi.me (sin API key).
+const RE4_LIVE_CHANNELS = [
+  'DitmanCup',
+  // 'jokeruy', 'sawken', '4rcadan', 'nevs', ...  (handles de Twitch, en minúscula)
+];
+
 // ======= TEXTOS BILINGÜES / BILINGUAL STRINGS =======
 const I18N = {
   es: {
@@ -35,6 +79,9 @@ const I18N = {
     'nav.grupos': 'Grupos',
     'nav.brackets': 'Brackets',
     'nav.clasificatorias': 'Clasificatorias',
+    'nav.champions': 'Campeones',
+    'nav.clips': 'Clips',
+    'nav.live': 'En vivo',
     'nav.donaciones': 'Donaciones',
     'nav.organizadores': 'Organizadores',
     'nav.menu': 'Abrir menú',
@@ -108,6 +155,28 @@ const I18N = {
     'link.youtube': 'YouTube',
     'link.twitch': 'Twitch',
 
+    'champions.title': 'Campeones',
+    'champions.edition': 'Ditman Cup {year}',
+    'champions.champion': 'Campeón',
+    'champions.runnerUp': 'Subcampeón',
+    'champions.third': '3er puesto',
+    'champions.tbd': 'Por confirmar',
+    'champions.vod': 'Ver final',
+    'champions.trophyTitle': 'El trofeo',
+    'champions.trophyPending': 'El trofeo de la Ditman Cup 2027 todavía se está diseñando.',
+
+    'clips.title': 'Mejores clips',
+    'clips.intro': 'Momentos destacados de ediciones y torneos anteriores.',
+    'clips.empty': 'Todavía no hay clips cargados. ¿Tenés uno? Pasálo por Discord.',
+
+    'live.title': 'Runners de RE4 en vivo',
+    'live.intro': 'Canales de la comunidad que están corriendo Resident Evil 4 ahora mismo.',
+    'live.on': 'EN VIVO',
+    'live.off': 'Desconectado',
+    'live.none': 'Ningún canal de la lista está en vivo en este momento.',
+    'live.watch': 'Ver en Twitch',
+    'live.checking': 'Chequeando canales…',
+
     'footer.text': 'Ditman Cup 2027 · Hecho por la comunidad',
 
     'testmode': 'MODO PRUEBA · datos falsos',
@@ -118,6 +187,9 @@ const I18N = {
     'nav.grupos': 'Groups',
     'nav.brackets': 'Bracket',
     'nav.clasificatorias': 'Standings',
+    'nav.champions': 'Champions',
+    'nav.clips': 'Clips',
+    'nav.live': 'Live',
     'nav.donaciones': 'Donations',
     'nav.organizadores': 'Organizers',
     'nav.menu': 'Open menu',
@@ -191,6 +263,28 @@ const I18N = {
     'link.youtube': 'YouTube',
     'link.twitch': 'Twitch',
 
+    'champions.title': 'Champions',
+    'champions.edition': 'Ditman Cup {year}',
+    'champions.champion': 'Champion',
+    'champions.runnerUp': 'Runner-up',
+    'champions.third': '3rd place',
+    'champions.tbd': 'To be confirmed',
+    'champions.vod': 'Watch the final',
+    'champions.trophyTitle': 'The trophy',
+    'champions.trophyPending': 'The Ditman Cup 2027 trophy is still being designed.',
+
+    'clips.title': 'Best clips',
+    'clips.intro': 'Highlights from past editions and other tournaments.',
+    'clips.empty': "No clips added yet. Got one? Drop it in the Discord.",
+
+    'live.title': 'RE4 runners live',
+    'live.intro': 'Community channels running Resident Evil 4 right now.',
+    'live.on': 'LIVE',
+    'live.off': 'Offline',
+    'live.none': 'No channel from the list is live right now.',
+    'live.watch': 'Watch on Twitch',
+    'live.checking': 'Checking channels…',
+
     'footer.text': 'Ditman Cup 2027 · Made by the community',
 
     'testmode': 'TEST MODE · fake data',
@@ -217,6 +311,61 @@ function esc(s) {
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
+// ======= BANDERAS / FLAGS =======
+const COUNTRY_CODES = {
+  argentina: 'AR', uruguay: 'UY', chile: 'CL', paraguay: 'PY', bolivia: 'BO', peru: 'PE',
+  'perú': 'PE', brazil: 'BR', brasil: 'BR', colombia: 'CO', venezuela: 'VE', ecuador: 'EC',
+  mexico: 'MX', 'méxico': 'MX', 'united states': 'US', usa: 'US', 'estados unidos': 'US',
+  canada: 'CA', 'canadá': 'CA', spain: 'ES', 'españa': 'ES', portugal: 'PT', france: 'FR',
+  'francia': 'FR', germany: 'DE', alemania: 'DE', italy: 'IT', italia: 'IT',
+  'united kingdom': 'GB', uk: 'GB', england: 'GB', inglaterra: 'GB', ireland: 'IE',
+  netherlands: 'NL', 'países bajos': 'NL', belgium: 'BE', poland: 'PL', polonia: 'PL',
+  sweden: 'SE', norway: 'NO', finland: 'FI', denmark: 'DK', 'czech republic': 'CZ',
+  czechia: 'CZ', austria: 'AT', switzerland: 'CH', suiza: 'CH', greece: 'GR', turkey: 'TR',
+  russia: 'RU', ukraine: 'UA', romania: 'RO', hungary: 'HU', japan: 'JP', 'japón': 'JP',
+  'south korea': 'KR', korea: 'KR', corea: 'KR', china: 'CN', taiwan: 'TW', 'hong kong': 'HK',
+  indonesia: 'ID', philippines: 'PH', filipinas: 'PH', malaysia: 'MY', thailand: 'TH',
+  vietnam: 'VN', india: 'IN', australia: 'AU', 'new zealand': 'NZ', morocco: 'MA',
+  marruecos: 'MA', algeria: 'DZ', argelia: 'DZ', egypt: 'EG', 'south africa': 'ZA', israel: 'IL',
+};
+
+let _sheetFlags = {};   // { 'nombre en minúscula': 'UY' | '🇺🇾' | 'Uruguay' }
+
+function indexFlags(rows) {
+  (rows || []).forEach(r => {
+    const name = r['Corredor'] || r['Runner'] || r['Nombre'];
+    const fl = r['Flag'] || r['Bandera'] || r['País'] || r['Pais'] || r['Country'];
+    if (name && fl) _sheetFlags[String(name).toLowerCase().trim()] = fl;
+  });
+}
+
+// Normaliza cualquier entrada (código ISO2 / emoji bandera / nombre de país) -> "uy"
+function flagCode(input) {
+  if (!input) return '';
+  const s = String(input).trim();
+  if (!s) return '';
+  const ri = [...s].map(c => c.codePointAt(0)).filter(cp => cp >= 0x1F1E6 && cp <= 0x1F1FF);
+  if (ri.length === 2) return String.fromCharCode(...ri.map(cp => cp - 0x1F1E6 + 97));
+  if (/^[A-Za-z]{2}$/.test(s)) return s.toLowerCase();
+  return (COUNTRY_CODES[s.toLowerCase()] || '').toLowerCase();
+}
+
+// <span> con la bandera SVG (flag-icons). Vacío si no hay país.
+function flagSpan(code) {
+  return code ? `<span class="fi fi-${code}" title="${esc(code.toUpperCase())}"></span>` : '';
+}
+
+function flagFor(name) {
+  const k = String(name || '').toLowerCase().trim();
+  return flagCode(_sheetFlags[k]) || flagCode(RUNNER_FLAGS[k]) || '';
+}
+
+// Devuelve HTML: "<bandera> Nombre" (nombre escapado)
+function nameWithFlag(name) {
+  const f = flagSpan(flagFor(name));
+  return (f ? f + ' ' : '') + esc(name);
+}
+
 // ¿Modo prueba? / Test mode?
 function isMock() {
   return TOURNAMENT_CONFIG.mock === true ||
@@ -233,6 +382,9 @@ document.addEventListener('DOMContentLoaded', () => {
   loadGroups();
   loadStandings();
   renderBracket();
+  renderChampions();
+  renderClips();
+  renderLive();
 });
 
 // ======= IDIOMA / LANGUAGE =======
@@ -282,6 +434,9 @@ function applyLang(lang) {
   else document.getElementById('groups-grid').innerHTML = placeholderGroups();
   if (lastStandingsRows) renderStandings(lastStandingsRows, document.getElementById('standings-table'));
   renderBracket();
+  renderChampions();
+  renderClips();
+  renderLive();
 }
 
 function showTestBanner() {
@@ -410,6 +565,7 @@ async function loadGroups() {
 
   if (isMock()) {
     lastGroupsRows = mockGroupsRows();
+    indexFlags(lastGroupsRows);
     renderGroups(lastGroupsRows, container);
     return;
   }
@@ -420,6 +576,7 @@ async function loadGroups() {
   try {
     const rows = await fetchCSV(SHEET_URLS.groups);
     lastGroupsRows = rows;
+    indexFlags(rows);
     renderGroups(rows, container);
     renderBracket();
   } catch (err) {
@@ -454,7 +611,7 @@ function renderGroups(rows, container) {
   container.innerHTML = keys.map(g => `
     <div class="group-card">
       <h3>${esc(t('group.word'))} ${esc(g)}</h3>
-      <ol>${groups[g].map(n => `<li>${esc(n)}</li>`).join('')}</ol>
+      <ol>${groups[g].map(n => `<li>${nameWithFlag(n)}</li>`).join('')}</ol>
     </div>
   `).join('');
 }
@@ -478,6 +635,7 @@ async function loadStandings() {
 
   if (isMock()) {
     lastStandingsRows = mockStandingsRows();
+    indexFlags(lastStandingsRows);
     renderStandings(lastStandingsRows, container);
     return;
   }
@@ -485,6 +643,7 @@ async function loadStandings() {
   try {
     const rows = await fetchCSV(SHEET_URLS.standings);
     lastStandingsRows = rows;
+    indexFlags(rows);
     renderStandings(rows, container);
     renderBracket();
   } catch (err) {
@@ -499,11 +658,23 @@ function renderStandings(rows, container) {
     return;
   }
   const headers = Object.keys(rows[0]);
+  const isFlagCol = h => /^(flag|bandera|pa[ií]s|country)$/i.test(h);
+  const isRunnerCol = h => /^(runner|corredor|nombre|player|jugador)$/i.test(h);
+
+  const cell = (r, h) => {
+    const v = r[h];
+    if (isFlagCol(h)) { const c = flagCode(v); return c ? flagSpan(c) : esc(v); }
+    if (isRunnerCol(h)) return nameWithFlag(v);
+    return esc(v);
+  };
+
   container.innerHTML = `
     <table>
       <thead><tr>${headers.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>
       <tbody>
-        ${rows.map(r => `<tr>${headers.map(h => `<td class="${isNaN(r[h]) || r[h] === '' ? '' : 'num'}">${esc(r[h])}</td>`).join('')}</tr>`).join('')}
+        ${rows.map(r => `<tr>${headers.map(h =>
+          `<td class="${!isFlagCol(h) && !isRunnerCol(h) && r[h] !== '' && !isNaN(r[h]) ? 'num' : ''}">${cell(r, h)}</td>`
+        ).join('')}</tr>`).join('')}
       </tbody>
     </table>
   `;
@@ -531,7 +702,8 @@ function renderBracket() {
     const pos = Math.floor((seed - 1) / G) + 1;         // 1 = ganador de grupo
     const letter = letterFor((seed - 1) % G);
     if (qualified && qualified[letter] && qualified[letter][pos - 1]) {
-      return { txt: qualified[letter][pos - 1], bye: false };
+      const nm = qualified[letter][pos - 1];
+      return { txt: nm, html: nameWithFlag(nm), bye: false };
     }
     return { txt: pos + (currentLang === 'en' ? '' : 'º') + ' ' + letter, bye: false, tag: pos + letter };
   }
@@ -561,9 +733,10 @@ function renderBracket() {
     html.push(`<div class="round" data-round="${ri}"><div class="round-title">${esc(round.name)}</div><div class="round-inner">`);
     round.matches.forEach(m => {
       const a = m[0], b = m[1];
+      const slotHtml = x => x ? (x.html || esc(x.txt)) : esc(t('bracket.tbd'));
       html.push(`<div class="match">
-        <span class="slot${a && a.bye ? ' is-bye' : ''}">${a ? esc(a.txt) : esc(t('bracket.tbd'))}</span>
-        <span class="slot${b && b.bye ? ' is-bye' : ''}">${b ? esc(b.txt) : esc(t('bracket.tbd'))}</span>
+        <span class="slot${a && a.bye ? ' is-bye' : ''}">${slotHtml(a)}</span>
+        <span class="slot${b && b.bye ? ' is-bye' : ''}">${slotHtml(b)}</span>
       </div>`);
     });
     html.push(`</div></div>`);
@@ -636,6 +809,109 @@ function qualifiedFromData() {
 function pickKey(obj, names) {
   for (const n of names) if (n in obj) return n;
   return null;
+}
+
+// ======= CAMPEONES / PAST CHAMPIONS =======
+function renderChampions() {
+  const host = document.getElementById('champions-content');
+  if (!host) return;
+
+  const podium = (labelKey, name, cls) => `
+    <div class="podium-spot ${cls}">
+      <div class="podium-medal" aria-hidden="true">${cls === 'gold' ? '🥇' : cls === 'silver' ? '🥈' : '🥉'}</div>
+      <div class="podium-role">${esc(t(labelKey))}</div>
+      <div class="podium-name">${name ? nameWithFlag(name) : '<span class="tbd">' + esc(t('champions.tbd')) + '</span>'}</div>
+    </div>`;
+
+  const editions = PAST_EDITIONS.map(e => `
+    <article class="edition">
+      <h3 class="edition-year">${esc(t('champions.edition', { year: e.year }))}</h3>
+      <div class="podium">
+        ${podium('champions.champion', e.champion, 'gold')}
+        ${podium('champions.runnerUp', e.runnerUp, 'silver')}
+        ${podium('champions.third', e.third, 'bronze')}
+      </div>
+      ${e.vod ? `<a class="edition-vod" href="${esc(e.vod)}" target="_blank" rel="noopener">${esc(t('champions.vod'))} ↗</a>` : ''}
+    </article>`).join('');
+
+  host.innerHTML = `
+    <div class="trophy-card">
+      <div class="trophy-emoji" aria-hidden="true">🏆</div>
+      <div>
+        <h3>${esc(t('champions.trophyTitle'))}</h3>
+        <p>${esc(t('champions.trophyPending'))}</p>
+      </div>
+    </div>
+    <div class="editions">${editions}</div>
+  `;
+}
+
+// ======= CLIPS =======
+function toEmbed(url) {
+  try {
+    const u = new URL(url);
+    const host = location.hostname;
+    if (/youtube\.com$/.test(u.hostname) && u.searchParams.get('v'))
+      return 'https://www.youtube.com/embed/' + u.searchParams.get('v');
+    if (u.hostname === 'youtu.be')
+      return 'https://www.youtube.com/embed/' + u.pathname.slice(1);
+    if (/youtube\.com$/.test(u.hostname) && u.pathname.startsWith('/embed/'))
+      return url;
+    if (u.hostname === 'clips.twitch.tv' && u.pathname.length > 1)
+      return `https://clips.twitch.tv/embed?clip=${u.pathname.slice(1)}&parent=${host}`;
+    const m = u.pathname.match(/\/clip\/([A-Za-z0-9_-]+)/);
+    if (/twitch\.tv$/.test(u.hostname) && m)
+      return `https://clips.twitch.tv/embed?clip=${m[1]}&parent=${host}`;
+  } catch (e) {}
+  return '';
+}
+
+function renderClips() {
+  const host = document.getElementById('clips-grid');
+  if (!host) return;
+  if (!CLIPS.length) {
+    host.innerHTML = `<p class="loading-msg">${esc(t('clips.empty'))}</p>`;
+    return;
+  }
+  host.innerHTML = CLIPS.map(c => {
+    const embed = toEmbed(c.url);
+    const inner = embed
+      ? `<div class="clip-frame"><iframe src="${esc(embed)}" allowfullscreen loading="lazy" title="${esc(c.title || 'clip')}"></iframe></div>`
+      : `<a class="clip-frame clip-link" href="${esc(c.url)}" target="_blank" rel="noopener">▶ ${esc(t('champions.vod'))}</a>`;
+    return `<figure class="clip">${inner}<figcaption>${esc(c.title || '')}${c.author ? ` · <span class="clip-author">${esc(c.author)}</span>` : ''}</figcaption></figure>`;
+  }).join('');
+}
+
+// ======= EN VIVO / LIVE (RE4 runners) =======
+async function renderLive() {
+  const host = document.getElementById('live-grid');
+  if (!host) return;
+  const channels = RE4_LIVE_CHANNELS.filter(Boolean);
+  if (!channels.length) { host.innerHTML = `<p class="loading-msg">${esc(t('live.none'))}</p>`; return; }
+
+  host.innerHTML = `<p class="loading-msg">${esc(t('live.checking'))}</p>`;
+  const parent = location.hostname;
+
+  const results = await Promise.all(channels.map(async ch => {
+    try {
+      const r = await fetch('https://decapi.me/twitch/uptime/' + encodeURIComponent(ch), { cache: 'no-store' });
+      const txt = (await r.text()).trim().toLowerCase();
+      const live = r.ok && !/offline|not found|error|unable/.test(txt);
+      return { ch, live };
+    } catch (e) { return { ch, live: false }; }
+  }));
+
+  results.sort((a, b) => (b.live - a.live) || a.ch.localeCompare(b.ch));
+  const anyLive = results.some(x => x.live);
+
+  host.innerHTML = (anyLive ? '' : `<p class="loading-msg">${esc(t('live.none'))}</p>`) + results.map(({ ch, live }) => live
+    ? `<div class="live-card is-live">
+         <div class="live-frame"><iframe src="https://player.twitch.tv/?channel=${encodeURIComponent(ch)}&parent=${parent}&muted=true" allowfullscreen title="${esc(ch)}"></iframe></div>
+         <div class="live-meta"><span class="live-badge">● ${esc(t('live.on'))}</span> <a href="https://twitch.tv/${encodeURIComponent(ch)}" target="_blank" rel="noopener">${esc(ch)}</a></div>
+       </div>`
+    : `<a class="live-card is-off" href="https://twitch.tv/${encodeURIComponent(ch)}" target="_blank" rel="noopener">
+         <span class="live-name">${esc(ch)}</span><span class="live-status">${esc(t('live.off'))}</span>
+       </a>`).join('');
 }
 
 // ======= DATOS FALSOS / MOCK DATA =======
