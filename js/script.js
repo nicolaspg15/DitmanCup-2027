@@ -61,7 +61,7 @@ const PAST_EDITIONS = [
     runnerUp: 'shimarisu',
     third: 'Sawken',
     prize: '$1,000',
-    logo: '',   // TODO: banner "RE4 NG Pro Tournament" (2022)
+    logo: 'assets/champions/2022.png',
     vod: '',
   },
 ];
