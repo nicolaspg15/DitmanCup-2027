@@ -44,6 +44,11 @@ const RUNNER_FLAGS = {
 };
 
 // ======= EDICIONES ANTERIORES / PAST EDITIONS =======
+// Sheets con TODOS los datos de cada edición pasada (para el botón "ver datos").
+const sheetPreview = (id, gid) => `https://docs.google.com/spreadsheets/d/${id}/preview?gid=${gid}`;
+const SHEET_2026_ARCHIVE_ID = '1Q4dkuOBvclcAzfIG_8oD6oQeFjp3ION0lxsDkE-K9No';
+const SHEET_2022_ARCHIVE_ID = '1nMEivjEgs-6tI-h75PW8KDr2iS4VDLM1O12JFCQpAw4';
+
 // Podio de cada Ditman Cup pasada. Dejar '' lo que falte.
 const PAST_EDITIONS = [
   {
@@ -54,6 +59,7 @@ const PAST_EDITIONS = [
     prize: '$1,568',
     logo: 'assets/champions/2026.png',
     vod: 'https://www.youtube.com/@DitmanCup',
+    sheetUrl: sheetPreview(SHEET_2026_ARCHIVE_ID, '1240403995'),
   },
   {
     year: 2022,
@@ -63,6 +69,7 @@ const PAST_EDITIONS = [
     prize: '$1,000',
     logo: 'assets/champions/2022.png',
     vod: '',
+    sheetUrl: sheetPreview(SHEET_2022_ARCHIVE_ID, '526473677'),
   },
 ];
 
@@ -291,6 +298,8 @@ const I18N = {
     'champions.prize': 'Prize pool',
     'champions.trophyTitle': 'El trofeo',
     'champions.trophyPending': 'El trofeo de la Ditman Cup 2027 todavia se esta diseñando.',
+    'champions.viewData': 'Ver todos los datos',
+    'champions.modalHint': 'Datos originales de la planilla del torneo.',
 
     'clips.title': 'Mejores clips',
     'clips.intro': 'Momentos destacados de ediciones y torneos anteriores.',
@@ -401,6 +410,8 @@ const I18N = {
     'champions.prize': 'Prize pool',
     'champions.trophyTitle': 'The trophy',
     'champions.trophyPending': 'The Ditman Cup 2027 trophy is still being designed.',
+    'champions.viewData': 'View all data',
+    'champions.modalHint': 'Original data from the tournament spreadsheet.',
 
     'clips.title': 'Best clips',
     'clips.intro': 'Highlights from past editions and other tournaments.',
@@ -507,6 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTabs();
   initFacts();
   initCountdown();
+  initSheetModal();
   if (isMock()) showTestBanner();
   loadGroups();
   loadStandings();
@@ -968,7 +980,10 @@ function renderChampions() {
         ${spot('champions.third', e.third, 3)}
       </div>
       ${e.prize ? `<div class="edition-prize"><span class="prize-label">${esc(t('champions.prize'))}</span><span class="prize-amount">${esc(e.prize)}</span></div>` : ''}
-      ${e.vod ? `<a class="edition-vod" href="${esc(e.vod)}" target="_blank" rel="noopener">${esc(t('champions.vod'))} ↗</a>` : ''}
+      <div class="edition-actions">
+        ${e.vod ? `<a class="edition-vod" href="${esc(e.vod)}" target="_blank" rel="noopener">${esc(t('champions.vod'))} ↗</a>` : ''}
+        ${e.sheetUrl ? `<button type="button" class="edition-data-btn" data-sheet-url="${esc(e.sheetUrl)}" data-sheet-title="${esc(t('champions.edition', { year: e.year }))}">${esc(t('champions.viewData'))}</button>` : ''}
+      </div>
     </article>`).join('');
 
   host.innerHTML = `
@@ -978,6 +993,39 @@ function renderChampions() {
     </div>
     <div class="editions">${editions}</div>
   `;
+
+  host.querySelectorAll('.edition-data-btn').forEach(btn => {
+    btn.addEventListener('click', () => openSheetModal(btn.dataset.sheetUrl, btn.dataset.sheetTitle));
+  });
+}
+
+// ======= MODAL DE SHEET (botón "ver todos los datos") =======
+function initSheetModal() {
+  const modal = document.getElementById('sheet-modal');
+  if (!modal) return;
+  modal.querySelector('.sheet-modal-close').addEventListener('click', closeSheetModal);
+  modal.querySelector('.sheet-modal-backdrop').addEventListener('click', closeSheetModal);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !modal.hidden) closeSheetModal();
+  });
+}
+
+function openSheetModal(url, title) {
+  const modal = document.getElementById('sheet-modal');
+  if (!modal || !url) return;
+  document.getElementById('sheet-modal-title').textContent = title || '';
+  document.getElementById('sheet-modal-frame').src = url;
+  modal.hidden = false;
+  document.body.classList.add('modal-open');
+  modal.querySelector('.sheet-modal-close').focus();
+}
+
+function closeSheetModal() {
+  const modal = document.getElementById('sheet-modal');
+  if (!modal) return;
+  modal.hidden = true;
+  document.getElementById('sheet-modal-frame').src = 'about:blank'; // corta la carga
+  document.body.classList.remove('modal-open');
 }
 
 // ======= CLIPS =======

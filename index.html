@@ -6,7 +6,7 @@
 <title>Ditman Cup 2027</title>
 <meta name="description" content="Ditman Cup 2027 — community Resident Evil 4 speedrunning tournament, World Cup format. / Torneo comunitario de speedrunning de RE4.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/css/flag-icons.min.css">
-<link rel="stylesheet" href="css/style.css?v=20260910h">
+<link rel="stylesheet" href="css/style.css?v=20260910i">
 </head>
 <body data-tab="inicio">
 
@@ -259,6 +259,20 @@
   <p class="footer-note" data-i18n="footer.text">Ditman Cup 2027 · Made by the community</p>
 </footer>
 
-<script src="js/script.js?v=20260910h"></script>
+<div id="sheet-modal" class="sheet-modal" hidden role="dialog" aria-modal="true" aria-labelledby="sheet-modal-title">
+  <div class="sheet-modal-backdrop"></div>
+  <div class="sheet-modal-box">
+    <div class="sheet-modal-head">
+      <h3 id="sheet-modal-title">Sheet</h3>
+      <button type="button" class="sheet-modal-close" aria-label="Close">&times;</button>
+    </div>
+    <p class="sheet-modal-hint" data-i18n="champions.modalHint">Original data from the tournament spreadsheet.</p>
+    <div class="sheet-modal-frame-wrap">
+      <iframe id="sheet-modal-frame" src="about:blank" title="Sheet data" loading="lazy"></iframe>
+    </div>
+  </div>
+</div>
+
+<script src="js/script.js?v=20260910i"></script>
 </body>
 </html>
