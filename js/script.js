@@ -9,7 +9,8 @@ const TOURNAMENT_CONFIG = {
 
   // Apertura de las clasificatorias ("qualys"). Formato ISO con offset.
   // Qualifier window opens. ISO format with UTC offset.
-  qualysOpen: '2027-01-15T00:00:00-03:00',      // 15 ene 2027, 00:00 hora Argentina (UTC-3)
+  qualysOpen: '2026-12-28T00:00:00-03:00',      // abren: 28 dic 2026, 00:00 hora Argentina (UTC-3)
+  qualysClose: '2027-01-15T00:00:00-03:00',     // cierran: 15 ene 2027, 00:00 hora Argentina (UTC-3)
   qualysTimeZone: 'America/Argentina/Buenos_Aires', // solo para mostrar la fecha siempre igual
 
   // Modo prueba: usa datos falsos en Grupos / Clasificatorias / Brackets.
@@ -227,6 +228,7 @@ const I18N = {
     'countdown.secs': 'seg',
     'countdown.open': '¡Las qualys ya estan abiertas!',
     'countdown.datePrefix': 'Apertura:',
+    'countdown.closePrefix': 'Cierre:',
 
     'facts.runners': 'corredores',
     'facts.groups': 'grupos',
@@ -340,6 +342,7 @@ const I18N = {
     'countdown.secs': 'sec',
     'countdown.open': 'Qualifiers are now open!',
     'countdown.datePrefix': 'Opens:',
+    'countdown.closePrefix': 'Closes:',
 
     'facts.runners': 'runners',
     'facts.groups': 'groups',
@@ -677,10 +680,16 @@ function renderCountdown() {
   const locale = currentLang === 'en' ? 'en-US' : 'es-ES';
   const fmtOpts = { day: 'numeric', month: 'long', year: 'numeric' };
   if (TOURNAMENT_CONFIG.qualysTimeZone) fmtOpts.timeZone = TOURNAMENT_CONFIG.qualysTimeZone;
-  let pretty;
-  try { pretty = _countdownTarget.toLocaleDateString(locale, fmtOpts); }
-  catch (e) { pretty = _countdownTarget.toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' }); }
-  if (dateLine) dateLine.textContent = t('countdown.datePrefix') + ' ' + pretty;
+  const fmtDate = d => {
+    try { return d.toLocaleDateString(locale, fmtOpts); }
+    catch (e) { return d.toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' }); }
+  };
+  if (dateLine) {
+    let line = t('countdown.datePrefix') + ' ' + fmtDate(_countdownTarget);
+    const closeDate = new Date(TOURNAMENT_CONFIG.qualysClose);
+    if (!isNaN(closeDate.getTime())) line += '  ·  ' + t('countdown.closePrefix') + ' ' + fmtDate(closeDate);
+    dateLine.textContent = line;
+  }
 
   let diff = _countdownTarget.getTime() - Date.now();
 
