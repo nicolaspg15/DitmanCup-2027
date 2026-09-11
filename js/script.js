@@ -9,7 +9,7 @@ const TOURNAMENT_CONFIG = {
 
   // Apertura de las clasificatorias ("qualys"). Formato ISO con offset.
   // Qualifier window opens. ISO format with UTC offset.
-  qualysOpen: '2026-11-20T00:00:00-03:00',      // 20 nov 2026, 00:00 hora Argentina (UTC-3)
+  qualysOpen: '2027-01-15T00:00:00-03:00',      // 15 ene 2027, 00:00 hora Argentina (UTC-3)
   qualysTimeZone: 'America/Argentina/Buenos_Aires', // solo para mostrar la fecha siempre igual
 
   // Modo prueba: usa datos falsos en Grupos / Clasificatorias / Brackets.
@@ -211,7 +211,7 @@ const I18N = {
     'nav.grupos': 'Grupos',
     'nav.brackets': 'Brackets',
     'nav.clasificatorias': 'Clasificatorias',
-    'nav.champions': 'Campeones',
+    'nav.champions': 'Historia',
     'nav.clips': 'Clips',
     'nav.live': 'En vivo',
     'nav.donaciones': 'Donaciones',
@@ -235,7 +235,8 @@ const I18N = {
     'intro.p': 'Bienvenidos a la Ditman Cup 2027. Aca vas a encontrar el sorteo, los grupos, el cuadro de eliminacion y todo lo necesario para seguir el torneo de punta a punta.',
 
     'sorteo.title': 'Sorteo',
-    'sorteo.vod': 'VOD del sorteo — proximamente',
+    'sorteo.vod': 'El sorteo arranca el 16 de enero',
+    'sorteo.live': 'En vivo por twitch.tv/ditmancup',
     'sorteo.note': 'Los resultados del sorteo se reflejan automaticamente en la pestaña Grupos.',
 
     'grupos.title': 'Fase de grupos',
@@ -288,7 +289,7 @@ const I18N = {
     'link.youtube': 'YouTube',
     'link.twitch': 'Twitch',
 
-    'champions.title': 'Campeones',
+    'champions.title': 'Historia',
     'champions.edition': 'Ditman Cup {year}',
     'champions.champion': 'Campeon',
     'champions.runnerUp': 'Subcampeon',
@@ -323,7 +324,7 @@ const I18N = {
     'nav.grupos': 'Groups',
     'nav.brackets': 'Bracket',
     'nav.clasificatorias': 'Standings',
-    'nav.champions': 'Champions',
+    'nav.champions': 'History',
     'nav.clips': 'Clips',
     'nav.live': 'Live',
     'nav.donaciones': 'Donations',
@@ -347,7 +348,8 @@ const I18N = {
     'intro.p': "Welcome to the Ditman Cup 2027. Here you'll find the draw, the groups, the knockout bracket and everything you need to follow the tournament end to end.",
 
     'sorteo.title': 'Draw',
-    'sorteo.vod': 'Draw VOD — coming soon',
+    'sorteo.vod': 'Draw will begin January 16th',
+    'sorteo.live': 'Live on twitch.tv/ditmancup',
     'sorteo.note': 'Draw results are reflected automatically in the Groups tab.',
 
     'grupos.title': 'Group stage',
@@ -400,7 +402,7 @@ const I18N = {
     'link.youtube': 'YouTube',
     'link.twitch': 'Twitch',
 
-    'champions.title': 'Champions',
+    'champions.title': 'History',
     'champions.edition': 'Ditman Cup {year}',
     'champions.champion': 'Champion',
     'champions.runnerUp': 'Runner-up',
@@ -970,9 +972,9 @@ function renderChampions() {
 
   const editions = PAST_EDITIONS.map(e => `
     <article class="edition">
+      ${e.logo ? `<div class="edition-banner"><img src="${esc(e.logo)}" alt="Ditman Cup ${esc(e.year)}" loading="lazy"></div>` : ''}
       <div class="edition-head">
         <h3 class="edition-year">${esc(t('champions.edition', { year: e.year }))}</h3>
-        ${e.logo ? `<img class="edition-logo" src="${esc(e.logo)}" alt="Ditman Cup ${esc(e.year)}" loading="lazy">` : ''}
       </div>
       <div class="podium">
         ${spot('champions.champion', e.champion, 1)}
