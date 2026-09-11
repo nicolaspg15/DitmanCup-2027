@@ -591,9 +591,6 @@ footer {
 .group-card .fi, .standings-wrapper .fi, .slot .fi { font-size: .9em; }
 
 /* --- Campeones --- */
-/* Fuente segura en toda la pestaña: la del juego rompe los tildes/ñ. */
-#champions-content { font-family: var(--font-safe); }
-
 .trophy-card {
   background: linear-gradient(rgba(9, 8, 6, .9), rgba(9, 8, 6, .82));
   border: 1px solid var(--frame);
@@ -602,7 +599,7 @@ footer {
   padding: 1.1rem 1.3rem;
   margin-bottom: 2.2rem;
 }
-.trophy-card h3 { font-family: var(--font-safe); color: var(--accent-bright); margin-bottom: .3rem; letter-spacing: .02em; }
+.trophy-card h3 { color: var(--accent-bright); margin-bottom: .3rem; letter-spacing: .02em; }
 .trophy-card p { margin: 0; color: var(--text-dim); }
 
 .editions { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
@@ -629,7 +626,7 @@ footer {
   margin-bottom: 1.1rem;
 }
 .edition-year {
-  font-family: var(--font-safe);
+  font-family: var(--font-title);
   font-size: 1.1rem;
   letter-spacing: .05em;
   text-transform: uppercase;
@@ -657,7 +654,7 @@ footer {
 }
 .podium-name .fi { vertical-align: baseline; margin-right: .35em; }
 .podium-name .tbd {
-  font-family: var(--font-safe);
+  font-family: var(--font-title);
   font-style: italic; font-size: 1rem; color: var(--text-muted);
 }
 
@@ -689,7 +686,7 @@ footer {
   border-top: 1px solid var(--frame);
 }
 .prize-label {
-  font-family: var(--font-safe);
+  font-family: var(--font-title);
   font-size: .72rem;
   text-transform: uppercase;
   letter-spacing: .1em;
@@ -704,7 +701,7 @@ footer {
 .edition-vod {
   display: inline-block;
   margin-top: 1.3rem;
-  font-family: var(--font-safe);
+  font-family: var(--font-title);
   font-size: .85rem;
   text-transform: uppercase;
   letter-spacing: .06em;
