@@ -357,7 +357,7 @@ const I18N = {
     'footer.text': 'Ditman Cup 2027 · Hecho para la comunidad',
 
     'sim.title': 'Simulador — formato tipo Nations League',
-    'sim.intro': 'El Top 8 de las clasificatorias (por PB real) clasifica directo a Octavos de Final y no juega la fase de grupos. Los otros 24 corredores forman 3 grupos de 8, con 4 fechas en total. Cada fecha corren BO1 dentro de su grupo, cerca de su PB pero con algo de variacion. En cada frontera suben los 2 que ganaron su carrera en el grupo de abajo, y bajan los 2 que perdieron en el grupo de arriba — ganar tu carrera es obligatorio para subir, y perderla lo es para bajar. Cada victoria suma puntos segun el grupo donde la conseguiste (Grupo 1 = 2 pts, Grupo 2 = 1, Grupo 3 = 1). Ademas, si perdiste tu carrera por menos de 30s (estuvo pareja), sumas un bono igual: +1 pt en Grupo 1, +0.5 pt en Grupo 2 (en Grupo 3 perder no da bono). Al cerrar la fecha 4, los 8 corredores con mas puntos de la fase de grupos (desempate: total de victorias, despues mejor tiempo) completan el cuadro de Octavos junto al Top 8 directo — 16 en total. Esto es una propuesta de formato, todavia no es el definitivo.',
+    'sim.intro': 'El Top 8 de las clasificatorias (por PB real) clasifica directo a Octavos de Final y no juega la fase de grupos. Los otros 24 corredores forman 3 grupos de 8, con 4 fechas en total. Cada fecha corren BO1 dentro de su grupo, cerca de su PB pero con algo de variacion. En cada frontera suben los 2 que ganaron su carrera en el grupo de abajo, y bajan los 2 que perdieron en el grupo de arriba — ganar tu carrera es obligatorio para subir, y perderla lo es para bajar. Cada victoria suma puntos segun el grupo donde la conseguiste (Grupo 1 = 2 pts, Grupo 2 = 1, Grupo 3 = 1). Ademas, si perdiste tu carrera por menos de 30s (estuvo pareja), sumas un bono igual: +1 pt en Grupo 1, +0.5 pt en Grupo 2 (en Grupo 3 perder no da bono). Al cerrar la fecha 4, los 8 corredores con mas puntos de la fase de grupos (desempate: promedio de sus 2 mejores carreras de las 4 jugadas) completan el cuadro de Octavos junto al Top 8 directo — 16 en total. Esto es una propuesta de formato, todavia no es el definitivo.',
     'sim.dateBadge': 'Fecha',
     'sim.btnNext': 'Simular siguiente fecha',
     'sim.btnNext5': 'Simular hasta el final',
@@ -517,7 +517,7 @@ const I18N = {
     'footer.text': 'Ditman Cup 2027 · Made for the community',
 
     'sim.title': 'Simulator — Nations League–style format',
-    'sim.intro': "The Top 8 from qualifiers (by real PB) qualify directly to the Round of 16 and skip the group stage. The other 24 runners form 3 groups of 8, over 4 matchdays total. Each matchday everyone races BO1 within their group, close to their PB with some variance. At every boundary, the 2 runners who won their race in the group below move up, and the 2 who lost theirs in the group above move down — winning your race is required to move up, and losing it is required to move down. Every win scores points based on the group where you earned it (Group 1 = 2 pts, Group 2 = 1, Group 3 = 1). On top of that, losing your race by less than 30s (a close one) still earns a bonus: +1 pt in Group 1, +0.5 pt in Group 2 (losing in Group 3 earns no bonus). After matchday 4, the 8 runners with the most points from the group stage (tiebreak: total wins, then best time) complete the Round of 16 bracket alongside the direct Top 8 — 16 in total. This is a format proposal — not the confirmed one yet.",
+    'sim.intro': "The Top 8 from qualifiers (by real PB) qualify directly to the Round of 16 and skip the group stage. The other 24 runners form 3 groups of 8, over 4 matchdays total. Each matchday everyone races BO1 within their group, close to their PB with some variance. At every boundary, the 2 runners who won their race in the group below move up, and the 2 who lost theirs in the group above move down — winning your race is required to move up, and losing it is required to move down. Every win scores points based on the group where you earned it (Group 1 = 2 pts, Group 2 = 1, Group 3 = 1). On top of that, losing your race by less than 30s (a close one) still earns a bonus: +1 pt in Group 1, +0.5 pt in Group 2 (losing in Group 3 earns no bonus). After matchday 4, the 8 runners with the most points from the group stage (tiebreak: average of their 2 best races out of the 4 played) complete the Round of 16 bracket alongside the direct Top 8 — 16 in total. This is a format proposal — not the confirmed one yet.",
     'sim.dateBadge': 'Matchday',
     'sim.btnNext': 'Simulate next matchday',
     'sim.btnNext5': 'Simulate to the end',
@@ -1500,6 +1500,7 @@ function simInitRunners() {
     wins: 0,
     points: 0,
     bestTimeEver: Infinity,
+    raceTimes: [], // tiempo de cada carrera jugada, para el desempate de las 2 mejores
   }));
   simFecha = 0;
   simLastRaces = [];
@@ -1541,6 +1542,8 @@ function simAdvanceFecha() {
       b.history.push(b.lastResult.won ? 'W' : 'L');
       a.bestTimeEver = Math.min(a.bestTimeEver, timeA);
       b.bestTimeEver = Math.min(b.bestTimeEver, timeB);
+      a.raceTimes.push(timeA);
+      b.raceTimes.push(timeB);
       simLastRaces.push({ group: g, a: a.name, b: b.name, winner: winner.name, margin, timeA, timeB });
     }
   }
@@ -1584,13 +1587,22 @@ function simSortGroup(members) {
   return [...relegatedIn, ...stayers, ...promotedIn];
 }
 
+// Promedio de las 2 mejores carreras (de las 4 jugadas) — se usa como
+// desempate: entre dos corredores con los mismos puntos, gana quien haya
+// corrido mas rapido en sus 2 mejores fechas, no solo su mejor marca suelta.
+function simBestAvg2(r) {
+  if (!r.raceTimes.length) return Infinity;
+  const top2 = [...r.raceTimes].sort((a, b) => a - b).slice(0, 2);
+  return top2.reduce((sum, t) => sum + t, 0) / top2.length;
+}
+
 // Orden: primero puntos acumulados (ponderados segun el grupo de cada
 // victoria — ganar en Grupo 1 vale mas que ganar en Grupo 3), desempate
-// por total de victorias y por ultimo el mejor tiempo de todo el torneo.
-// Se usa para clasificar a los 8 mejores de la fase de grupos (no importa
-// en que grupo termines) y para sembrar su parte del bracket.
+// por el promedio de las 2 mejores carreras. Se usa para clasificar a los
+// 8 mejores de la fase de grupos (no importa en que grupo termines) y
+// para sembrar su parte del bracket.
 function simRankByPoints(members) {
-  return [...members].sort((a, b) => b.points - a.points || b.wins - a.wins || a.bestTimeEver - b.bestTimeEver);
+  return [...members].sort((a, b) => b.points - a.points || simBestAvg2(a) - simBestAvg2(b));
 }
 function simGroupRunners() { return simRunners.filter(r => !r.isTop8Seed); } // los 24 que juegan grupos
 function simDirectSeeds() { return simRunners.filter(r => r.isTop8Seed).sort((a, b) => a.pbSeconds - b.pbSeconds); } // top 8 por PB, directo a Octavos
