@@ -374,10 +374,10 @@ const I18N = {
     'sim.group3': 'Grupo 3',
     'sim.runnersCount': '{n} corredores',
     'sim.thRunner': 'Corredor',
-    'sim.thGroup': 'Grupo',
     'sim.thPB': 'PB',
     'sim.thPts': 'Pts',
     'sim.thBest': 'Mejor tiempo',
+    'sim.thBestAvg': 'Mejor promedio',
     'sim.thHistory': 'Historial',
     'sim.rankingTitle': 'Ranking de grupos — ordenado solo por puntaje',
     'sim.rankingNote': 'Los 24 corredores de la fase de grupos en una sola tabla, ordenados de mayor a menor puntaje (sin desempates de grupo ni tabla por tabla). Los primeros 8 clasifican a Octavos junto al Top 8 directo.',
@@ -534,10 +534,10 @@ const I18N = {
     'sim.group3': 'Group 3',
     'sim.runnersCount': '{n} runners',
     'sim.thRunner': 'Runner',
-    'sim.thGroup': 'Group',
     'sim.thPB': 'PB',
     'sim.thPts': 'Pts',
     'sim.thBest': 'Best time',
+    'sim.thBestAvg': 'Best Average Time',
     'sim.thHistory': 'History',
     'sim.rankingTitle': 'Group stage ranking — sorted by points only',
     'sim.rankingNote': 'The 24 group-stage runners in a single table, sorted highest to lowest points (no group tiebreaks, no separate tables). The top 8 qualify to the Round of 16 alongside the direct Top 8.',
@@ -1812,15 +1812,15 @@ function simRenderRanking(qualifiedIds) {
   const ranked = simRankByPoints(simGroupRunners());
   el.innerHTML = `
     <div class="table-scroll"><table>
-      <thead><tr><th></th><th>${esc(t('sim.thRunner'))}</th><th>${esc(t('sim.thGroup'))}</th><th>${esc(t('sim.thPB'))}</th><th>${esc(t('sim.thPts'))}</th><th>${esc(t('sim.thBest'))}</th><th>${esc(t('sim.thHistory'))}</th></tr></thead>
+      <thead><tr><th></th><th>${esc(t('sim.thRunner'))}</th><th>${esc(t('sim.thPB'))}</th><th>${esc(t('sim.thPts'))}</th><th>${esc(t('sim.thBestAvg'))}</th><th>${esc(t('sim.thHistory'))}</th></tr></thead>
       <tbody>
         ${ranked.map((r, i) => `
           <tr class="${simStatusClass(r, qualifiedIds)}">
             <td class="sim-rank">${i + 1}</td>
             <td>${nameWithFlag(r.name)}</td>
-            <td class="sim-pb">G${r.group}</td>
+            <td class="sim-pb">${esc(r.pbLabel)}</td>
             <td class="sim-pts">${simFormatPoints(r.points)}</td>
-            <td class="sim-best">${Number.isFinite(r.bestTimeEver) ? esc(simFormatRaceTime(r.bestTimeEver)) : '—'}</td>
+            <td class="sim-best">${Number.isFinite(simBestAvg2(r)) ? esc(simFormatRaceTime(simBestAvg2(r))) : '—'}</td>
             <td class="sim-hist">${simRenderHistory(r)}</td>
           </tr>`).join('')}
       </tbody>

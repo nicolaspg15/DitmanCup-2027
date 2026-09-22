@@ -1019,6 +1019,8 @@ body.modal-open { overflow: hidden; }
   letter-spacing: .04em;
   text-transform: uppercase;
   font-weight: 400;
+  white-space: normal; /* los encabezados largos ("Best Average Time") pueden pasar a 2 lineas en vez de forzar el ancho de la columna */
+  max-width: 8em;
 }
 .sim-groups td.sim-rank, #sim-ranking-table td.sim-rank { color: var(--text-muted); width: 1.4em; }
 .sim-groups td.sim-pb, .sim-groups td.sim-best, #sim-ranking-table td.sim-pb, #sim-ranking-table td.sim-best { font-family: var(--font-grunge); color: var(--text-dim); font-size: 1.05rem; font-variant-numeric: tabular-nums; }
