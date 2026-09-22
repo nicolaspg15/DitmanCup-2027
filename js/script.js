@@ -357,23 +357,19 @@ const I18N = {
     'footer.text': 'Ditman Cup 2027 · Hecho para la comunidad',
 
     'sim.title': 'Simulador — formato tipo Nations League',
-    'sim.intro': '32 corredores con sus PBs reales, 4 grupos de 8, 4 fechas en total. Cada fecha corren BO1 dentro de su grupo, cerca de su PB pero con algo de variacion. En cada frontera suben los 3 mejores tiempos entre quienes ganaron su carrera en el grupo de abajo, y bajan los 3 peores tiempos entre quienes perdieron en el grupo de arriba — ganar tu carrera es obligatorio para subir, y perderla lo es para bajar. Al cerrar la fecha 4, clasifica el Top 16 (Grupo 1 + Grupo 2). Esto es una propuesta de formato, todavia no es el definitivo.',
+    'sim.intro': '32 corredores con sus PBs reales, 4 grupos de 8, 4 fechas en total. Cada fecha corren BO1 dentro de su grupo, cerca de su PB pero con algo de variacion. En cada frontera suben los 4 que ganaron su carrera en el grupo de abajo, y bajan los 4 que perdieron en el grupo de arriba — ganar tu carrera es obligatorio para subir, y perderla lo es para bajar. Cada victoria suma puntos segun el grupo donde la conseguiste (Grupo 1 = 4 pts, Grupo 2 = 3, Grupo 3 = 2, Grupo 4 = 1): ganarle a los mejores vale mas. Al cerrar la fecha 4, clasifican los 16 corredores con mas puntos de todo el torneo (desempate: mejor tiempo), sin importar en que grupo hayan terminado. Esto es una propuesta de formato, todavia no es el definitivo.',
     'sim.dateBadge': 'Fecha',
     'sim.btnNext': 'Simular siguiente fecha',
     'sim.btnNext5': 'Simular hasta el final',
     'sim.btnReset': 'Reiniciar',
-    'sim.qualifyTitleLive': 'Si el torneo cortara aca, clasifican (Grupo 1 + Grupo 2)',
-    'sim.qualifyTitleFinal': 'Torneo terminado — clasificados definitivos',
-    'sim.legendQualified': 'Clasificado (Grupo 1 + Grupo 2)',
-    'sim.legendEliminated': 'Eliminado (Grupo 3 + Grupo 4)',
+    'sim.qualifyTitleLive': 'Si el torneo cortara aca, clasifican estos 16 (por puntaje)',
+    'sim.qualifyTitleFinal': 'Torneo terminado — clasificados definitivos (por puntaje)',
+    'sim.legendQualified': 'Clasificado (Top 16 por puntaje)',
+    'sim.legendEliminated': 'Eliminado',
     'sim.group1': 'Grupo 1 · elite',
     'sim.group2': 'Grupo 2',
     'sim.group3': 'Grupo 3',
     'sim.group4': 'Grupo 4 · entrada',
-    'sim.group1Final': 'Grupo 1 · clasificado',
-    'sim.group2Final': 'Grupo 2 · clasificado',
-    'sim.group3Final': 'Grupo 3 · eliminado',
-    'sim.group4Final': 'Grupo 4 · eliminado',
     'sim.runnersCount': '{n} corredores',
     'sim.thRunner': 'Corredor',
     'sim.thPB': 'PB',
@@ -516,23 +512,19 @@ const I18N = {
     'footer.text': 'Ditman Cup 2027 · Made for the community',
 
     'sim.title': 'Simulator — Nations League–style format',
-    'sim.intro': "32 runners with their real PBs, 4 groups of 8, 4 matchdays total. Each matchday everyone races BO1 within their group, close to their PB with some variance. At every boundary, the 3 best times among the runners who won their race in the group below move up, and the 3 worst times among the runners who lost theirs in the group above move down — winning your race is required to move up, and losing it is required to move down. After matchday 4, the Top 16 (Group 1 + Group 2) qualify. This is a format proposal — not the confirmed one yet.",
+    'sim.intro': "32 runners with their real PBs, 4 groups of 8, 4 matchdays total. Each matchday everyone races BO1 within their group, close to their PB with some variance. At every boundary, the 4 runners who won their race in the group below move up, and the 4 who lost theirs in the group above move down — winning your race is required to move up, and losing it is required to move down. Every win scores points based on the group where you earned it (Group 1 = 4 pts, Group 2 = 3, Group 3 = 2, Group 4 = 1): beating the best is worth more. After matchday 4, the 16 runners with the most points across the whole tournament qualify (tiebreak: best time), regardless of which group they end up in. This is a format proposal — not the confirmed one yet.",
     'sim.dateBadge': 'Matchday',
     'sim.btnNext': 'Simulate next matchday',
     'sim.btnNext5': 'Simulate to the end',
     'sim.btnReset': 'Reset',
-    'sim.qualifyTitleLive': 'If the tournament ended now, these would qualify (Group 1 + Group 2)',
-    'sim.qualifyTitleFinal': 'Tournament over — final qualifiers',
-    'sim.legendQualified': 'Qualified (Group 1 + Group 2)',
-    'sim.legendEliminated': 'Eliminated (Group 3 + Group 4)',
+    'sim.qualifyTitleLive': 'If the tournament ended now, these 16 would qualify (by points)',
+    'sim.qualifyTitleFinal': 'Tournament over — final qualifiers (by points)',
+    'sim.legendQualified': 'Qualified (Top 16 by points)',
+    'sim.legendEliminated': 'Eliminated',
     'sim.group1': 'Group 1 · elite',
     'sim.group2': 'Group 2',
     'sim.group3': 'Group 3',
     'sim.group4': 'Group 4 · entry',
-    'sim.group1Final': 'Group 1 · qualified',
-    'sim.group2Final': 'Group 2 · qualified',
-    'sim.group3Final': 'Group 3 · eliminated',
-    'sim.group4Final': 'Group 4 · eliminated',
     'sim.runnersCount': '{n} runners',
     'sim.thRunner': 'Runner',
     'sim.thPB': 'PB',
@@ -1415,7 +1407,10 @@ async function fetchCSV(url) {
 const SIM_GROUP_SIZE = 8;
 const SIM_NUM_GROUPS = 4;
 const SIM_MAX_FECHAS = 4;
-const SIM_MOVE_COUNT = 3; // cuantos suben/bajan por frontera
+const SIM_MOVE_COUNT = 4; // cuantos suben/bajan por frontera
+// Puntos por victoria segun el grupo donde se consiguio: ganarle a los
+// mejores (Grupo 1) vale mas que ganarle a los mas lentos (Grupo 4).
+function simWinPoints(group) { return SIM_NUM_GROUPS + 1 - group; }
 const SIM_SEED_ORDER = [1, 8, 4, 5, 2, 7, 3, 6]; // sembrado clásico de 8 cabezas de serie
 
 const SIM_RUNNER_NAMES = [
@@ -1515,7 +1510,7 @@ function simAdvanceFecha() {
       const { winner, margin, timeA, timeB } = simRace(a, b);
       a.lastResult = { opponent: b.name, won: a === winner, margin, time: timeA };
       b.lastResult = { opponent: a.name, won: b === winner, margin, time: timeB };
-      if (a === winner) { a.wins++; a.points += 3; } else { b.wins++; b.points += 3; }
+      if (a === winner) { a.wins++; a.points += simWinPoints(a.group); } else { b.wins++; b.points += simWinPoints(b.group); }
       a.history.push(a.lastResult.won ? 'W' : 'L');
       b.history.push(b.lastResult.won ? 'W' : 'L');
       a.bestTimeEver = Math.min(a.bestTimeEver, timeA);
@@ -1563,26 +1558,30 @@ function simSortGroup(members) {
   return [...relegatedIn, ...stayers, ...promotedIn];
 }
 
-// Orden final del Top 1-8 para el sembrado: puntos acumulados (3 x victoria),
-// desempate por el mejor tiempo de todo el torneo.
+// Orden por puntos acumulados (ponderados segun el grupo de cada victoria),
+// desempate por el mejor tiempo de todo el torneo. Se usa para clasificar
+// al Top 16 (no importa en que grupo termines) y para sembrar el bracket.
 function simRankByPoints(members) {
   return [...members].sort((a, b) => b.points - a.points || a.bestTimeEver - b.bestTimeEver);
 }
+function simQualifiers() { return simRankByPoints(simRunners).slice(0, 16); }
 
 function simRenderHistory(r) {
   if (!r.history.length) return '—';
   return [...r.history].reverse().map(res => `<span class="${res === 'W' ? 'sim-res-w' : 'sim-res-l'}">${res}</span>`).join('');
 }
 
-function simStatusClass(r) {
+function simStatusClass(r, qualifiedIds) {
   if (simFecha === 0) return '';
-  return (r.group === 1 || r.group === 2) ? 'sim-row-q' : 'sim-row-e';
+  return qualifiedIds.has(r.id) ? 'sim-row-q' : 'sim-row-e';
 }
 
 function simInitBracket() {
-  const g1 = simRankByPoints(simGetGroup(1));
-  simBracketSeeds = SIM_SEED_ORDER.map(seedNum => ({ runner: g1[seedNum - 1], seedNum }));
-  simBracketPool = simShuffle(simGetGroup(2));
+  const top16 = simQualifiers();
+  const seeded = top16.slice(0, 8);
+  const pool = top16.slice(8, 16);
+  simBracketSeeds = SIM_SEED_ORDER.map(seedNum => ({ runner: seeded[seedNum - 1], seedNum }));
+  simBracketPool = simShuffle(pool);
   simBracketAssignments = new Array(8).fill(null);
   simBracketDrawIndex = 0;
   simBracketReady = true;
@@ -1600,7 +1599,7 @@ function simDrawAll() {
 }
 function simResetDraw() {
   if (!simBracketReady) return;
-  simBracketPool = simShuffle(simGetGroup(2));
+  simBracketPool = simShuffle(simQualifiers().slice(8, 16));
   simBracketAssignments = new Array(8).fill(null);
   simBracketDrawIndex = 0;
   simRenderBracket();
@@ -1657,21 +1656,18 @@ function renderSimulator() {
   const legend = document.getElementById('sim-legend');
   if (legend) legend.hidden = simFecha < 1;
 
-  const qualified = simRunners
-    .filter(r => r.group === 1 || r.group === 2)
-    .sort((a, b) => a.group - b.group || simTimeOf(a) - simTimeOf(b))
-    .map(r => `<strong>${nameWithFlag(r.name)}</strong> (G${r.group})`);
+  const top16 = simQualifiers();
+  const qualifiedIds = new Set(top16.map(r => r.id));
+  const qualified = top16.map(r => `<strong>${nameWithFlag(r.name)}</strong> (${r.points} pts · G${r.group})`);
   setText('sim-qualify-title', t(isFinal ? 'sim.qualifyTitleFinal' : 'sim.qualifyTitleLive'));
   const namesEl = document.getElementById('sim-qualify-names');
   if (namesEl) namesEl.innerHTML = qualified.join(', ');
 
-  const labels = isFinal
-    ? { 1: t('sim.group1Final'), 2: t('sim.group2Final'), 3: t('sim.group3Final'), 4: t('sim.group4Final') }
-    : { 1: t('sim.group1'), 2: t('sim.group2'), 3: t('sim.group3'), 4: t('sim.group4') };
+  const labels = { 1: t('sim.group1'), 2: t('sim.group2'), 3: t('sim.group3'), 4: t('sim.group4') };
 
   panel.innerHTML = '';
   for (let g = 1; g <= SIM_NUM_GROUPS; g++) {
-    const members = (isFinal && (g === 1 || g === 2)) ? simRankByPoints(simGetGroup(g)) : simSortGroup(simGetGroup(g));
+    const members = simSortGroup(simGetGroup(g));
     const card = document.createElement('div');
     card.className = 'group-card';
     card.innerHTML = `
@@ -1681,7 +1677,7 @@ function renderSimulator() {
         <thead><tr><th></th><th>${esc(t('sim.thRunner'))}</th><th>${esc(t('sim.thPB'))}</th><th>${esc(t('sim.thPts'))}</th><th>${esc(t('sim.thBest'))}</th><th>${esc(t('sim.thHistory'))}</th></tr></thead>
         <tbody>
           ${members.map((r, i) => `
-            <tr class="${simStatusClass(r)}">
+            <tr class="${simStatusClass(r, qualifiedIds)}">
               <td class="sim-rank">${i + 1}</td>
               <td>${nameWithFlag(r.name)}${r.lastMove === 'up' ? ' <span class="sim-move-up">▲</span>' : ''}${r.lastMove === 'down' ? ' <span class="sim-move-down">▼</span>' : ''}</td>
               <td class="sim-pb">${esc(r.pbLabel)}</td>
