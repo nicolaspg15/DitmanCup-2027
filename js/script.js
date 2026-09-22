@@ -357,7 +357,7 @@ const I18N = {
     'footer.text': 'Ditman Cup 2027 · Hecho para la comunidad',
 
     'sim.title': 'Simulador — formato tipo Nations League',
-    'sim.intro': 'El Top 8 de las clasificatorias (por PB real) clasifica directo a Octavos de Final y no juega la fase de grupos. Los otros 24 corredores forman 3 grupos de 8, con 4 fechas en total. Cada fecha corren BO1 dentro de su grupo, cerca de su PB pero con algo de variacion. En cada frontera suben los 2 que ganaron su carrera en el grupo de abajo, y bajan los 2 que perdieron en el grupo de arriba — ganar tu carrera es obligatorio para subir, y perderla lo es para bajar. Cada victoria suma puntos segun el grupo donde la conseguiste (Grupo 1 = 2 pts, Grupo 2 = 1, Grupo 3 = 1). Ademas, si perdiste tu carrera por menos de 30s (estuvo pareja), sumas un bono igual: +1 pt en Grupo 1, +0.5 pt en Grupo 2 (en Grupo 3 perder no da bono). Al cerrar la fecha 4, los 8 corredores con mas puntos de la fase de grupos (desempate: promedio de sus 2 mejores carreras de las 4 jugadas) completan el cuadro de Octavos junto al Top 8 directo — 16 en total. Esto es una propuesta de formato, todavia no es el definitivo.',
+    'sim.intro': 'El Top 8 de las clasificatorias (por PB real) clasifica directo a Octavos de Final y no juega la fase de grupos. Los otros 24 corredores forman 3 grupos de 8, con 4 fechas en total. Cada fecha corren BO1 dentro de su grupo, cerca de su PB pero con algo de variacion. En cada frontera suben los 4 que ganaron su carrera en el grupo de abajo, y bajan los 4 que perdieron en el grupo de arriba — ganar tu carrera es obligatorio para subir, y perderla lo es para bajar. Cada victoria suma puntos segun el grupo donde la conseguiste (Grupo 1 = 2 pts, Grupo 2 = 1, Grupo 3 = 1). Ademas, si perdiste tu carrera por menos de 30s (estuvo pareja), sumas un bono igual: +1 pt en Grupo 1, +0.5 pt en Grupo 2 (en Grupo 3 perder no da bono). Al cerrar la fecha 4, los 8 corredores con mas puntos de la fase de grupos (desempate: promedio de sus 2 mejores carreras de las 4 jugadas) completan el cuadro de Octavos junto al Top 8 directo — 16 en total. Esto es una propuesta de formato, todavia no es el definitivo.',
     'sim.dateBadge': 'Fecha',
     'sim.btnNext': 'Simular siguiente fecha',
     'sim.btnNext5': 'Simular hasta el final',
@@ -517,7 +517,7 @@ const I18N = {
     'footer.text': 'Ditman Cup 2027 · Made for the community',
 
     'sim.title': 'Simulator — Nations League–style format',
-    'sim.intro': "The Top 8 from qualifiers (by real PB) qualify directly to the Round of 16 and skip the group stage. The other 24 runners form 3 groups of 8, over 4 matchdays total. Each matchday everyone races BO1 within their group, close to their PB with some variance. At every boundary, the 2 runners who won their race in the group below move up, and the 2 who lost theirs in the group above move down — winning your race is required to move up, and losing it is required to move down. Every win scores points based on the group where you earned it (Group 1 = 2 pts, Group 2 = 1, Group 3 = 1). On top of that, losing your race by less than 30s (a close one) still earns a bonus: +1 pt in Group 1, +0.5 pt in Group 2 (losing in Group 3 earns no bonus). After matchday 4, the 8 runners with the most points from the group stage (tiebreak: average of their 2 best races out of the 4 played) complete the Round of 16 bracket alongside the direct Top 8 — 16 in total. This is a format proposal — not the confirmed one yet.",
+    'sim.intro': "The Top 8 from qualifiers (by real PB) qualify directly to the Round of 16 and skip the group stage. The other 24 runners form 3 groups of 8, over 4 matchdays total. Each matchday everyone races BO1 within their group, close to their PB with some variance. At every boundary, the 4 runners who won their race in the group below move up, and the 4 who lost theirs in the group above move down — winning your race is required to move up, and losing it is required to move down. Every win scores points based on the group where you earned it (Group 1 = 2 pts, Group 2 = 1, Group 3 = 1). On top of that, losing your race by less than 30s (a close one) still earns a bonus: +1 pt in Group 1, +0.5 pt in Group 2 (losing in Group 3 earns no bonus). After matchday 4, the 8 runners with the most points from the group stage (tiebreak: average of their 2 best races out of the 4 played) complete the Round of 16 bracket alongside the direct Top 8 — 16 in total. This is a format proposal — not the confirmed one yet.",
     'sim.dateBadge': 'Matchday',
     'sim.btnNext': 'Simulate next matchday',
     'sim.btnNext5': 'Simulate to the end',
@@ -1420,7 +1420,7 @@ async function fetchCSV(url) {
 const SIM_GROUP_SIZE = 8;
 const SIM_NUM_GROUPS = 3;
 const SIM_MAX_FECHAS = 4;
-const SIM_MOVE_COUNT = 2; // cuantos suben/bajan por frontera
+const SIM_MOVE_COUNT = 4; // cuantos suben/bajan por frontera
 // Puntos por victoria segun el grupo donde se consiguio: ganarle a los
 // mejores (Grupo 1) vale mas que ganarle a los mas lentos (Grupo 3)
 // (Grupo 1 = 2 pts, Grupo 2 = 1 pt, Grupo 3 = 1 pt).
