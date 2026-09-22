@@ -357,19 +357,21 @@ const I18N = {
     'footer.text': 'Ditman Cup 2027 · Hecho para la comunidad',
 
     'sim.title': 'Simulador — formato tipo Nations League',
-    'sim.intro': '32 corredores con sus PBs reales, 4 grupos de 8, 4 fechas en total. Cada fecha corren BO1 dentro de su grupo, cerca de su PB pero con algo de variacion. En cada frontera suben los 4 que ganaron su carrera en el grupo de abajo, y bajan los 4 que perdieron en el grupo de arriba — ganar tu carrera es obligatorio para subir, y perderla lo es para bajar. Cada victoria suma puntos segun el grupo donde la conseguiste, el doble por cada grupo que subís (Grupo 1 = 8 pts, Grupo 2 = 4, Grupo 3 = 2, Grupo 4 = 1): ganar en Grupo 4 es mas facil, asi que no compite ni de cerca con ganar en Grupo 1. Al cerrar la fecha 4, clasifican los 16 corredores con mas puntos de todo el torneo (desempate: total de victorias, despues mejor tiempo), sin importar en que grupo hayan terminado. Esto es una propuesta de formato, todavia no es el definitivo.',
+    'sim.intro': 'El Top 8 de las clasificatorias (por PB real) clasifica directo a Octavos de Final y no juega la fase de grupos. Los otros 24 corredores forman 3 grupos de 8, con 4 fechas en total. Cada fecha corren BO1 dentro de su grupo, cerca de su PB pero con algo de variacion. En cada frontera suben los 2 que ganaron su carrera en el grupo de abajo, y bajan los 2 que perdieron en el grupo de arriba — ganar tu carrera es obligatorio para subir, y perderla lo es para bajar. Cada victoria suma puntos segun el grupo donde la conseguiste, el doble por cada grupo que subís (Grupo 1 = 4 pts, Grupo 2 = 2, Grupo 3 = 1). Al cerrar la fecha 4, los 8 corredores con mas puntos de la fase de grupos (desempate: total de victorias, despues mejor tiempo) completan el cuadro de Octavos junto al Top 8 directo — 16 en total. Esto es una propuesta de formato, todavia no es el definitivo.',
     'sim.dateBadge': 'Fecha',
     'sim.btnNext': 'Simular siguiente fecha',
     'sim.btnNext5': 'Simular hasta el final',
     'sim.btnReset': 'Reiniciar',
-    'sim.qualifyTitleLive': 'Si el torneo cortara aca, clasifican estos 16 (por puntaje)',
-    'sim.qualifyTitleFinal': 'Torneo terminado — clasificados definitivos (por puntaje)',
-    'sim.legendQualified': 'Clasificado (Top 16 por puntaje)',
+    'sim.qualifyTitleLive': 'Si el torneo cortara aca, clasifican estos 16 (8 directos + 8 de grupos por puntaje)',
+    'sim.qualifyTitleFinal': 'Torneo terminado — clasificados definitivos (8 directos + 8 de grupos por puntaje)',
+    'sim.legendQualified': 'Clasificado a Octavos (Top 8 de la fase de grupos)',
     'sim.legendEliminated': 'Eliminado',
-    'sim.group1': 'Grupo 1 · elite',
+    'sim.directTag': 'clasificado directo',
+    'sim.directTitle': 'Top 8 — clasificados directo a Octavos',
+    'sim.directNote': 'Los 8 mejores tiempos de las clasificatorias no juegan la fase de grupos: quedan sembrados directo en Octavos de Final.',
+    'sim.group1': 'Grupo 1',
     'sim.group2': 'Grupo 2',
     'sim.group3': 'Grupo 3',
-    'sim.group4': 'Grupo 4 · entrada',
     'sim.runnersCount': '{n} corredores',
     'sim.thRunner': 'Corredor',
     'sim.thGroup': 'Grupo',
@@ -377,8 +379,8 @@ const I18N = {
     'sim.thPts': 'Pts',
     'sim.thBest': 'Mejor tiempo',
     'sim.thHistory': 'Historial',
-    'sim.rankingTitle': 'Ranking general — ordenado solo por puntaje',
-    'sim.rankingNote': 'Los 32 corredores en una sola tabla, ordenados de mayor a menor puntaje (sin desempates de grupo ni tabla por tabla). Los primeros 16 son los clasificados.',
+    'sim.rankingTitle': 'Ranking de grupos — ordenado solo por puntaje',
+    'sim.rankingNote': 'Los 24 corredores de la fase de grupos en una sola tabla, ordenados de mayor a menor puntaje (sin desempates de grupo ni tabla por tabla). Los primeros 8 clasifican a Octavos junto al Top 8 directo.',
     'sim.logTitleEmpty': 'Todavia no se corrio ninguna fecha',
     'sim.logTitle': 'Resultados de la fecha {n}',
     'sim.logTitleFinal': 'Resultados de la fecha {n} (final)',
@@ -388,7 +390,7 @@ const I18N = {
     'sim.boundaryLabel': 'Frontera Grupo {a} / Grupo {b}',
     'sim.bracketTitle': 'Octavos de Final',
     'sim.bracketLocked': 'Termina las 4 fechas para desbloquear el sorteo de octavos.',
-    'sim.bracketExplainer': 'Los 8 de Grupo 1 quedan fijos con el sembrado clasico (no se cruzan entre ellos hasta semis). Sortealos contra los 8 de Grupo 2 para completar los cruces.',
+    'sim.bracketExplainer': 'El Top 8 directo queda fijo con el sembrado clasico (no se cruzan entre ellos hasta semis). Sortealos contra los 8 clasificados de la fase de grupos para completar los cruces.',
     'sim.btnDrawNext': 'Sortear siguiente',
     'sim.btnDrawAll': 'Sortear todos',
     'sim.btnDrawReset': 'Reiniciar sorteo',
@@ -515,19 +517,21 @@ const I18N = {
     'footer.text': 'Ditman Cup 2027 · Made for the community',
 
     'sim.title': 'Simulator — Nations League–style format',
-    'sim.intro': "32 runners with their real PBs, 4 groups of 8, 4 matchdays total. Each matchday everyone races BO1 within their group, close to their PB with some variance. At every boundary, the 4 runners who won their race in the group below move up, and the 4 who lost theirs in the group above move down — winning your race is required to move up, and losing it is required to move down. Every win scores points based on the group where you earned it, doubling for each group up (Group 1 = 8 pts, Group 2 = 4, Group 3 = 2, Group 4 = 1): winning in Group 4 is easier, so it can't come close to winning in Group 1. After matchday 4, the 16 runners with the most points across the whole tournament qualify (tiebreak: total wins, then best time), regardless of which group they end up in. This is a format proposal — not the confirmed one yet.",
+    'sim.intro': "The Top 8 from qualifiers (by real PB) qualify directly to the Round of 16 and skip the group stage. The other 24 runners form 3 groups of 8, over 4 matchdays total. Each matchday everyone races BO1 within their group, close to their PB with some variance. At every boundary, the 2 runners who won their race in the group below move up, and the 2 who lost theirs in the group above move down — winning your race is required to move up, and losing it is required to move down. Every win scores points based on the group where you earned it, doubling for each group up (Group 1 = 4 pts, Group 2 = 2, Group 3 = 1). After matchday 4, the 8 runners with the most points from the group stage (tiebreak: total wins, then best time) complete the Round of 16 bracket alongside the direct Top 8 — 16 in total. This is a format proposal — not the confirmed one yet.",
     'sim.dateBadge': 'Matchday',
     'sim.btnNext': 'Simulate next matchday',
     'sim.btnNext5': 'Simulate to the end',
     'sim.btnReset': 'Reset',
-    'sim.qualifyTitleLive': 'If the tournament ended now, these 16 would qualify (by points)',
-    'sim.qualifyTitleFinal': 'Tournament over — final qualifiers (by points)',
-    'sim.legendQualified': 'Qualified (Top 16 by points)',
+    'sim.qualifyTitleLive': 'If the tournament ended now, these 16 would qualify (8 direct + 8 from groups by points)',
+    'sim.qualifyTitleFinal': 'Tournament over — final qualifiers (8 direct + 8 from groups by points)',
+    'sim.legendQualified': 'Qualified to Round of 16 (Top 8 from groups)',
     'sim.legendEliminated': 'Eliminated',
-    'sim.group1': 'Group 1 · elite',
+    'sim.directTag': 'direct qualifier',
+    'sim.directTitle': 'Top 8 — direct qualifiers to the Round of 16',
+    'sim.directNote': "The 8 fastest qualifier times skip the group stage entirely: they're seeded straight into the Round of 16.",
+    'sim.group1': 'Group 1',
     'sim.group2': 'Group 2',
     'sim.group3': 'Group 3',
-    'sim.group4': 'Group 4 · entry',
     'sim.runnersCount': '{n} runners',
     'sim.thRunner': 'Runner',
     'sim.thGroup': 'Group',
@@ -535,8 +539,8 @@ const I18N = {
     'sim.thPts': 'Pts',
     'sim.thBest': 'Best time',
     'sim.thHistory': 'History',
-    'sim.rankingTitle': 'Overall ranking — sorted by points only',
-    'sim.rankingNote': 'All 32 runners in a single table, sorted highest to lowest points (no group tiebreaks, no separate tables). The top 16 are the qualifiers.',
+    'sim.rankingTitle': 'Group stage ranking — sorted by points only',
+    'sim.rankingNote': 'The 24 group-stage runners in a single table, sorted highest to lowest points (no group tiebreaks, no separate tables). The top 8 qualify to the Round of 16 alongside the direct Top 8.',
     'sim.logTitleEmpty': 'No matchday played yet',
     'sim.logTitle': 'Matchday {n} results',
     'sim.logTitleFinal': 'Matchday {n} results (final)',
@@ -546,7 +550,7 @@ const I18N = {
     'sim.boundaryLabel': 'Group {a} / Group {b} boundary',
     'sim.bracketTitle': 'Round of 16',
     'sim.bracketLocked': 'Finish all 4 matchdays to unlock the Round of 16 draw.',
-    'sim.bracketExplainer': "The 8 from Group 1 keep the classic seeding (they can't meet each other before the semis). Draw them against the 8 from Group 2 to complete the bracket.",
+    'sim.bracketExplainer': "The direct Top 8 keep the classic seeding (they can't meet each other before the semis). Draw them against the 8 group-stage qualifiers to complete the bracket.",
     'sim.btnDrawNext': 'Draw next',
     'sim.btnDrawAll': 'Draw all',
     'sim.btnDrawReset': 'Reset draw',
@@ -1406,20 +1410,21 @@ async function fetchCSV(url) {
 }
 
 // ======= SIMULADOR DE FORMATO / FORMAT SIMULATOR =======
-// Pestaña "Simulations": simula una propuesta de formato tipo Nations League
-// (4 grupos de 8, ascensos/descensos por tiempo absoluto, 4 fechas, clasifica
-// el Top 16). Usa nombres y PBs reales de la comunidad, pero los resultados
-// son al azar — sirve para entender el formato, no predice nada real.
+// Pestaña "Simulations": simula una propuesta de formato tipo Nations League.
+// El Top 8 de las clasificatorias (por PB real) va directo a Octavos de Final
+// y NO juega la fase de grupos. Los otros 24 corredores juegan 3 grupos de 8,
+// con ascensos/descensos, 4 fechas, y clasifican los 8 mejores por puntaje —
+// esos 8 completan el cuadro de Octavos junto al Top 8 directo (16 en total).
+// Usa nombres y PBs reales de la comunidad, pero los resultados son al azar —
+// sirve para entender el formato, no predice nada real.
 const SIM_GROUP_SIZE = 8;
-const SIM_NUM_GROUPS = 4;
+const SIM_NUM_GROUPS = 3;
 const SIM_MAX_FECHAS = 4;
-const SIM_MOVE_COUNT = 4; // cuantos suben/bajan por frontera
+const SIM_MOVE_COUNT = 2; // cuantos suben/bajan por frontera
 // Puntos por victoria segun el grupo donde se consiguio: ganarle a los
-// mejores (Grupo 1) vale mas que ganarle a los mas lentos (Grupo 4).
-// Escala exponencial: cada grupo vale el doble que el de abajo. Ganar en
-// Grupo 4 es mucho mas facil (rivales mas lentos) que ganar en Grupo 1,
-// asi que no puede pesar igual ni acercarse — 1 victoria en Grupo 1 vale
-// mas que CUALQUIER cantidad de victorias en Grupo 4 (4 x 1 = 4 < 8).
+// mejores (Grupo 1) vale mas que ganarle a los mas lentos (Grupo 3).
+// Escala exponencial: cada grupo vale el doble que el de abajo
+// (Grupo 1 = 4 pts, Grupo 2 = 2 pts, Grupo 3 = 1 pt).
 function simWinPoints(group) { return Math.pow(2, SIM_NUM_GROUPS - group); }
 const SIM_SEED_ORDER = [1, 8, 4, 5, 2, 7, 3, 6]; // sembrado clásico de 8 cabezas de serie
 
@@ -1478,8 +1483,10 @@ function simInitRunners() {
     name,
     pbSeconds: simParseTime(SIM_RUNNER_PBS[i]),
     pbLabel: SIM_RUNNER_PBS[i],
-    group: Math.floor(i / SIM_GROUP_SIZE) + 1,
-    isTop8Seed: i < 8, // top 8 por PB real: variacion mas acotada (mas realista)
+    // top 8 por PB real: clasifican directo a Octavos, no juegan la fase de
+    // grupos (group=0). El resto (24) forma 3 grupos de 8.
+    group: i < 8 ? 0 : Math.floor((i - 8) / SIM_GROUP_SIZE) + 1,
+    isTop8Seed: i < 8,
     lastResult: null,
     lastMove: null,
     history: [],
@@ -1570,14 +1577,17 @@ function simSortGroup(members) {
 }
 
 // Orden: primero puntos acumulados (ponderados segun el grupo de cada
-// victoria — ganar en Grupo 1 vale mucho mas que ganar en Grupo 4),
-// desempate por total de victorias y por ultimo el mejor tiempo de todo
-// el torneo. Se usa para clasificar al Top 16 (no importa en que grupo
-// termines) y para sembrar el bracket.
+// victoria — ganar en Grupo 1 vale mas que ganar en Grupo 3), desempate
+// por total de victorias y por ultimo el mejor tiempo de todo el torneo.
+// Se usa para clasificar a los 8 mejores de la fase de grupos (no importa
+// en que grupo termines) y para sembrar su parte del bracket.
 function simRankByPoints(members) {
   return [...members].sort((a, b) => b.points - a.points || b.wins - a.wins || a.bestTimeEver - b.bestTimeEver);
 }
-function simQualifiers() { return simRankByPoints(simRunners).slice(0, 16); }
+function simGroupRunners() { return simRunners.filter(r => !r.isTop8Seed); } // los 24 que juegan grupos
+function simDirectSeeds() { return simRunners.filter(r => r.isTop8Seed).sort((a, b) => a.pbSeconds - b.pbSeconds); } // top 8 por PB, directo a Octavos
+function simGroupQualifiers() { return simRankByPoints(simGroupRunners()).slice(0, 8); } // los 8 mejores de la fase de grupos
+function simQualifiers() { return [...simDirectSeeds(), ...simGroupQualifiers()]; } // 16 en total (8 directos + 8 de grupos)
 
 function simRenderHistory(r) {
   if (!r.history.length) return '—';
@@ -1590,9 +1600,8 @@ function simStatusClass(r, qualifiedIds) {
 }
 
 function simInitBracket() {
-  const top16 = simQualifiers();
-  const seeded = top16.slice(0, 8);
-  const pool = top16.slice(8, 16);
+  const seeded = simDirectSeeds(); // top 8 por PB real, sembrado clasico
+  const pool = simGroupQualifiers(); // 8 mejores de la fase de grupos, por sorteo
   simBracketSeeds = SIM_SEED_ORDER.map(seedNum => ({ runner: seeded[seedNum - 1], seedNum }));
   simBracketPool = simShuffle(pool);
   simBracketAssignments = new Array(8).fill(null);
@@ -1612,7 +1621,7 @@ function simDrawAll() {
 }
 function simResetDraw() {
   if (!simBracketReady) return;
-  simBracketPool = simShuffle(simQualifiers().slice(8, 16));
+  simBracketPool = simShuffle(simGroupQualifiers());
   simBracketAssignments = new Array(8).fill(null);
   simBracketDrawIndex = 0;
   simRenderBracket();
@@ -1671,12 +1680,14 @@ function renderSimulator() {
 
   const top16 = simQualifiers();
   const qualifiedIds = new Set(top16.map(r => r.id));
-  const qualified = top16.map(r => `<strong>${nameWithFlag(r.name)}</strong> (${r.points} pts · ${r.wins}/${simFecha} · G${r.group})`);
+  const qualified = top16.map(r => r.isTop8Seed
+    ? `<strong>${nameWithFlag(r.name)}</strong> (${t('sim.directTag')} · ${esc(r.pbLabel)})`
+    : `<strong>${nameWithFlag(r.name)}</strong> (${r.points} pts · ${r.wins}/${simFecha} · G${r.group})`);
   setText('sim-qualify-title', t(isFinal ? 'sim.qualifyTitleFinal' : 'sim.qualifyTitleLive'));
   const namesEl = document.getElementById('sim-qualify-names');
   if (namesEl) namesEl.innerHTML = qualified.join(', ');
 
-  const labels = { 1: t('sim.group1'), 2: t('sim.group2'), 3: t('sim.group3'), 4: t('sim.group4') };
+  const labels = { 1: t('sim.group1'), 2: t('sim.group2'), 3: t('sim.group3') };
 
   panel.innerHTML = '';
   for (let g = 1; g <= SIM_NUM_GROUPS; g++) {
@@ -1745,15 +1756,38 @@ function renderSimulator() {
 
   simRenderBracket();
   simRenderRanking(qualifiedIds);
+  simRenderDirect();
 }
 
-// Tabla unica con los 32 corredores ordenados solo por puntaje (sin las
-// 4 tablas por grupo ni sus criterios de orden por tiempo/historial) —
-// para ver de un vistazo, claro, quien clasifica y quien no.
+// Lista fija con el Top 8 de las clasificatorias (por PB real): van directo
+// a Octavos, no juegan la fase de grupos. No cambia con la simulacion.
+function simRenderDirect() {
+  const el = document.getElementById('sim-direct-list');
+  if (!el) return;
+  const seeds = simDirectSeeds();
+  el.innerHTML = `
+    <div class="sim-groups"><div class="group-card">
+      <div class="table-scroll"><table>
+        <thead><tr><th></th><th>${esc(t('sim.thRunner'))}</th><th>${esc(t('sim.thPB'))}</th></tr></thead>
+        <tbody>
+          ${seeds.map((r, i) => `
+            <tr>
+              <td class="sim-rank">${i + 1}</td>
+              <td>${nameWithFlag(r.name)}</td>
+              <td class="sim-pb">${esc(r.pbLabel)}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table></div>
+    </div></div>`;
+}
+
+// Tabla unica con los 24 corredores de la fase de grupos ordenados solo por
+// puntaje (sin las 3 tablas por grupo ni sus criterios de orden por
+// tiempo/historial) — para ver de un vistazo, claro, quien clasifica y quien no.
 function simRenderRanking(qualifiedIds) {
   const el = document.getElementById('sim-ranking-table');
   if (!el) return;
-  const ranked = simRankByPoints(simRunners);
+  const ranked = simRankByPoints(simGroupRunners());
   el.innerHTML = `
     <div class="table-scroll"><table>
       <thead><tr><th></th><th>${esc(t('sim.thRunner'))}</th><th>${esc(t('sim.thGroup'))}</th><th>${esc(t('sim.thPB'))}</th><th>${esc(t('sim.thPts'))}</th><th>${esc(t('sim.thBest'))}</th><th>${esc(t('sim.thHistory'))}</th></tr></thead>

@@ -1030,8 +1030,9 @@ body.modal-open { overflow: hidden; }
 .sim-groups tr.sim-row-e, #sim-ranking-table tr.sim-row-e { background: rgba(225, 70, 44, .1); }
 .sim-groups tr.sim-row-q td:first-child, #sim-ranking-table tr.sim-row-q td:first-child { box-shadow: inset 3px 0 0 #3ECF6E; }
 .sim-groups tr.sim-row-e td:first-child, #sim-ranking-table tr.sim-row-e td:first-child { box-shadow: inset 3px 0 0 var(--accent-bright); }
-.sim-ranking-panel h3 { margin-bottom: .4rem; }
-.sim-ranking-panel .section-note { margin-bottom: 1rem; }
+.sim-ranking-panel h3, .sim-direct-panel h3 { margin-bottom: .4rem; }
+.sim-ranking-panel .section-note, .sim-direct-panel .section-note { margin-bottom: 1rem; }
+.sim-direct-panel .sim-groups { margin-bottom: 0; }
 
 .sim-log-panel {
   background: rgba(9, 8, 6, .85);
