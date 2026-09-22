@@ -75,7 +75,7 @@ const RUNNER_FLAGS = {
   missing: 'MX',
   '4rcadan': 'AR',
   otakuxd: 'BR',
-  nevs: 'BR',
+  thenevs: 'BR',
   mikewavrr: 'US',
   abdou_mz: 'DZ',
   // ...completar. También se puede llenar la columna "Flag" de la Sheet.
@@ -1429,17 +1429,17 @@ function simWinPoints(group) { return Math.pow(2, SIM_NUM_GROUPS - group); }
 const SIM_SEED_ORDER = [1, 8, 4, 5, 2, 7, 3, 6]; // sembrado clásico de 8 cabezas de serie
 
 const SIM_RUNNER_NAMES = [
-  'JokerUY', 'Sawken', 'Missing', 'seppp', 'Frit', '4rcadan', 'Pochoide', 'OtakuXD',
-  'Nevs', 'MateoUsh27', 'ChampT', 'MikeWavRR', 'Youcri', 'Zudinn', 'Muh', 'Pixiesaki',
-  'MattGael', 'manboo', 'Lu1u', 'abdou_mz', 'novi_fan', 'VAL', 'luis_sera', 'Gui19',
-  'Razie', 'aqbilghilman', 'doradori_dolph', 'HannNrY', 'Matiuss', 'MajorRichy', 'Nobu_22', 'InfamousLol8',
+  'JokerUY', 'Sawken', '4rcadan', 'Missing', 'seppp', 'Frit', 'Pochoide', 'OtakuXD',
+  'TheNevs', 'Youcri', 'ChampT', 'MikeWavRR', 'MateoUsh27', 'Muh', 'Pixiesaki', 'MattGael',
+  'Zudinn', 'Lu1u', 'luis_sera', 'manboo', 'novi_fan', 'aqbilghilman', 'abdou_mz', 'doradori_dolph',
+  'VAL', 'Gui19', 'Razie', 'Nobu_22', 'MajorRichy', 'HannNrY', 'InfamousLol8', 'Matiuss',
 ];
 // PBs reales, mismo orden que SIM_RUNNER_NAMES (formato H:MM:SS)
 const SIM_RUNNER_PBS = [
-  '1:21:04', '1:21:27', '1:21:48', '1:21:48', '1:21:57', '1:22:01', '1:22:30', '1:22:51',
-  '1:22:53', '1:22:57', '1:23:41', '1:23:42', '1:23:46', '1:24:19', '1:24:20', '1:24:40',
-  '1:24:41', '1:24:48', '1:24:52', '1:24:54', '1:24:59', '1:25:00', '1:25:03', '1:25:06',
-  '1:25:19', '1:25:26', '1:25:26', '1:25:33', '1:25:45', '1:25:59', '1:26:10', '1:26:18',
+  '1:21:04', '1:21:27', '1:21:31', '1:21:48', '1:21:48', '1:21:57', '1:22:00', '1:22:21',
+  '1:23:05', '1:23:16', '1:23:41', '1:23:42', '1:23:43', '1:23:50', '1:24:10', '1:24:11',
+  '1:24:19', '1:24:22', '1:24:30', '1:24:48', '1:24:52', '1:24:56', '1:24:59', '1:25:00',
+  '1:25:03', '1:25:06', '1:25:19', '1:25:35', '1:25:40', '1:25:45', '1:25:53', '1:25:59',
 ];
 
 function simParseTime(str) {
