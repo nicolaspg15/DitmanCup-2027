@@ -71,6 +71,13 @@ const RUNNER_FLAGS = {
   pixiesaki: 'CL',
   manboo: 'CN',
   gui19: 'BR',
+
+  missing: 'MX',
+  '4rcadan': 'AR',
+  otakuxd: 'BR',
+  nevs: 'BR',
+  mikewavrr: 'US',
+  abdou_mz: 'DZ',
   // ...completar. También se puede llenar la columna "Flag" de la Sheet.
 };
 
