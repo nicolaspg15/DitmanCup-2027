@@ -1007,10 +1007,10 @@ body.modal-open { overflow: hidden; }
 .sim-groups .group-card { padding: 1.3rem 1.5rem 1.5rem; }
 .sim-groups .group-card h3 { font-size: 1.25rem; }
 .sim-groups .group-tag { display: block; font-family: var(--font-grunge); color: var(--text-dim); font-size: 1rem; margin: -.2rem 0 .9rem; }
-.sim-groups .table-scroll { overflow-x: auto; }
-.sim-groups table { width: 100%; border-collapse: collapse; font-family: var(--font-grunge); font-size: 1.15rem; }
-.sim-groups th, .sim-groups td { padding: .6rem .7rem; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
-.sim-groups th {
+.sim-groups .table-scroll, #sim-ranking-table .table-scroll { overflow-x: auto; }
+.sim-groups table, #sim-ranking-table table { width: 100%; border-collapse: collapse; font-family: var(--font-grunge); font-size: 1.15rem; }
+.sim-groups th, .sim-groups td, #sim-ranking-table th, #sim-ranking-table td { padding: .6rem .7rem; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.sim-groups th, #sim-ranking-table th {
   color: var(--text-dim);
   font-family: var(--font-grunge);
   font-size: .82rem;
@@ -1018,18 +1018,20 @@ body.modal-open { overflow: hidden; }
   text-transform: uppercase;
   font-weight: 400;
 }
-.sim-groups td.sim-rank { color: var(--text-muted); width: 1.4em; }
-.sim-groups td.sim-pb, .sim-groups td.sim-best { font-family: var(--font-grunge); color: var(--text-dim); font-size: 1.05rem; font-variant-numeric: tabular-nums; }
-.sim-groups td.sim-pts { font-family: var(--font-grunge); color: var(--accent-2); font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
-.sim-groups td.sim-hist { font-family: var(--font-grunge); font-weight: 700; letter-spacing: .12em; font-size: 1.2rem; }
+.sim-groups td.sim-rank, #sim-ranking-table td.sim-rank { color: var(--text-muted); width: 1.4em; }
+.sim-groups td.sim-pb, .sim-groups td.sim-best, #sim-ranking-table td.sim-pb, #sim-ranking-table td.sim-best { font-family: var(--font-grunge); color: var(--text-dim); font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.sim-groups td.sim-pts, #sim-ranking-table td.sim-pts { font-family: var(--font-grunge); color: var(--accent-2); font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
+.sim-groups td.sim-hist, #sim-ranking-table td.sim-hist { font-family: var(--font-grunge); font-weight: 700; letter-spacing: .12em; font-size: 1.2rem; }
 .sim-res-w { color: #3ECF6E; }
 .sim-res-l { color: var(--accent-bright); }
 .sim-move-up { color: #3ECF6E; }
 .sim-move-down { color: var(--accent-bright); }
-.sim-groups tr.sim-row-q { background: rgba(62, 207, 110, .1); }
-.sim-groups tr.sim-row-e { background: rgba(225, 70, 44, .1); }
-.sim-groups tr.sim-row-q td:first-child { box-shadow: inset 3px 0 0 #3ECF6E; }
-.sim-groups tr.sim-row-e td:first-child { box-shadow: inset 3px 0 0 var(--accent-bright); }
+.sim-groups tr.sim-row-q, #sim-ranking-table tr.sim-row-q { background: rgba(62, 207, 110, .1); }
+.sim-groups tr.sim-row-e, #sim-ranking-table tr.sim-row-e { background: rgba(225, 70, 44, .1); }
+.sim-groups tr.sim-row-q td:first-child, #sim-ranking-table tr.sim-row-q td:first-child { box-shadow: inset 3px 0 0 #3ECF6E; }
+.sim-groups tr.sim-row-e td:first-child, #sim-ranking-table tr.sim-row-e td:first-child { box-shadow: inset 3px 0 0 var(--accent-bright); }
+.sim-ranking-panel h3 { margin-bottom: .4rem; }
+.sim-ranking-panel .section-note { margin-bottom: 1rem; }
 
 .sim-log-panel {
   background: rgba(9, 8, 6, .85);

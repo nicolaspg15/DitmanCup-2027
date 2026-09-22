@@ -372,10 +372,13 @@ const I18N = {
     'sim.group4': 'Grupo 4 · entrada',
     'sim.runnersCount': '{n} corredores',
     'sim.thRunner': 'Corredor',
+    'sim.thGroup': 'Grupo',
     'sim.thPB': 'PB',
     'sim.thPts': 'Pts',
     'sim.thBest': 'Mejor tiempo',
     'sim.thHistory': 'Historial',
+    'sim.rankingTitle': 'Ranking general — ordenado solo por puntaje',
+    'sim.rankingNote': 'Los 32 corredores en una sola tabla, ordenados de mayor a menor puntaje (sin desempates de grupo ni tabla por tabla). Los primeros 16 son los clasificados.',
     'sim.logTitleEmpty': 'Todavia no se corrio ninguna fecha',
     'sim.logTitle': 'Resultados de la fecha {n}',
     'sim.logTitleFinal': 'Resultados de la fecha {n} (final)',
@@ -527,10 +530,13 @@ const I18N = {
     'sim.group4': 'Group 4 · entry',
     'sim.runnersCount': '{n} runners',
     'sim.thRunner': 'Runner',
+    'sim.thGroup': 'Group',
     'sim.thPB': 'PB',
     'sim.thPts': 'Pts',
     'sim.thBest': 'Best time',
     'sim.thHistory': 'History',
+    'sim.rankingTitle': 'Overall ranking — sorted by points only',
+    'sim.rankingNote': 'All 32 runners in a single table, sorted highest to lowest points (no group tiebreaks, no separate tables). The top 16 are the qualifiers.',
     'sim.logTitleEmpty': 'No matchday played yet',
     'sim.logTitle': 'Matchday {n} results',
     'sim.logTitleFinal': 'Matchday {n} results (final)',
@@ -1737,6 +1743,31 @@ function renderSimulator() {
   if (next5Btn) next5Btn.disabled = done;
 
   simRenderBracket();
+  simRenderRanking(qualifiedIds);
+}
+
+// Tabla unica con los 32 corredores ordenados solo por puntaje (sin las
+// 4 tablas por grupo ni sus criterios de orden por tiempo/historial) —
+// para ver de un vistazo, claro, quien clasifica y quien no.
+function simRenderRanking(qualifiedIds) {
+  const el = document.getElementById('sim-ranking-table');
+  if (!el) return;
+  const ranked = simRankByPoints(simRunners);
+  el.innerHTML = `
+    <div class="table-scroll"><table>
+      <thead><tr><th></th><th>${esc(t('sim.thRunner'))}</th><th>${esc(t('sim.thGroup'))}</th><th>${esc(t('sim.thPB'))}</th><th>${esc(t('sim.thPts'))}</th><th>${esc(t('sim.thBest'))}</th><th>${esc(t('sim.thHistory'))}</th></tr></thead>
+      <tbody>
+        ${ranked.map((r, i) => `
+          <tr class="${simStatusClass(r, qualifiedIds)}">
+            <td class="sim-rank">${i + 1}</td>
+            <td>${nameWithFlag(r.name)}</td>
+            <td class="sim-pb">G${r.group}</td>
+            <td class="sim-pts">${r.points}</td>
+            <td class="sim-best">${Number.isFinite(r.bestTimeEver) ? esc(simFormatRaceTime(r.bestTimeEver)) : '—'}</td>
+            <td class="sim-hist">${simRenderHistory(r)}</td>
+          </tr>`).join('')}
+      </tbody>
+    </table></div>`;
 }
 
 function initSimulator() {
