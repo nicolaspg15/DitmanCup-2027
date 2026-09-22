@@ -357,7 +357,7 @@ const I18N = {
     'footer.text': 'Ditman Cup 2027 · Hecho para la comunidad',
 
     'sim.title': 'Simulador — formato tipo Nations League',
-    'sim.intro': 'El Top 8 de las clasificatorias (por PB real) clasifica directo a Octavos de Final y no juega la fase de grupos. Los otros 24 corredores forman 3 grupos de 8, con 4 fechas en total. Cada fecha corren BO1 dentro de su grupo, cerca de su PB pero con algo de variacion. En cada frontera suben los 2 que ganaron su carrera en el grupo de abajo, y bajan los 2 que perdieron en el grupo de arriba — ganar tu carrera es obligatorio para subir, y perderla lo es para bajar. Cada victoria suma puntos segun el grupo donde la conseguiste, el doble por cada grupo que subís (Grupo 1 = 4 pts, Grupo 2 = 2, Grupo 3 = 1). Al cerrar la fecha 4, los 8 corredores con mas puntos de la fase de grupos (desempate: total de victorias, despues mejor tiempo) completan el cuadro de Octavos junto al Top 8 directo — 16 en total. Esto es una propuesta de formato, todavia no es el definitivo.',
+    'sim.intro': 'El Top 8 de las clasificatorias (por PB real) clasifica directo a Octavos de Final y no juega la fase de grupos. Los otros 24 corredores forman 3 grupos de 8, con 4 fechas en total. Cada fecha corren BO1 dentro de su grupo, cerca de su PB pero con algo de variacion. En cada frontera suben los 2 que ganaron su carrera en el grupo de abajo, y bajan los 2 que perdieron en el grupo de arriba — ganar tu carrera es obligatorio para subir, y perderla lo es para bajar. Cada victoria suma puntos segun el grupo donde la conseguiste (Grupo 1 = 2 pts, Grupo 2 = 1, Grupo 3 = 1). Ademas, si perdiste tu carrera por menos de 30s (estuvo pareja), sumas un bono igual: +1 pt en Grupo 1, +0.5 pt en Grupo 2 (en Grupo 3 perder no da bono). Al cerrar la fecha 4, los 8 corredores con mas puntos de la fase de grupos (desempate: total de victorias, despues mejor tiempo) completan el cuadro de Octavos junto al Top 8 directo — 16 en total. Esto es una propuesta de formato, todavia no es el definitivo.',
     'sim.dateBadge': 'Fecha',
     'sim.btnNext': 'Simular siguiente fecha',
     'sim.btnNext5': 'Simular hasta el final',
@@ -517,7 +517,7 @@ const I18N = {
     'footer.text': 'Ditman Cup 2027 · Made for the community',
 
     'sim.title': 'Simulator — Nations League–style format',
-    'sim.intro': "The Top 8 from qualifiers (by real PB) qualify directly to the Round of 16 and skip the group stage. The other 24 runners form 3 groups of 8, over 4 matchdays total. Each matchday everyone races BO1 within their group, close to their PB with some variance. At every boundary, the 2 runners who won their race in the group below move up, and the 2 who lost theirs in the group above move down — winning your race is required to move up, and losing it is required to move down. Every win scores points based on the group where you earned it, doubling for each group up (Group 1 = 4 pts, Group 2 = 2, Group 3 = 1). After matchday 4, the 8 runners with the most points from the group stage (tiebreak: total wins, then best time) complete the Round of 16 bracket alongside the direct Top 8 — 16 in total. This is a format proposal — not the confirmed one yet.",
+    'sim.intro': "The Top 8 from qualifiers (by real PB) qualify directly to the Round of 16 and skip the group stage. The other 24 runners form 3 groups of 8, over 4 matchdays total. Each matchday everyone races BO1 within their group, close to their PB with some variance. At every boundary, the 2 runners who won their race in the group below move up, and the 2 who lost theirs in the group above move down — winning your race is required to move up, and losing it is required to move down. Every win scores points based on the group where you earned it (Group 1 = 2 pts, Group 2 = 1, Group 3 = 1). On top of that, losing your race by less than 30s (a close one) still earns a bonus: +1 pt in Group 1, +0.5 pt in Group 2 (losing in Group 3 earns no bonus). After matchday 4, the 8 runners with the most points from the group stage (tiebreak: total wins, then best time) complete the Round of 16 bracket alongside the direct Top 8 — 16 in total. This is a format proposal — not the confirmed one yet.",
     'sim.dateBadge': 'Matchday',
     'sim.btnNext': 'Simulate next matchday',
     'sim.btnNext5': 'Simulate to the end',
@@ -1422,10 +1422,17 @@ const SIM_NUM_GROUPS = 3;
 const SIM_MAX_FECHAS = 4;
 const SIM_MOVE_COUNT = 2; // cuantos suben/bajan por frontera
 // Puntos por victoria segun el grupo donde se consiguio: ganarle a los
-// mejores (Grupo 1) vale mas que ganarle a los mas lentos (Grupo 3).
-// Escala exponencial: cada grupo vale el doble que el de abajo
-// (Grupo 1 = 4 pts, Grupo 2 = 2 pts, Grupo 3 = 1 pt).
-function simWinPoints(group) { return Math.pow(2, SIM_NUM_GROUPS - group); }
+// mejores (Grupo 1) vale mas que ganarle a los mas lentos (Grupo 3)
+// (Grupo 1 = 2 pts, Grupo 2 = 1 pt, Grupo 3 = 1 pt).
+function simWinPoints(group) { return [2, 1, 1][group - 1]; }
+// Bonus por derrota ajustada: si perdiste tu carrera por menos de 30s
+// (estuvo pareja), sumas algo igual aunque hayas perdido — Grupo 1 = +1 pt,
+// Grupo 2 = +0.5 pt, Grupo 3 = +0 (no aplica, ahi solo cuenta ganar).
+const SIM_CLOSE_MARGIN = 30;
+function simLossBonus(group, margin) {
+  if (margin >= SIM_CLOSE_MARGIN) return 0;
+  return [1, 0.5, 0][group - 1];
+}
 const SIM_SEED_ORDER = [1, 8, 4, 5, 2, 7, 3, 6]; // sembrado clásico de 8 cabezas de serie
 
 const SIM_RUNNER_NAMES = [
@@ -1528,7 +1535,8 @@ function simAdvanceFecha() {
       const { winner, margin, timeA, timeB } = simRace(a, b);
       a.lastResult = { opponent: b.name, won: a === winner, margin, time: timeA };
       b.lastResult = { opponent: a.name, won: b === winner, margin, time: timeB };
-      if (a === winner) { a.wins++; a.points += simWinPoints(a.group); } else { b.wins++; b.points += simWinPoints(b.group); }
+      if (a === winner) { a.wins++; a.points += simWinPoints(a.group); b.points += simLossBonus(b.group, margin); }
+      else { b.wins++; b.points += simWinPoints(b.group); a.points += simLossBonus(a.group, margin); }
       a.history.push(a.lastResult.won ? 'W' : 'L');
       b.history.push(b.lastResult.won ? 'W' : 'L');
       a.bestTimeEver = Math.min(a.bestTimeEver, timeA);
@@ -1588,6 +1596,8 @@ function simGroupRunners() { return simRunners.filter(r => !r.isTop8Seed); } // 
 function simDirectSeeds() { return simRunners.filter(r => r.isTop8Seed).sort((a, b) => a.pbSeconds - b.pbSeconds); } // top 8 por PB, directo a Octavos
 function simGroupQualifiers() { return simRankByPoints(simGroupRunners()).slice(0, 8); } // los 8 mejores de la fase de grupos
 function simQualifiers() { return [...simDirectSeeds(), ...simGroupQualifiers()]; } // 16 en total (8 directos + 8 de grupos)
+
+function simFormatPoints(n) { return Number.isInteger(n) ? String(n) : n.toFixed(1); }
 
 function simRenderHistory(r) {
   if (!r.history.length) return '—';
@@ -1682,7 +1692,7 @@ function renderSimulator() {
   const qualifiedIds = new Set(top16.map(r => r.id));
   const qualified = top16.map(r => r.isTop8Seed
     ? `<strong>${nameWithFlag(r.name)}</strong> (${t('sim.directTag')} · ${esc(r.pbLabel)})`
-    : `<strong>${nameWithFlag(r.name)}</strong> (${r.points} pts · ${r.wins}/${simFecha} · G${r.group})`);
+    : `<strong>${nameWithFlag(r.name)}</strong> (${simFormatPoints(r.points)} pts · ${r.wins}/${simFecha} · G${r.group})`);
   setText('sim-qualify-title', t(isFinal ? 'sim.qualifyTitleFinal' : 'sim.qualifyTitleLive'));
   const namesEl = document.getElementById('sim-qualify-names');
   if (namesEl) namesEl.innerHTML = qualified.join(', ');
@@ -1705,7 +1715,7 @@ function renderSimulator() {
               <td class="sim-rank">${i + 1}</td>
               <td>${nameWithFlag(r.name)}${r.lastMove === 'up' ? ' <span class="sim-move-up">▲</span>' : ''}${r.lastMove === 'down' ? ' <span class="sim-move-down">▼</span>' : ''}</td>
               <td class="sim-pb">${esc(r.pbLabel)}</td>
-              <td class="sim-pts">${r.points}</td>
+              <td class="sim-pts">${simFormatPoints(r.points)}</td>
               <td class="sim-best">${Number.isFinite(r.bestTimeEver) ? esc(simFormatRaceTime(r.bestTimeEver)) : '—'}</td>
               <td class="sim-hist">${simRenderHistory(r)}</td>
             </tr>`).join('')}
@@ -1797,7 +1807,7 @@ function simRenderRanking(qualifiedIds) {
             <td class="sim-rank">${i + 1}</td>
             <td>${nameWithFlag(r.name)}</td>
             <td class="sim-pb">G${r.group}</td>
-            <td class="sim-pts">${r.points}</td>
+            <td class="sim-pts">${simFormatPoints(r.points)}</td>
             <td class="sim-best">${Number.isFinite(r.bestTimeEver) ? esc(simFormatRaceTime(r.bestTimeEver)) : '—'}</td>
             <td class="sim-hist">${simRenderHistory(r)}</td>
           </tr>`).join('')}
