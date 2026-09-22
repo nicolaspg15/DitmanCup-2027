@@ -211,6 +211,7 @@ const I18N = {
     'nav.sorteo': 'Sorteo',
     'nav.grupos': 'Grupos',
     'nav.brackets': 'Brackets',
+    'nav.simulations': 'Simulaciones',
     'nav.clasificatorias': 'Clasificatorias',
     'nav.champions': 'Historia',
     'nav.clips': 'Clips',
@@ -318,6 +319,50 @@ const I18N = {
 
     'footer.text': 'Ditman Cup 2027 · Hecho para la comunidad',
 
+    'sim.title': 'Simulador — formato tipo Nations League',
+    'sim.intro': '32 corredores con sus PBs reales, 4 grupos de 8, 4 fechas en total. Cada fecha corren BO1 dentro de su grupo, cerca de su PB pero con algo de variacion — se compara el tiempo absoluto de todo el grupo. En cada frontera suben los 2 mejores tiempos del grupo de abajo y bajan los 2 peores del grupo de arriba. Al cerrar la fecha 4, clasifica el Top 16 (Grupo 1 + Grupo 2). Esto es una propuesta de formato, todavia no es el definitivo.',
+    'sim.dateBadge': 'Fecha',
+    'sim.btnNext': 'Simular siguiente fecha',
+    'sim.btnNext5': 'Simular hasta el final',
+    'sim.btnReset': 'Reiniciar',
+    'sim.qualifyTitleLive': 'Si el torneo cortara aca, clasifican (Grupo 1 + Grupo 2)',
+    'sim.qualifyTitleFinal': 'Torneo terminado — clasificados definitivos',
+    'sim.legendQualified': 'Clasificado (Grupo 1 + Grupo 2)',
+    'sim.legendEliminated': 'Eliminado (Grupo 3 + Grupo 4)',
+    'sim.group1': 'Grupo 1 · elite',
+    'sim.group2': 'Grupo 2',
+    'sim.group3': 'Grupo 3',
+    'sim.group4': 'Grupo 4 · entrada',
+    'sim.group1Final': 'Grupo 1 · clasificado',
+    'sim.group2Final': 'Grupo 2 · clasificado',
+    'sim.group3Final': 'Grupo 3 · eliminado',
+    'sim.group4Final': 'Grupo 4 · eliminado',
+    'sim.runnersCount': '{n} corredores',
+    'sim.thRunner': 'Corredor',
+    'sim.thPB': 'PB',
+    'sim.thPts': 'Pts',
+    'sim.thBest': 'Mejor tiempo',
+    'sim.thHistory': 'Historial',
+    'sim.logTitleEmpty': 'Todavia no se corrio ninguna fecha',
+    'sim.logTitle': 'Resultados de la fecha {n}',
+    'sim.logTitleFinal': 'Resultados de la fecha {n} (final)',
+    'sim.raceResult': '<b>{a}</b> {timeA} vs <b>{b}</b> {timeB} — gana {winner} por {margin}',
+    'sim.moveUp': '<span class="sim-move-up">▲</span> <b>{name}</b> asciende a Grupo {group} — mejor tiempo del grupo ({time})',
+    'sim.moveDown': '<span class="sim-move-down">▼</span> <b>{name}</b> desciende a Grupo {group} — peor tiempo del grupo ({time})',
+    'sim.boundaryLabel': 'Frontera Grupo {a} / Grupo {b}',
+    'sim.bracketTitle': 'Octavos de Final',
+    'sim.bracketLocked': 'Termina las 4 fechas para desbloquear el sorteo de octavos.',
+    'sim.bracketExplainer': 'Los 8 de Grupo 1 quedan fijos con el sembrado clasico (no se cruzan entre ellos hasta semis). Sortealos contra los 8 de Grupo 2 para completar los cruces.',
+    'sim.btnDrawNext': 'Sortear siguiente',
+    'sim.btnDrawAll': 'Sortear todos',
+    'sim.btnDrawReset': 'Reiniciar sorteo',
+    'sim.sideA': 'Lado A',
+    'sim.sideB': 'Lado B',
+    'sim.seedTag': 'Top {n}',
+    'sim.pending': 'Por sortear',
+    'sim.footer': 'Simulacion con datos ficticios — pensada para entender el formato, no para predecir resultados reales.',
+    'sim.doneLabel': 'Torneo terminado',
+
     'testmode': 'MODO PRUEBA · datos falsos',
   },
   en: {
@@ -325,6 +370,7 @@ const I18N = {
     'nav.sorteo': 'Draw',
     'nav.grupos': 'Groups',
     'nav.brackets': 'Bracket',
+    'nav.simulations': 'Simulations',
     'nav.clasificatorias': 'Standings',
     'nav.champions': 'History',
     'nav.clips': 'Clips',
@@ -432,6 +478,50 @@ const I18N = {
 
     'footer.text': 'Ditman Cup 2027 · Made for the community',
 
+    'sim.title': 'Simulator — Nations League–style format',
+    'sim.intro': "32 runners with their real PBs, 4 groups of 8, 4 matchdays total. Each matchday everyone races BO1 within their group, close to their PB with some variance — the whole group's absolute time is compared, not just each head-to-head. At every boundary, the 2 best times from the group below move up, and the 2 worst times from the group above move down. After matchday 4, the Top 16 (Group 1 + Group 2) qualify. This is a format proposal — not the confirmed one yet.",
+    'sim.dateBadge': 'Matchday',
+    'sim.btnNext': 'Simulate next matchday',
+    'sim.btnNext5': 'Simulate to the end',
+    'sim.btnReset': 'Reset',
+    'sim.qualifyTitleLive': 'If the tournament ended now, these would qualify (Group 1 + Group 2)',
+    'sim.qualifyTitleFinal': 'Tournament over — final qualifiers',
+    'sim.legendQualified': 'Qualified (Group 1 + Group 2)',
+    'sim.legendEliminated': 'Eliminated (Group 3 + Group 4)',
+    'sim.group1': 'Group 1 · elite',
+    'sim.group2': 'Group 2',
+    'sim.group3': 'Group 3',
+    'sim.group4': 'Group 4 · entry',
+    'sim.group1Final': 'Group 1 · qualified',
+    'sim.group2Final': 'Group 2 · qualified',
+    'sim.group3Final': 'Group 3 · eliminated',
+    'sim.group4Final': 'Group 4 · eliminated',
+    'sim.runnersCount': '{n} runners',
+    'sim.thRunner': 'Runner',
+    'sim.thPB': 'PB',
+    'sim.thPts': 'Pts',
+    'sim.thBest': 'Best time',
+    'sim.thHistory': 'History',
+    'sim.logTitleEmpty': 'No matchday played yet',
+    'sim.logTitle': 'Matchday {n} results',
+    'sim.logTitleFinal': 'Matchday {n} results (final)',
+    'sim.raceResult': '<b>{a}</b> {timeA} vs <b>{b}</b> {timeB} — {winner} wins by {margin}',
+    'sim.moveUp': '<span class="sim-move-up">▲</span> <b>{name}</b> moves up to Group {group} — group\'s best time ({time})',
+    'sim.moveDown': '<span class="sim-move-down">▼</span> <b>{name}</b> moves down to Group {group} — group\'s worst time ({time})',
+    'sim.boundaryLabel': 'Group {a} / Group {b} boundary',
+    'sim.bracketTitle': 'Round of 16',
+    'sim.bracketLocked': 'Finish all 4 matchdays to unlock the Round of 16 draw.',
+    'sim.bracketExplainer': "The 8 from Group 1 keep the classic seeding (they can't meet each other before the semis). Draw them against the 8 from Group 2 to complete the bracket.",
+    'sim.btnDrawNext': 'Draw next',
+    'sim.btnDrawAll': 'Draw all',
+    'sim.btnDrawReset': 'Reset draw',
+    'sim.sideA': 'Side A',
+    'sim.sideB': 'Side B',
+    'sim.seedTag': 'Top {n}',
+    'sim.pending': 'To be drawn',
+    'sim.footer': 'Simulation with placeholder data — meant to explain the format, not to predict real results.',
+    'sim.doneLabel': 'Tournament complete',
+
     'testmode': 'TEST MODE · fake data',
   },
 };
@@ -531,6 +621,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderChampions();
   renderClips();
   renderLive();
+  initSimulator();
 });
 
 // ======= IDIOMA / LANGUAGE =======
@@ -583,6 +674,7 @@ function applyLang(lang) {
   renderChampions();
   renderClips();
   renderLive();
+  renderSimulator();
 }
 
 function showTestBanner() {
@@ -1276,6 +1368,348 @@ async function fetchCSV(url) {
   const res = await fetch(url);
   if (!res.ok) throw new Error('Sheet HTTP ' + res.status);
   return csvToObjects(await res.text());
+}
+
+// ======= SIMULADOR DE FORMATO / FORMAT SIMULATOR =======
+// Pestaña "Simulations": simula una propuesta de formato tipo Nations League
+// (4 grupos de 8, ascensos/descensos por tiempo absoluto, 4 fechas, clasifica
+// el Top 16). Usa nombres y PBs reales de la comunidad, pero los resultados
+// son al azar — sirve para entender el formato, no predice nada real.
+const SIM_GROUP_SIZE = 8;
+const SIM_NUM_GROUPS = 4;
+const SIM_MAX_FECHAS = 4;
+const SIM_SEED_ORDER = [1, 8, 4, 5, 2, 7, 3, 6]; // sembrado clásico de 8 cabezas de serie
+
+const SIM_RUNNER_NAMES = [
+  'JokerUY', 'Sawken', 'Missing', 'seppp', 'Frit', '4rcadan', 'Pochoide', 'OtakuXD',
+  'Nevs', 'MateoUsh27', 'ChampT', 'MikeWavRR', 'Youcri', 'Zudinn', 'Muh', 'Pixiesaki',
+  'MattGael', 'manboo', 'Lu1u', 'abdou_mz', 'novi_fan', 'VAL', 'luis_sera', 'Gui19',
+  'Razie', 'aqbilghilman', 'doradori_dolph', 'HannNrY', 'Matiuss', 'MajorRichy', 'Nobu_22', 'InfamousLol8',
+];
+// PBs reales, mismo orden que SIM_RUNNER_NAMES (formato H:MM:SS)
+const SIM_RUNNER_PBS = [
+  '1:21:04', '1:21:27', '1:21:48', '1:21:48', '1:21:57', '1:22:01', '1:22:30', '1:22:51',
+  '1:22:53', '1:22:57', '1:23:41', '1:23:42', '1:23:46', '1:24:19', '1:24:20', '1:24:40',
+  '1:24:41', '1:24:48', '1:24:52', '1:24:54', '1:24:59', '1:25:00', '1:25:03', '1:25:06',
+  '1:25:19', '1:25:26', '1:25:26', '1:25:33', '1:25:45', '1:25:59', '1:26:10', '1:26:18',
+];
+
+function simParseTime(str) {
+  const parts = str.split(':').map(Number);
+  return parts.length === 3 ? parts[0] * 3600 + parts[1] * 60 + parts[2] : parts[0] * 60 + parts[1];
+}
+function simFormatSeconds(total) {
+  const h = Math.floor(total / 3600), m = Math.floor((total % 3600) / 60), s = Math.floor(total % 60);
+  return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+function simFormatRaceTime(total) {
+  const h = Math.floor(total / 3600), m = Math.floor((total % 3600) / 60), s = total % 60;
+  return `${h}:${String(m).padStart(2, '0')}:${s.toFixed(2).padStart(5, '0')}`;
+}
+function simFormatMargin(seconds) {
+  if (seconds >= 60) return `${Math.floor(seconds / 60)}m ${(seconds % 60).toFixed(1)}s`;
+  return `${seconds.toFixed(2)}s`;
+}
+function simShuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+let simRunners = [];
+let simFecha = 0;
+let simLastRaces = [];
+let simLastMoves = [];
+let simBracketReady = false;
+let simBracketSeeds = [];
+let simBracketPool = [];
+let simBracketAssignments = [];
+let simBracketDrawIndex = 0;
+
+function simInitRunners() {
+  simRunners = SIM_RUNNER_NAMES.map((name, i) => ({
+    id: i + 1,
+    name,
+    pbSeconds: simParseTime(SIM_RUNNER_PBS[i]),
+    pbLabel: SIM_RUNNER_PBS[i],
+    group: Math.floor(i / SIM_GROUP_SIZE) + 1,
+    lastResult: null,
+    lastMove: null,
+    history: [],
+    wins: 0,
+    points: 0,
+    bestTimeEver: Infinity,
+  }));
+  simFecha = 0;
+  simLastRaces = [];
+  simLastMoves = [];
+  simBracketReady = false;
+}
+
+function simGetGroup(g) { return simRunners.filter(r => r.group === g); }
+function simTimeOf(r) { return r.lastResult ? r.lastResult.time : Infinity; }
+
+// Simula una carrera BO1: cada uno corre cerca de su PB, con variación —
+// nadie corre su mejor marca siempre. Devuelve el tiempo de cada uno para
+// poder comparar a todo el grupo, no solo este cruce puntual.
+function simRace(a, b) {
+  const timeA = a.pbSeconds + Math.pow(Math.random(), 2) * 180;
+  const timeB = b.pbSeconds + Math.pow(Math.random(), 2) * 180;
+  const winner = timeA < timeB ? a : b;
+  const loser = winner === a ? b : a;
+  const margin = Number(Math.abs(timeA - timeB).toFixed(2));
+  return { winner, loser, margin, timeA, timeB };
+}
+
+function simAdvanceFecha() {
+  if (simFecha >= SIM_MAX_FECHAS) return;
+  simFecha++;
+  simLastRaces = [];
+  simRunners.forEach(r => { r.lastMove = null; });
+
+  for (let g = 1; g <= SIM_NUM_GROUPS; g++) {
+    const members = simShuffle(simGetGroup(g));
+    for (let i = 0; i < members.length; i += 2) {
+      const a = members[i], b = members[i + 1];
+      const { winner, margin, timeA, timeB } = simRace(a, b);
+      a.lastResult = { opponent: b.name, won: a === winner, margin, time: timeA };
+      b.lastResult = { opponent: a.name, won: b === winner, margin, time: timeB };
+      if (a === winner) { a.wins++; a.points += 3; } else { b.wins++; b.points += 3; }
+      a.history.push(a.lastResult.won ? 'W' : 'L');
+      b.history.push(b.lastResult.won ? 'W' : 'L');
+      a.bestTimeEver = Math.min(a.bestTimeEver, timeA);
+      b.bestTimeEver = Math.min(b.bestTimeEver, timeB);
+      simLastRaces.push({ group: g, a: a.name, b: b.name, winner: winner.name, margin, timeA, timeB });
+    }
+  }
+
+  // En cada frontera (1-2, 2-3, 3-4): bajan los 2 peores tiempos absolutos
+  // del grupo de arriba, suben los 2 mejores del grupo de abajo.
+  simLastMoves = [];
+  const relegate = {}, promote = {};
+  for (let g = 1; g < SIM_NUM_GROUPS; g++) {
+    const upperLosers = simGetGroup(g).filter(r => r.lastResult).sort((a, b) => b.lastResult.time - a.lastResult.time).slice(0, 2);
+    const lowerWinners = simGetGroup(g + 1).filter(r => r.lastResult).sort((a, b) => a.lastResult.time - b.lastResult.time).slice(0, 2);
+    upperLosers.forEach(r => { relegate[r.id] = g + 1; });
+    lowerWinners.forEach(r => { promote[r.id] = g; });
+    for (let i = 0; i < 2; i++) {
+      simLastMoves.push({
+        up: lowerWinners[i], down: upperLosers[i],
+        timeUp: lowerWinners[i].lastResult.time, timeDown: upperLosers[i].lastResult.time,
+        fromGroup: g + 1, toGroup: g, boundary: `${g}-${g + 1}`,
+      });
+    }
+  }
+  simRunners.forEach(r => {
+    if (promote[r.id] !== undefined) { r.group = promote[r.id]; r.lastMove = 'up'; }
+    else if (relegate[r.id] !== undefined) { r.group = relegate[r.id]; r.lastMove = 'down'; }
+  });
+
+  renderSimulator();
+}
+
+// Orden de una tabla de grupo por mejor tiempo absoluto: los que bajan entran
+// arriba de todo (vienen a reforzar), los que suben entran abajo (todavía no
+// demostraron nada acá), los que se quedan van en el medio por su tiempo.
+function simSortGroup(members) {
+  const byTime = (a, b) => simTimeOf(a) - simTimeOf(b);
+  const stayers = members.filter(r => !r.lastMove).sort(byTime);
+  const promotedIn = members.filter(r => r.lastMove === 'up').sort(byTime);
+  const relegatedIn = members.filter(r => r.lastMove === 'down').sort(byTime);
+  if (!stayers.length) return [...relegatedIn, ...promotedIn].sort(byTime);
+  return [...relegatedIn, ...stayers, ...promotedIn];
+}
+
+// Orden final del Top 1-8 para el sembrado: puntos acumulados (3 x victoria),
+// desempate por el mejor tiempo de todo el torneo.
+function simRankByPoints(members) {
+  return [...members].sort((a, b) => b.points - a.points || a.bestTimeEver - b.bestTimeEver);
+}
+
+function simRenderHistory(r) {
+  if (!r.history.length) return '—';
+  return [...r.history].reverse().map(res => `<span class="${res === 'W' ? 'sim-res-w' : 'sim-res-l'}">${res}</span>`).join('');
+}
+
+function simStatusClass(r) {
+  if (simFecha === 0) return '';
+  return (r.group === 1 || r.group === 2) ? 'sim-row-q' : 'sim-row-e';
+}
+
+function simInitBracket() {
+  const g1 = simRankByPoints(simGetGroup(1));
+  simBracketSeeds = SIM_SEED_ORDER.map(seedNum => ({ runner: g1[seedNum - 1], seedNum }));
+  simBracketPool = simShuffle(simGetGroup(2));
+  simBracketAssignments = new Array(8).fill(null);
+  simBracketDrawIndex = 0;
+  simBracketReady = true;
+}
+function simDrawNext() {
+  if (!simBracketReady || simBracketDrawIndex >= 8) return;
+  simBracketAssignments[simBracketDrawIndex] = simBracketPool[simBracketDrawIndex];
+  simBracketDrawIndex++;
+  simRenderBracket();
+}
+function simDrawAll() {
+  if (!simBracketReady) return;
+  while (simBracketDrawIndex < 8) { simBracketAssignments[simBracketDrawIndex] = simBracketPool[simBracketDrawIndex]; simBracketDrawIndex++; }
+  simRenderBracket();
+}
+function simResetDraw() {
+  if (!simBracketReady) return;
+  simBracketPool = simShuffle(simGetGroup(2));
+  simBracketAssignments = new Array(8).fill(null);
+  simBracketDrawIndex = 0;
+  simRenderBracket();
+}
+
+function simRenderBracket() {
+  const isFinal = simFecha === SIM_MAX_FECHAS;
+  const locked = document.getElementById('sim-bracket-locked');
+  const explainer = document.getElementById('sim-bracket-explainer');
+  const controls = document.getElementById('sim-bracket-controls');
+  const sidesEl = document.getElementById('sim-bracket-sides');
+  if (!locked || !sidesEl) return;
+
+  if (!isFinal) {
+    locked.hidden = false; explainer.hidden = true; controls.hidden = true;
+    sidesEl.innerHTML = '';
+    simBracketReady = false;
+    return;
+  }
+  if (!simBracketReady) simInitBracket();
+  locked.hidden = true; explainer.hidden = false; controls.hidden = false;
+
+  const sideLabels = [t('sim.sideA'), t('sim.sideB')];
+  let html = '';
+  for (let side = 0; side < 2; side++) {
+    html += `<div class="sim-bracket-side"><h4>${esc(sideLabels[side])}</h4>`;
+    for (let i = 0; i < 4; i++) {
+      const idx = side * 4 + i;
+      const seed = simBracketSeeds[idx];
+      const opp = simBracketAssignments[idx];
+      html += `<div class="sim-match-card">
+        <div class="sim-match-seed">${nameWithFlag(seed.runner.name)}<span class="sim-seed-tag">${esc(t('sim.seedTag', { n: seed.seedNum }))}</span></div>
+        <div class="sim-match-vs">vs</div>
+        <div class="sim-match-slot${opp ? '' : ' sim-pending'}">${opp ? nameWithFlag(opp.name) : esc(t('sim.pending'))}</div>
+      </div>`;
+    }
+    html += `</div>`;
+  }
+  sidesEl.innerHTML = html;
+
+  const done = simBracketDrawIndex >= 8;
+  const nextBtn = document.getElementById('sim-btn-draw-next');
+  const allBtn = document.getElementById('sim-btn-draw-all');
+  if (nextBtn) nextBtn.disabled = done;
+  if (allBtn) allBtn.disabled = done;
+}
+
+function renderSimulator() {
+  const panel = document.getElementById('sim-groups');
+  if (!panel) return; // la sección todavía no existe en el DOM
+
+  const isFinal = simFecha === SIM_MAX_FECHAS;
+  setText('sim-fecha-counter', simFecha);
+  const legend = document.getElementById('sim-legend');
+  if (legend) legend.hidden = simFecha < 1;
+
+  const qualified = simRunners
+    .filter(r => r.group === 1 || r.group === 2)
+    .sort((a, b) => a.group - b.group || simTimeOf(a) - simTimeOf(b))
+    .map(r => `<strong>${nameWithFlag(r.name)}</strong> (G${r.group})`);
+  setText('sim-qualify-title', t(isFinal ? 'sim.qualifyTitleFinal' : 'sim.qualifyTitleLive'));
+  const namesEl = document.getElementById('sim-qualify-names');
+  if (namesEl) namesEl.innerHTML = qualified.join(', ');
+
+  const labels = isFinal
+    ? { 1: t('sim.group1Final'), 2: t('sim.group2Final'), 3: t('sim.group3Final'), 4: t('sim.group4Final') }
+    : { 1: t('sim.group1'), 2: t('sim.group2'), 3: t('sim.group3'), 4: t('sim.group4') };
+
+  panel.innerHTML = '';
+  for (let g = 1; g <= SIM_NUM_GROUPS; g++) {
+    const members = (isFinal && (g === 1 || g === 2)) ? simRankByPoints(simGetGroup(g)) : simSortGroup(simGetGroup(g));
+    const card = document.createElement('div');
+    card.className = 'group-card';
+    card.innerHTML = `
+      <h3>${esc(labels[g])}</h3>
+      <span class="group-tag">${esc(t('sim.runnersCount', { n: members.length }))}</span>
+      <div class="table-scroll"><table>
+        <thead><tr><th></th><th>${esc(t('sim.thRunner'))}</th><th>${esc(t('sim.thPB'))}</th><th>${esc(t('sim.thPts'))}</th><th>${esc(t('sim.thBest'))}</th><th>${esc(t('sim.thHistory'))}</th></tr></thead>
+        <tbody>
+          ${members.map((r, i) => `
+            <tr class="${simStatusClass(r)}">
+              <td class="sim-rank">${i + 1}</td>
+              <td>${nameWithFlag(r.name)}${r.lastMove === 'up' ? ' <span class="sim-move-up">▲</span>' : ''}${r.lastMove === 'down' ? ' <span class="sim-move-down">▼</span>' : ''}</td>
+              <td class="sim-pb">${esc(r.pbLabel)}</td>
+              <td class="sim-pts">${r.points}</td>
+              <td class="sim-best">${Number.isFinite(r.bestTimeEver) ? esc(simFormatRaceTime(r.bestTimeEver)) : '—'}</td>
+              <td class="sim-hist">${simRenderHistory(r)}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table></div>`;
+    panel.appendChild(card);
+  }
+
+  setText('sim-log-title', simFecha === 0 ? t('sim.logTitleEmpty') : t(isFinal ? 'sim.logTitleFinal' : 'sim.logTitle', { n: simFecha }));
+
+  const racesEl = document.getElementById('sim-log-races');
+  if (racesEl) {
+    racesEl.innerHTML = '';
+    for (let g = 1; g <= SIM_NUM_GROUPS; g++) {
+      const col = document.createElement('div');
+      const races = simLastRaces.filter(r => r.group === g);
+      col.innerHTML = `<div class="sim-log-group-label">${esc(labels[g])}</div>` +
+        races.map(r => `<div class="sim-log-line">${t('sim.raceResult', {
+          a: esc(r.a), timeA: simFormatRaceTime(r.timeA), b: esc(r.b), timeB: simFormatRaceTime(r.timeB),
+          winner: esc(r.winner), margin: simFormatMargin(r.margin),
+        })}</div>`).join('');
+      racesEl.appendChild(col);
+    }
+  }
+
+  const movesEl = document.getElementById('sim-log-moves');
+  if (movesEl) {
+    if (simLastMoves.length) {
+      const byBoundary = {};
+      simLastMoves.forEach(m => { (byBoundary[m.boundary] = byBoundary[m.boundary] || []).push(m); });
+      movesEl.innerHTML = Object.keys(byBoundary).sort().map(b => {
+        const [ga, gb] = b.split('-');
+        return `<div class="sim-log-group-label">${esc(t('sim.boundaryLabel', { a: ga, b: gb }))}</div>` +
+          byBoundary[b].map(m => `
+            <div class="sim-log-line">${t('sim.moveUp', { name: esc(m.up.name), group: m.toGroup, time: simFormatSeconds(m.timeUp) })}</div>
+            <div class="sim-log-line">${t('sim.moveDown', { name: esc(m.down.name), group: m.fromGroup, time: simFormatSeconds(m.timeDown) })}</div>`).join('');
+      }).join('');
+    } else {
+      movesEl.innerHTML = '';
+    }
+  }
+
+  const done = simFecha >= SIM_MAX_FECHAS;
+  const nextBtn = document.getElementById('sim-btn-next');
+  const next5Btn = document.getElementById('sim-btn-next5');
+  if (nextBtn) { nextBtn.disabled = done; nextBtn.textContent = done ? t('sim.doneLabel') : t('sim.btnNext'); }
+  if (next5Btn) next5Btn.disabled = done;
+
+  simRenderBracket();
+}
+
+function initSimulator() {
+  if (!document.getElementById('sim-groups')) return;
+  simInitRunners();
+
+  const on = (id, fn) => { const el = document.getElementById(id); if (el) el.addEventListener('click', fn); };
+  on('sim-btn-next', simAdvanceFecha);
+  on('sim-btn-next5', () => { while (simFecha < SIM_MAX_FECHAS) simAdvanceFecha(); });
+  on('sim-btn-reset', () => { simInitRunners(); renderSimulator(); });
+  on('sim-btn-draw-next', simDrawNext);
+  on('sim-btn-draw-all', simDrawAll);
+  on('sim-btn-draw-reset', simResetDraw);
+
+  renderSimulator();
 }
 
 // ======= UTILIDADES / UTILITIES =======

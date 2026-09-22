@@ -6,7 +6,7 @@
 <title>Ditman Cup 2027</title>
 <meta name="description" content="Ditman Cup 2027 — community Resident Evil 4 speedrunning tournament, World Cup format. / Torneo comunitario de speedrunning de RE4.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/css/flag-icons.min.css">
-<link rel="stylesheet" href="css/style.css?v=20260911a">
+<link rel="stylesheet" href="css/style.css?v=20260922a">
 </head>
 <body data-tab="inicio">
 
@@ -36,6 +36,7 @@
       <button class="tab-btn" data-tab="sorteo" data-i18n="nav.sorteo">Draw</button>
       <button class="tab-btn" data-tab="grupos" data-i18n="nav.grupos">Groups</button>
       <button class="tab-btn" data-tab="brackets" data-i18n="nav.brackets">Bracket</button>
+      <button class="tab-btn" data-tab="simulations" data-i18n="nav.simulations">Simulations</button>
       <button class="tab-btn" data-tab="clasificatorias" data-i18n="nav.clasificatorias">Standings</button>
       <button class="tab-btn" data-tab="champions" data-i18n="nav.champions">Champions</button>
       <button class="tab-btn" data-tab="clips" data-i18n="nav.clips">Clips</button>
@@ -118,6 +119,50 @@
     <div id="bracket-container" class="bracket-placeholder">
       <p data-i18n="brackets.placeholder">The knockout bracket goes live once the group stage is finalized.</p>
     </div>
+  </section>
+
+  <section id="simulations" class="tab-panel sim-panel" tabindex="-1">
+    <h2 data-i18n="sim.title">Simulator — Nations League–style format</h2>
+    <p class="section-note sim-intro" data-i18n="sim.intro">32 runners with their real PBs, 4 groups of 8, 4 matchdays total. This is a proposal — not the confirmed format.</p>
+
+    <div class="sim-controls">
+      <span class="sim-badge"><span data-i18n="sim.dateBadge">Matchday</span> <span id="sim-fecha-counter">0</span> / 4</span>
+      <button type="button" class="btn-sim btn-sim-primary" id="sim-btn-next" data-i18n="sim.btnNext">Simulate next matchday</button>
+      <button type="button" class="btn-sim" id="sim-btn-next5" data-i18n="sim.btnNext5">Simulate to the end</button>
+      <button type="button" class="btn-sim btn-sim-ghost" id="sim-btn-reset" data-i18n="sim.btnReset">Reset</button>
+    </div>
+
+    <div class="sim-qualify-banner">
+      <h3 id="sim-qualify-title" data-i18n="sim.qualifyTitleLive">If the tournament ended now, these would qualify (Group 1 + Group 2)</h3>
+      <div class="sim-qualify-names" id="sim-qualify-names"></div>
+    </div>
+
+    <div class="sim-legend" id="sim-legend" hidden>
+      <span><span class="sim-dot sim-dot-q"></span> <span data-i18n="sim.legendQualified">Qualified (Group 1 + Group 2)</span></span>
+      <span><span class="sim-dot sim-dot-e"></span> <span data-i18n="sim.legendEliminated">Eliminated (Group 3 + Group 4)</span></span>
+    </div>
+
+    <div class="groups-grid sim-groups" id="sim-groups"></div>
+
+    <div class="sim-log-panel">
+      <h3 id="sim-log-title" data-i18n="sim.logTitleEmpty">No matchday played yet</h3>
+      <div class="sim-log-cols" id="sim-log-races"></div>
+      <div class="sim-log-moves" id="sim-log-moves"></div>
+    </div>
+
+    <div class="sim-bracket-panel" id="sim-bracket-panel">
+      <h3 data-i18n="sim.bracketTitle">Round of 16</h3>
+      <p class="section-note" id="sim-bracket-locked" data-i18n="sim.bracketLocked">Finish all 4 matchdays to unlock the Round of 16 draw.</p>
+      <p class="section-note" id="sim-bracket-explainer" data-i18n="sim.bracketExplainer" hidden>The 8 from Group 1 keep the classic seeding. Draw them against the 8 from Group 2 to complete the bracket.</p>
+      <div class="sim-controls" id="sim-bracket-controls" hidden>
+        <button type="button" class="btn-sim btn-sim-primary" id="sim-btn-draw-next" data-i18n="sim.btnDrawNext">Draw next</button>
+        <button type="button" class="btn-sim" id="sim-btn-draw-all" data-i18n="sim.btnDrawAll">Draw all</button>
+        <button type="button" class="btn-sim btn-sim-ghost" id="sim-btn-draw-reset" data-i18n="sim.btnDrawReset">Reset draw</button>
+      </div>
+      <div class="sim-bracket-sides" id="sim-bracket-sides"></div>
+    </div>
+
+    <p class="section-note sim-footnote" data-i18n="sim.footer">Simulation with placeholder data — meant to explain the format, not to predict real results.</p>
   </section>
 
   <section id="clasificatorias" class="tab-panel" tabindex="-1">
@@ -276,6 +321,6 @@
   </div>
 </div>
 
-<script src="js/script.js?v=20260911a"></script>
+<script src="js/script.js?v=20260922a"></script>
 </body>
 </html>
