@@ -998,24 +998,27 @@ body.modal-open { overflow: hidden; }
 .sim-dot-q { background: #3ECF6E; }
 .sim-dot-e { background: var(--accent-bright); }
 
-.sim-groups { margin-bottom: 1.6rem; }
-.sim-groups .group-card { padding: 1rem 1rem 1.2rem; }
-.sim-groups .group-tag { display: block; color: var(--text-muted); font-size: .78rem; margin: -.35rem 0 .7rem; }
+/* Una sola columna, tarjetas a todo el ancho — así entra toda la tabla
+   sin necesitar el scroll horizontal. */
+.sim-groups { grid-template-columns: 1fr; margin-bottom: 1.6rem; gap: 1.4rem; }
+.sim-groups .group-card { padding: 1.3rem 1.5rem 1.5rem; }
+.sim-groups .group-card h3 { font-size: 1.25rem; }
+.sim-groups .group-tag { display: block; font-family: var(--font-grunge); color: var(--text-dim); font-size: 1rem; margin: -.2rem 0 .9rem; }
 .sim-groups .table-scroll { overflow-x: auto; }
-.sim-groups table { width: 100%; min-width: 300px; border-collapse: collapse; font-size: .86rem; }
-.sim-groups th, .sim-groups td { padding: .4rem .45rem; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.sim-groups table { width: 100%; border-collapse: collapse; font-family: var(--font-grunge); font-size: 1.15rem; }
+.sim-groups th, .sim-groups td { padding: .6rem .7rem; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
 .sim-groups th {
-  color: var(--text-muted);
-  font-family: var(--font-title);
-  font-size: .68rem;
-  letter-spacing: .05em;
+  color: var(--text-dim);
+  font-family: var(--font-grunge);
+  font-size: .82rem;
+  letter-spacing: .04em;
   text-transform: uppercase;
   font-weight: 400;
 }
-.sim-groups td.sim-rank { color: var(--text-muted); width: 1.2em; }
-.sim-groups td.sim-pb, .sim-groups td.sim-best { font-family: var(--font-title); color: var(--text-dim); font-size: .82rem; font-variant-numeric: tabular-nums; }
-.sim-groups td.sim-pts { font-family: var(--font-title); color: var(--accent-2); font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
-.sim-groups td.sim-hist { font-family: var(--font-title); font-weight: 700; letter-spacing: .12em; }
+.sim-groups td.sim-rank { color: var(--text-muted); width: 1.4em; }
+.sim-groups td.sim-pb, .sim-groups td.sim-best { font-family: var(--font-grunge); color: var(--text-dim); font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.sim-groups td.sim-pts { font-family: var(--font-grunge); color: var(--accent-2); font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
+.sim-groups td.sim-hist { font-family: var(--font-grunge); font-weight: 700; letter-spacing: .12em; font-size: 1.2rem; }
 .sim-res-w { color: #3ECF6E; }
 .sim-res-l { color: var(--accent-bright); }
 .sim-move-up { color: #3ECF6E; }
