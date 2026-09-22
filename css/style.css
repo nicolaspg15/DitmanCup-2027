@@ -24,6 +24,7 @@
 }
 
 :root {
+  color-scheme: dark; /* evita que el navegador re-oscurezca/invierta (rompe iconos como la bandera de Japon) */
   --bg: #0A0908;
   --surface: #16130F;
   --surface-alt: #201C16;
@@ -608,6 +609,7 @@ footer {
   border-radius: 2px;
   vertical-align: -.08em;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, .35);
+  forced-color-adjust: none; /* Windows modo alto contraste: no ocultar el icono de fondo */
 }
 .group-card .fi, .standings-wrapper .fi, .slot .fi { font-size: .9em; }
 
