@@ -1479,6 +1479,7 @@ function simInitRunners() {
     pbSeconds: simParseTime(SIM_RUNNER_PBS[i]),
     pbLabel: SIM_RUNNER_PBS[i],
     group: Math.floor(i / SIM_GROUP_SIZE) + 1,
+    isTop8Seed: i < 8, // top 8 por PB real: variacion mas acotada (mas realista)
     lastResult: null,
     lastMove: null,
     history: [],
@@ -1499,8 +1500,8 @@ function simTimeOf(r) { return r.lastResult ? r.lastResult.time : Infinity; }
 // nadie corre su mejor marca siempre. Devuelve el tiempo de cada uno para
 // poder comparar a todo el grupo, no solo este cruce puntual.
 function simRace(a, b) {
-  const timeA = a.pbSeconds + Math.pow(Math.random(), 2) * 180;
-  const timeB = b.pbSeconds + Math.pow(Math.random(), 2) * 180;
+  const timeA = a.pbSeconds + Math.pow(Math.random(), 2) * (a.isTop8Seed ? 120 : 180);
+  const timeB = b.pbSeconds + Math.pow(Math.random(), 2) * (b.isTop8Seed ? 120 : 180);
   const winner = timeA < timeB ? a : b;
   const loser = winner === a ? b : a;
   const margin = Number(Math.abs(timeA - timeB).toFixed(2));
