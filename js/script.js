@@ -357,14 +357,14 @@ const I18N = {
     'footer.text': 'Ditman Cup 2027 · Hecho para la comunidad',
 
     'sim.title': 'Simulador — formato tipo Nations League',
-    'sim.intro': '32 corredores con sus PBs reales, 4 grupos de 8, 4 fechas en total. Cada fecha corren BO1 dentro de su grupo, cerca de su PB pero con algo de variacion. En cada frontera suben los 4 que ganaron su carrera en el grupo de abajo, y bajan los 4 que perdieron en el grupo de arriba — ganar tu carrera es obligatorio para subir, y perderla lo es para bajar. Cada victoria tambien suma puntos segun el grupo donde la conseguiste (Grupo 1 = 4 pts, Grupo 2 = 3, Grupo 3 = 2, Grupo 4 = 1): ganarle a los mejores vale mas. Al cerrar la fecha 4, clasifican los 16 corredores con mas victorias totales (desempate: puntos, despues mejor tiempo), sin importar en que grupo hayan terminado. Esto es una propuesta de formato, todavia no es el definitivo.',
+    'sim.intro': '32 corredores con sus PBs reales, 4 grupos de 8, 4 fechas en total. Cada fecha corren BO1 dentro de su grupo, cerca de su PB pero con algo de variacion. En cada frontera suben los 4 que ganaron su carrera en el grupo de abajo, y bajan los 4 que perdieron en el grupo de arriba — ganar tu carrera es obligatorio para subir, y perderla lo es para bajar. Cada victoria suma puntos segun el grupo donde la conseguiste, el doble por cada grupo que subís (Grupo 1 = 8 pts, Grupo 2 = 4, Grupo 3 = 2, Grupo 4 = 1): ganar en Grupo 4 es mas facil, asi que no compite ni de cerca con ganar en Grupo 1. Al cerrar la fecha 4, clasifican los 16 corredores con mas puntos de todo el torneo (desempate: total de victorias, despues mejor tiempo), sin importar en que grupo hayan terminado. Esto es una propuesta de formato, todavia no es el definitivo.',
     'sim.dateBadge': 'Fecha',
     'sim.btnNext': 'Simular siguiente fecha',
     'sim.btnNext5': 'Simular hasta el final',
     'sim.btnReset': 'Reiniciar',
-    'sim.qualifyTitleLive': 'Si el torneo cortara aca, clasifican estos 16 (por victorias)',
-    'sim.qualifyTitleFinal': 'Torneo terminado — clasificados definitivos (por victorias)',
-    'sim.legendQualified': 'Clasificado (Top 16 por victorias)',
+    'sim.qualifyTitleLive': 'Si el torneo cortara aca, clasifican estos 16 (por puntaje)',
+    'sim.qualifyTitleFinal': 'Torneo terminado — clasificados definitivos (por puntaje)',
+    'sim.legendQualified': 'Clasificado (Top 16 por puntaje)',
     'sim.legendEliminated': 'Eliminado',
     'sim.group1': 'Grupo 1 · elite',
     'sim.group2': 'Grupo 2',
@@ -512,14 +512,14 @@ const I18N = {
     'footer.text': 'Ditman Cup 2027 · Made for the community',
 
     'sim.title': 'Simulator — Nations League–style format',
-    'sim.intro': "32 runners with their real PBs, 4 groups of 8, 4 matchdays total. Each matchday everyone races BO1 within their group, close to their PB with some variance. At every boundary, the 4 runners who won their race in the group below move up, and the 4 who lost theirs in the group above move down — winning your race is required to move up, and losing it is required to move down. Every win also scores points based on the group where you earned it (Group 1 = 4 pts, Group 2 = 3, Group 3 = 2, Group 4 = 1): beating the best is worth more. After matchday 4, the 16 runners with the most total wins qualify (tiebreak: points, then best time), regardless of which group they end up in. This is a format proposal — not the confirmed one yet.",
+    'sim.intro': "32 runners with their real PBs, 4 groups of 8, 4 matchdays total. Each matchday everyone races BO1 within their group, close to their PB with some variance. At every boundary, the 4 runners who won their race in the group below move up, and the 4 who lost theirs in the group above move down — winning your race is required to move up, and losing it is required to move down. Every win scores points based on the group where you earned it, doubling for each group up (Group 1 = 8 pts, Group 2 = 4, Group 3 = 2, Group 4 = 1): winning in Group 4 is easier, so it can't come close to winning in Group 1. After matchday 4, the 16 runners with the most points across the whole tournament qualify (tiebreak: total wins, then best time), regardless of which group they end up in. This is a format proposal — not the confirmed one yet.",
     'sim.dateBadge': 'Matchday',
     'sim.btnNext': 'Simulate next matchday',
     'sim.btnNext5': 'Simulate to the end',
     'sim.btnReset': 'Reset',
-    'sim.qualifyTitleLive': 'If the tournament ended now, these 16 would qualify (by wins)',
-    'sim.qualifyTitleFinal': 'Tournament over — final qualifiers (by wins)',
-    'sim.legendQualified': 'Qualified (Top 16 by wins)',
+    'sim.qualifyTitleLive': 'If the tournament ended now, these 16 would qualify (by points)',
+    'sim.qualifyTitleFinal': 'Tournament over — final qualifiers (by points)',
+    'sim.legendQualified': 'Qualified (Top 16 by points)',
     'sim.legendEliminated': 'Eliminated',
     'sim.group1': 'Group 1 · elite',
     'sim.group2': 'Group 2',
@@ -1410,7 +1410,11 @@ const SIM_MAX_FECHAS = 4;
 const SIM_MOVE_COUNT = 4; // cuantos suben/bajan por frontera
 // Puntos por victoria segun el grupo donde se consiguio: ganarle a los
 // mejores (Grupo 1) vale mas que ganarle a los mas lentos (Grupo 4).
-function simWinPoints(group) { return SIM_NUM_GROUPS + 1 - group; }
+// Escala exponencial: cada grupo vale el doble que el de abajo. Ganar en
+// Grupo 4 es mucho mas facil (rivales mas lentos) que ganar en Grupo 1,
+// asi que no puede pesar igual ni acercarse — 1 victoria en Grupo 1 vale
+// mas que CUALQUIER cantidad de victorias en Grupo 4 (4 x 1 = 4 < 8).
+function simWinPoints(group) { return Math.pow(2, SIM_NUM_GROUPS - group); }
 const SIM_SEED_ORDER = [1, 8, 4, 5, 2, 7, 3, 6]; // sembrado clásico de 8 cabezas de serie
 
 const SIM_RUNNER_NAMES = [
@@ -1558,13 +1562,13 @@ function simSortGroup(members) {
   return [...relegatedIn, ...stayers, ...promotedIn];
 }
 
-// Orden: primero total de victorias (lo que mas importa — mas victorias
-// nunca puede quedar detras de menos victorias), desempate por puntos
-// acumulados (ponderados segun el grupo de cada victoria) y por ultimo
-// el mejor tiempo de todo el torneo. Se usa para clasificar al Top 16
-// (no importa en que grupo termines) y para sembrar el bracket.
+// Orden: primero puntos acumulados (ponderados segun el grupo de cada
+// victoria — ganar en Grupo 1 vale mucho mas que ganar en Grupo 4),
+// desempate por total de victorias y por ultimo el mejor tiempo de todo
+// el torneo. Se usa para clasificar al Top 16 (no importa en que grupo
+// termines) y para sembrar el bracket.
 function simRankByPoints(members) {
-  return [...members].sort((a, b) => b.wins - a.wins || b.points - a.points || a.bestTimeEver - b.bestTimeEver);
+  return [...members].sort((a, b) => b.points - a.points || b.wins - a.wins || a.bestTimeEver - b.bestTimeEver);
 }
 function simQualifiers() { return simRankByPoints(simRunners).slice(0, 16); }
 
@@ -1660,7 +1664,7 @@ function renderSimulator() {
 
   const top16 = simQualifiers();
   const qualifiedIds = new Set(top16.map(r => r.id));
-  const qualified = top16.map(r => `<strong>${nameWithFlag(r.name)}</strong> (${r.wins}/${simFecha} · ${r.points} pts · G${r.group})`);
+  const qualified = top16.map(r => `<strong>${nameWithFlag(r.name)}</strong> (${r.points} pts · ${r.wins}/${simFecha} · G${r.group})`);
   setText('sim-qualify-title', t(isFinal ? 'sim.qualifyTitleFinal' : 'sim.qualifyTitleLive'));
   const namesEl = document.getElementById('sim-qualify-names');
   if (namesEl) namesEl.innerHTML = qualified.join(', ');
