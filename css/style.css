@@ -941,6 +941,9 @@ body.modal-open { overflow: hidden; }
 }
 
 /* --- Simulaciones (formato propuesto, no es el torneo real) --- */
+/* Toda la sección usa por defecto la misma fuente que la descripción
+   (más legible); los títulos (h2/h3) mantienen la fuente del juego. */
+.sim-panel { font-family: var(--font-grunge); }
 .sim-intro { text-align: left; margin-bottom: 1.6rem; max-width: 74ch; }
 
 .sim-controls {
@@ -951,7 +954,7 @@ body.modal-open { overflow: hidden; }
   margin-bottom: 1.6rem;
 }
 .sim-badge {
-  font-family: var(--font-title);
+  font-family: var(--font-grunge);
   font-size: .95rem;
   letter-spacing: .04em;
   background: rgba(9, 8, 6, .85);
@@ -962,7 +965,7 @@ body.modal-open { overflow: hidden; }
   font-variant-numeric: tabular-nums;
 }
 .btn-sim {
-  font-family: var(--font-title);
+  font-family: var(--font-grunge);
   font-size: .85rem;
   letter-spacing: .04em;
   text-transform: uppercase;
@@ -1037,7 +1040,7 @@ body.modal-open { overflow: hidden; }
 }
 .sim-log-panel h3 { font-size: 1rem; margin-bottom: .8rem; }
 .sim-log-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem 1.6rem; }
-.sim-log-group-label { color: var(--accent-bright); font-family: var(--font-title); font-size: .78rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .35rem; }
+.sim-log-group-label { color: var(--accent-bright); font-family: var(--font-grunge); font-size: .85rem; letter-spacing: .03em; text-transform: uppercase; margin-bottom: .35rem; }
 .sim-log-line { font-size: .86rem; color: var(--text-muted); margin-bottom: .3rem; line-height: 1.5; }
 .sim-log-line b { color: var(--text); font-weight: 600; }
 .sim-log-moves { margin-top: 1.1rem; padding-top: 1rem; border-top: 1px dashed var(--frame); }
@@ -1061,10 +1064,10 @@ body.modal-open { overflow: hidden; }
   margin-bottom: .6rem;
 }
 .sim-match-seed { font-weight: 700; color: var(--text); }
-.sim-seed-tag { color: var(--accent-bright); font-family: var(--font-title); font-size: .72rem; margin-left: .4rem; }
+.sim-seed-tag { color: var(--accent-bright); font-family: var(--font-grunge); font-size: .78rem; margin-left: .4rem; }
 .sim-match-vs { color: var(--text-muted); font-size: .72rem; margin: .3rem 0; }
 .sim-match-slot { font-weight: 700; color: var(--accent-2); }
-.sim-match-slot.sim-pending { color: var(--text-muted); font-family: var(--font-title); font-weight: 400; }
+.sim-match-slot.sim-pending { color: var(--text-muted); font-family: var(--font-grunge); font-weight: 400; }
 
 .sim-footnote { margin-top: -.5rem; }
 
