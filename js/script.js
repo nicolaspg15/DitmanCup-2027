@@ -41,6 +41,36 @@ const RUNNER_FLAGS = {
   pochoide: 'AR',
   yuushi: 'JP',
   shimarisu: 'JP',
+
+  frit: 'US',
+  majorrichy: 'US',
+
+  seppp: 'ID',
+  champt: 'ID',
+  zudinn: 'ID',
+  muh: 'ID',
+  lu1u: 'ID',
+  val: 'ID',
+  hannnry: 'ID',
+  aqbilghilman: 'ID',
+
+  nobu_22: 'PE',
+  matiuss: 'EC',
+
+  youcri: 'JP',
+  doradori_dolph: 'JP',
+
+  infamouslol8: 'CO',
+  razie: 'CR',
+  luis_sera: 'FR',
+
+  novi_fan: 'AR',
+  mateoush27: 'AR',
+  mattgael: 'AR',
+
+  pixiesaki: 'CL',
+  manboo: 'CN',
+  gui19: 'BR',
   // ...completar. También se puede llenar la columna "Flag" de la Sheet.
 };
 
