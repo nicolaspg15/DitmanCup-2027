@@ -357,7 +357,7 @@ const I18N = {
     'footer.text': 'Ditman Cup 2027 · Hecho para la comunidad',
 
     'sim.title': 'Simulador — formato tipo Nations League',
-    'sim.intro': '32 corredores con sus PBs reales, 4 grupos de 8, 4 fechas en total. Cada fecha corren BO1 dentro de su grupo, cerca de su PB pero con algo de variacion — se compara el tiempo absoluto de todo el grupo. En cada frontera suben los 3 mejores tiempos del grupo de abajo y bajan los 3 peores del grupo de arriba. Al cerrar la fecha 4, clasifica el Top 16 (Grupo 1 + Grupo 2). Esto es una propuesta de formato, todavia no es el definitivo.',
+    'sim.intro': '32 corredores con sus PBs reales, 4 grupos de 8, 4 fechas en total. Cada fecha corren BO1 dentro de su grupo, cerca de su PB pero con algo de variacion. En cada frontera suben los 3 mejores tiempos entre quienes ganaron su carrera en el grupo de abajo, y bajan los 3 peores tiempos entre quienes perdieron en el grupo de arriba — ganar tu carrera es obligatorio para subir, y perderla lo es para bajar. Al cerrar la fecha 4, clasifica el Top 16 (Grupo 1 + Grupo 2). Esto es una propuesta de formato, todavia no es el definitivo.',
     'sim.dateBadge': 'Fecha',
     'sim.btnNext': 'Simular siguiente fecha',
     'sim.btnNext5': 'Simular hasta el final',
@@ -516,7 +516,7 @@ const I18N = {
     'footer.text': 'Ditman Cup 2027 · Made for the community',
 
     'sim.title': 'Simulator — Nations League–style format',
-    'sim.intro': "32 runners with their real PBs, 4 groups of 8, 4 matchdays total. Each matchday everyone races BO1 within their group, close to their PB with some variance — the whole group's absolute time is compared, not just each head-to-head. At every boundary, the 3 best times from the group below move up, and the 3 worst times from the group above move down. After matchday 4, the Top 16 (Group 1 + Group 2) qualify. This is a format proposal — not the confirmed one yet.",
+    'sim.intro': "32 runners with their real PBs, 4 groups of 8, 4 matchdays total. Each matchday everyone races BO1 within their group, close to their PB with some variance. At every boundary, the 3 best times among the runners who won their race in the group below move up, and the 3 worst times among the runners who lost theirs in the group above move down — winning your race is required to move up, and losing it is required to move down. After matchday 4, the Top 16 (Group 1 + Group 2) qualify. This is a format proposal — not the confirmed one yet.",
     'sim.dateBadge': 'Matchday',
     'sim.btnNext': 'Simulate next matchday',
     'sim.btnNext5': 'Simulate to the end',
@@ -1525,12 +1525,14 @@ function simAdvanceFecha() {
   }
 
   // En cada frontera (1-2, 2-3, 3-4): bajan los SIM_MOVE_COUNT peores tiempos
-  // absolutos del grupo de arriba, suben los SIM_MOVE_COUNT mejores del grupo de abajo.
+  // ENTRE QUIENES PERDIERON su carrera en el grupo de arriba, suben los
+  // SIM_MOVE_COUNT mejores tiempos ENTRE QUIENES GANARON en el grupo de abajo.
+  // Ganar tu carrera es condicion necesaria para subir; perderla lo es para bajar.
   simLastMoves = [];
   const relegate = {}, promote = {};
   for (let g = 1; g < SIM_NUM_GROUPS; g++) {
-    const upperLosers = simGetGroup(g).filter(r => r.lastResult).sort((a, b) => b.lastResult.time - a.lastResult.time).slice(0, SIM_MOVE_COUNT);
-    const lowerWinners = simGetGroup(g + 1).filter(r => r.lastResult).sort((a, b) => a.lastResult.time - b.lastResult.time).slice(0, SIM_MOVE_COUNT);
+    const upperLosers = simGetGroup(g).filter(r => r.lastResult && !r.lastResult.won).sort((a, b) => b.lastResult.time - a.lastResult.time).slice(0, SIM_MOVE_COUNT);
+    const lowerWinners = simGetGroup(g + 1).filter(r => r.lastResult && r.lastResult.won).sort((a, b) => a.lastResult.time - b.lastResult.time).slice(0, SIM_MOVE_COUNT);
     upperLosers.forEach(r => { relegate[r.id] = g + 1; });
     lowerWinners.forEach(r => { promote[r.id] = g; });
     for (let i = 0; i < SIM_MOVE_COUNT; i++) {
