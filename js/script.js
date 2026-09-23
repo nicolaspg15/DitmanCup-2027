@@ -3,9 +3,10 @@
 // Single source of truth for the tournament numbers. Edit here once final.
 const TOURNAMENT_CONFIG = {
   totalRunners: 32,
-  numGroups: 8,
-  groupSize: 4,
-  qualifiersPerGroup: 2,   // clasificados por grupo a la llave / advance per group
+  directQualifiers: 8,    // Top 8 de las clasificatorias: directo a Octavos, no juegan grupos
+  numGroups: 3,
+  groupSize: 8,
+  groupQualifiers: 8,     // los mejores 8 de la fase de grupos completan el cuadro (16 en Octavos)
 
   // Apertura de las clasificatorias ("qualys"). Formato ISO con offset.
   // Qualifier window opens. ISO format with UTC offset.
@@ -270,7 +271,7 @@ const I18N = {
 
     'facts.runners': 'corredores',
     'facts.groups': 'grupos',
-    'facts.qualify': 'clasifican x grupo',
+    'facts.qualify': 'clasifican directo',
 
     'intro.p': 'Bienvenidos a la Ditman Cup 2027. Aca vas a encontrar el sorteo, los grupos, el cuadro de eliminacion y todo lo necesario para seguir el torneo de punta a punta.',
 
@@ -284,6 +285,7 @@ const I18N = {
     'grupos.sheetError': 'No se pudo cargar la Sheet. Mostrando datos de ejemplo.',
     'group.word': 'Grupo',
     'group.tbd': 'Por definir',
+    'group.directTitle': 'Top 8 — directo a Octavos',
 
     'brackets.title': 'Brackets',
     'brackets.placeholder': 'El cuadro de eliminacion se arma una vez cerrada la fase de grupos.',
@@ -291,6 +293,7 @@ const I18N = {
     'bracket.champion': 'Campeon/a',
     'bracket.tbd': '—',
     'bracket.bye': 'BYE',
+    'bracket.seedTag': 'Sembrado {n}',
     'bracket.round.final': 'Final',
     'bracket.round.semi': 'Semifinal',
     'bracket.round.quarter': 'Cuartos',
@@ -430,7 +433,7 @@ const I18N = {
 
     'facts.runners': 'runners',
     'facts.groups': 'groups',
-    'facts.qualify': 'advance per group',
+    'facts.qualify': 'qualify directly',
 
     'intro.p': "Welcome to the Ditman Cup 2027. Here you'll find the draw, the groups, the knockout bracket and everything you need to follow the tournament end to end.",
 
@@ -444,6 +447,7 @@ const I18N = {
     'grupos.sheetError': 'Could not load the Sheet. Showing sample data.',
     'group.word': 'Group',
     'group.tbd': 'TBD',
+    'group.directTitle': 'Top 8 — direct to Round of 16',
 
     'brackets.title': 'Bracket',
     'brackets.placeholder': 'The knockout bracket goes live once the group stage is finalized.',
@@ -451,6 +455,7 @@ const I18N = {
     'bracket.champion': 'Champion',
     'bracket.tbd': '—',
     'bracket.bye': 'BYE',
+    'bracket.seedTag': 'Seed {n}',
     'bracket.round.final': 'Final',
     'bracket.round.semi': 'Semifinals',
     'bracket.round.quarter': 'Quarterfinals',
@@ -790,7 +795,7 @@ function initTabs() {
 function initFacts() {
   setText('fact-runners', TOURNAMENT_CONFIG.totalRunners);
   setText('fact-groups', TOURNAMENT_CONFIG.numGroups);
-  setText('fact-qualify', TOURNAMENT_CONFIG.qualifiersPerGroup);
+  setText('fact-qualify', TOURNAMENT_CONFIG.directQualifiers);
 }
 
 // ======= CONTADOR / COUNTDOWN =======
@@ -868,12 +873,12 @@ async function loadGroups() {
   }
 }
 
-function letterFor(i) { return String.fromCharCode(65 + i); }
-
 function placeholderGroups() {
-  let html = '';
-  for (let g = 0; g < TOURNAMENT_CONFIG.numGroups; g++) {
-    html += `<div class="group-card"><h3>${esc(t('group.word'))} ${letterFor(g)}</h3><ol>`;
+  let html = `<div class="group-card"><h3>${esc(t('group.directTitle'))}</h3><ol>`;
+  for (let i = 0; i < TOURNAMENT_CONFIG.directQualifiers; i++) html += `<li>${esc(t('group.tbd'))}</li>`;
+  html += `</ol></div>`;
+  for (let g = 1; g <= TOURNAMENT_CONFIG.numGroups; g++) {
+    html += `<div class="group-card"><h3>${esc(t('group.word'))} ${g}</h3><ol>`;
     for (let i = 0; i < TOURNAMENT_CONFIG.groupSize; i++) {
       html += `<li>${esc(t('group.tbd'))}</li>`;
     }
@@ -882,7 +887,9 @@ function placeholderGroups() {
   return html;
 }
 
-// Espera columnas en la Sheet: Grupo, Corredor (una fila por corredor)
+// Espera columnas en la Sheet: Grupo, Corredor (una fila por corredor).
+// El Top 8 de las clasificatorias va con Grupo = "0" (no juega la fase de
+// grupos, ver directQualifiersFromData) — el resto usa Grupo = "1"/"2"/"3".
 function renderGroups(rows, container) {
   const groups = groupRows(rows);
   const keys = Object.keys(groups).sort();
@@ -891,15 +898,20 @@ function renderGroups(rows, container) {
     return;
   }
 
-  container.innerHTML = keys.map(g => `
+  let html = '';
+  if (groups['0']) {
+    html += `<div class="group-card"><h3>${esc(t('group.directTitle'))}</h3><ol>${groups['0'].map(n => `<li>${nameWithFlag(n)}</li>`).join('')}</ol></div>`;
+  }
+  html += keys.filter(g => g !== '0').map(g => `
     <div class="group-card">
       <h3>${esc(t('group.word'))} ${esc(g)}</h3>
       <ol>${groups[g].map(n => `<li>${nameWithFlag(n)}</li>`).join('')}</ol>
     </div>
   `).join('');
+  container.innerHTML = html;
 }
 
-// { "A": ["nombre", ...], ... } a partir de filas {Grupo, Corredor}
+// { "0": ["nombre", ...], "1": [...], ... } a partir de filas {Grupo, Corredor}
 function groupRows(rows) {
   const groups = {};
   (rows || []).forEach(r => {
@@ -969,31 +981,30 @@ function renderStandings(rows, container) {
 }
 
 // ======= BRACKET / CUADRO DE ELIMINACIÓN =======
-// Se arma a partir de TOURNAMENT_CONFIG: numGroups * qualifiersPerGroup entrantes.
-// Con datos (Sheet o mock) muestra nombres; sin datos, casilleros "1A / 2B".
+// Se arma a partir de TOURNAMENT_CONFIG: directQualifiers + groupQualifiers
+// entrantes (8 directo por PB de clasificatorias + 8 de la fase de grupos
+// por puntaje). Con datos (Sheet o mock) muestra nombres; sin datos,
+// casilleros "Sembrado 1", "Sembrado 2", etc.
 function renderBracket() {
   const host = document.getElementById('bracket-container');
   if (!host) return;
 
-  const G = TOURNAMENT_CONFIG.numGroups;
-  const Q = TOURNAMENT_CONFIG.qualifiersPerGroup;
-  const nEntrants = G * Q;
+  const nEntrants = TOURNAMENT_CONFIG.directQualifiers + TOURNAMENT_CONFIG.groupQualifiers;
   if (nEntrants < 2) { host.innerHTML = `<p>${esc(t('brackets.placeholder'))}</p>`; return; }
 
   const size = 1 << Math.ceil(Math.log2(nEntrants));   // próxima potencia de 2
   const order = seedOrder(size);                        // orden de siembra 1..size
 
-  // Etiqueta de cada semilla: 1..nEntrants -> "posº Grupo"; resto -> BYE
-  const qualified = qualifiedFromData();                // {"A":["n1","n2"], ...} o null
+  // Etiqueta de cada semilla: 1..8 = Top 8 directo (por PB), 9..16 = mejores
+  // de la fase de grupos (por puntaje), en ese orden. Resto -> BYE.
+  const qualified = qualifiedFromData();                // [nombre1..nombre16] o null
   function seedLabel(seed) {
     if (seed > nEntrants) return { txt: t('bracket.bye'), bye: true };
-    const pos = Math.floor((seed - 1) / G) + 1;         // 1 = ganador de grupo
-    const letter = letterFor((seed - 1) % G);
-    if (qualified && qualified[letter] && qualified[letter][pos - 1]) {
-      const nm = qualified[letter][pos - 1];
+    if (qualified && qualified[seed - 1]) {
+      const nm = qualified[seed - 1];
       return { txt: nm, html: nameWithFlag(nm), bye: false };
     }
-    return { txt: pos + (currentLang === 'en' ? '' : 'º') + ' ' + letter, bye: false, tag: pos + letter };
+    return { txt: t('bracket.seedTag', { n: seed }), bye: false, tag: seed };
   }
 
   // Ronda 1: pares (order[0] vs order[1]), (order[2] vs order[3]), ...
@@ -1061,37 +1072,42 @@ function roundName(teams) {
   return t('bracket.round.generic', { n: teams });
 }
 
-// Top Q de cada grupo, si hay datos cargados. Devuelve {"A":[...], ...} o null.
+// Los 16 clasificados a Octavos, en orden de sembrado 1..16: primero el
+// Top 8 directo (por orden de la hoja de Clasificatorias, ya ordenada por
+// tiempo), despues los mejores de la fase de grupos (por Pts si la hoja de
+// Grupos la trae, si no en el orden en que esten cargados). Devuelve un
+// array de nombres (puede venir incompleto) o null si no hay nada aun.
 function qualifiedFromData() {
+  const direct = directQualifiersFromData();
+  const fromGroups = groupQualifiersFromData();
+  if (!direct.length && !fromGroups.length) return null;
+  return [...direct, ...fromGroups];
+}
+
+// Primeras N filas de la hoja de Clasificatorias (Qualifiers) = Top 8 real.
+function directQualifiersFromData() {
   const rows = lastStandingsRows;
-  const Q = TOURNAMENT_CONFIG.qualifiersPerGroup;
+  if (!rows || !rows.length) return [];
+  const rCol = pickKey(rows[0], ['Corredor', 'Runner', 'Nombre']);
+  if (!rCol) return [];
+  return rows.slice(0, TOURNAMENT_CONFIG.directQualifiers)
+    .map(r => (r[rCol] || '').trim()).filter(Boolean);
+}
 
-  // 1) Si la clasificación trae Grupo + Corredor + (Pos), usar eso
-  if (rows && rows.length) {
-    const gCol = pickKey(rows[0], ['Grupo', 'Group']);
-    const rCol = pickKey(rows[0], ['Corredor', 'Runner', 'Nombre']);
-    if (gCol && rCol) {
-      const by = {};
-      rows.forEach(r => {
-        const g = (r[gCol] || '').trim();
-        const name = (r[rCol] || '').trim();
-        if (!g || !name) return;
-        (by[g] = by[g] || []).push(name);
-      });
-      const out = {};
-      Object.keys(by).forEach(g => { out[g] = by[g].slice(0, Q); });
-      if (Object.keys(out).length) return out;
-    }
-  }
-
-  // 2) Si no, usar el orden de la hoja de grupos (primeros Q de cada grupo)
-  const g = groupRows(lastGroupsRows);
-  if (Object.keys(g).length) {
-    const out = {};
-    Object.keys(g).forEach(k => { out[k] = g[k].slice(0, Q); });
-    return out;
-  }
-  return null;
+// Mejores N de la hoja de Grupos (excluyendo el bloque "0" = Top 8 directo,
+// por si vinieran mezclados en la misma hoja), ordenados por Pts si la
+// columna existe.
+function groupQualifiersFromData() {
+  const rows = lastGroupsRows;
+  if (!rows || !rows.length) return [];
+  const rCol = pickKey(rows[0], ['Corredor', 'Runner', 'Nombre']);
+  if (!rCol) return [];
+  const gCol = pickKey(rows[0], ['Grupo', 'Group']);
+  const ptsCol = pickKey(rows[0], ['Pts', 'Puntos', 'Points']);
+  let entrants = rows.filter(r => !gCol || (r[gCol] || '').trim() !== '0');
+  if (ptsCol) entrants = [...entrants].sort((a, b) => (parseFloat(b[ptsCol]) || 0) - (parseFloat(a[ptsCol]) || 0));
+  return entrants.slice(0, TOURNAMENT_CONFIG.groupQualifiers)
+    .map(r => (r[rCol] || '').trim()).filter(Boolean);
 }
 
 function pickKey(obj, names) {
@@ -1324,36 +1340,33 @@ const MOCK_NAMES = [
   'leon_k', 'ganado', 'plaga', 'verdugo', 'delLago', 'elGigante', 'novistador', 'regenerador',
 ];
 
+// Primeros N nombres = Top 8 directo (Grupo "0"), el resto se reparte en
+// los 3 grupos de 8 (Grupo "1"/"2"/"3") con puntos falsos para el sembrado.
 function mockGroupsRows() {
-  const G = TOURNAMENT_CONFIG.numGroups;
-  const S = TOURNAMENT_CONFIG.groupSize;
   const rows = [];
   let k = 0;
-  for (let g = 0; g < G; g++) {
-    for (let i = 0; i < S; i++) {
-      rows.push({ Grupo: letterFor(g), Corredor: MOCK_NAMES[k % MOCK_NAMES.length] });
+  for (let i = 0; i < TOURNAMENT_CONFIG.directQualifiers; i++) {
+    rows.push({ Grupo: '0', Corredor: MOCK_NAMES[k % MOCK_NAMES.length] });
+    k++;
+  }
+  for (let g = 1; g <= TOURNAMENT_CONFIG.numGroups; g++) {
+    for (let i = 0; i < TOURNAMENT_CONFIG.groupSize; i++) {
+      rows.push({ Grupo: String(g), Corredor: MOCK_NAMES[k % MOCK_NAMES.length], Pts: String(Math.floor(Math.random() * 9)) });
       k++;
     }
   }
   return rows;
 }
 
+// Ranking plano de las clasificatorias (los 32, por tiempo) — de aca salen
+// los primeros 8 (directQualifiersFromData) y se arman los grupos con el
+// resto. No tiene columna Grupo: eso lo define la hoja de Grupos aparte.
 function mockStandingsRows() {
-  const rows = mockGroupsRows();
-  const groups = groupRows(rows);
-  const out = [];
-  Object.keys(groups).sort().forEach(g => {
-    groups[g].forEach((name, i) => {
-      out.push({
-        [t('clas.col.pos')]: String(i + 1),
-        [t('clas.col.runner')]: name,
-        [t('clas.col.group')]: g,
-        [t('clas.col.time')]: mockTime(),
-        [t('clas.col.pts')]: String(9 - i * 2),
-      });
-    });
-  });
-  return out;
+  return MOCK_NAMES.map((name, i) => ({
+    [t('clas.col.pos')]: String(i + 1),
+    [t('clas.col.runner')]: name,
+    [t('clas.col.time')]: mockTime(),
+  }));
 }
 
 function mockTime() {
