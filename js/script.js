@@ -258,7 +258,7 @@ const I18N = {
     'nav.organizadores': 'Organizadores',
     'nav.menu': 'Abrir menu',
 
-    'hero.subtitle': 'Torneo comunitario de speedrunning de Resident Evil 4 — formato copa del mundo.',
+    'hero.subtitle': 'Torneo comunitario de speedrunning de Resident Evil 4.',
 
     'countdown.label': 'Faltan para que abran las qualys',
     'countdown.days': 'dias',
@@ -420,7 +420,7 @@ const I18N = {
     'nav.organizadores': 'Organizers',
     'nav.menu': 'Open menu',
 
-    'hero.subtitle': 'Community Resident Evil 4 speedrunning tournament — World Cup format.',
+    'hero.subtitle': 'Community Resident Evil 4 speedrunning tournament.',
 
     'countdown.label': 'Until the qualifiers open',
     'countdown.days': 'days',
@@ -750,6 +750,8 @@ function initTabs() {
 
     const panel = document.getElementById(btn.dataset.tab);
     panel.classList.add('active');
+    const trailer = document.getElementById('trailer');
+    if (trailer && btn.dataset.tab !== 'inicio') trailer.pause();
     document.body.dataset.tab = btn.dataset.tab;
     tabs.classList.remove('open');
     toggle.setAttribute('aria-expanded', 'false');
