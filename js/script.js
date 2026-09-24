@@ -749,7 +749,9 @@ function initTabs() {
     btn.tabIndex = 0;
 
     const panel = document.getElementById(btn.dataset.tab);
-    panel.classList.add('active');    document.body.dataset.tab = btn.dataset.tab;
+    panel.classList.add('active');
+    const trailer = document.getElementById('trailer');
+    if (trailer && btn.dataset.tab !== 'inicio') trailer.pause();    document.body.dataset.tab = btn.dataset.tab;
     tabs.classList.remove('open');
     toggle.setAttribute('aria-expanded', 'false');
     if (focusPanel) panel.focus();
