@@ -213,7 +213,7 @@ main { max-width: 1180px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
 /* --- Inicio / Trailer --- */
 .trailer-frame {
   position: relative;
-  margin: 1.5rem 0 0;
+  margin: 2.5rem 0 1rem;
   border: 1px solid var(--frame);
   border-radius: 2px;
   background: #000;
